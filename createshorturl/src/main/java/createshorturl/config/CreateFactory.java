@@ -6,6 +6,7 @@ import static shorturls.constants.Constants.CACHE_ENABLED;
 import static shorturls.constants.Constants.CACHE_FACTORY;
 import static shorturls.constants.Constants.WRITER_FACTORY;
 
+
 import com.meli.factory.Factory;
 
 import createshorturl.apigateway.CreateShortURL;
@@ -36,7 +37,9 @@ public class CreateFactory {
 	@Getter(lazy = true)
 	private static final Service service = initService();
 
+	//private static final Properties properties = new Properties();
 	private static Service initService() {
+		
 		val cacheEnabled = Boolean.valueOf(getenv(CACHE_ENABLED));
 		val baseURL = new BaseURL(getenv(BASE_URL));
 		var writerFactory = getenv(WRITER_FACTORY);
