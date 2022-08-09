@@ -1,0 +1,97 @@
+package geturl.apigateway;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+
+import geturl.services.InvalidArgumentsException;
+import geturl.services.Service;
+
+
+@RunWith(MockitoJUnitRunner.class)
+public class GetLongURLTest {
+	
+	
+	@InjectMocks
+	private GetLongURL getLongURL;
+	
+	@Mock
+	private Service svc;
+
+    @Test
+	public void test1() throws MalformedURLException, InvalidArgumentsException {
+		String url = "file://wa";
+		InvalidArgumentsException e = new InvalidArgumentsException();
+		when(svc.getURL(new URL(url),null)).thenThrow(e);
+		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
+		Map<String, String> map = new HashMap<>();
+        map.put("shortURL", url);
+        input.setQueryStringParameters(map);
+		var response = getLongURL.handleRequest(input);
+		assertEquals(Integer.valueOf(400), response.getStatusCode());
+	}
+
+
+    @Test
+	public void test2() throws MalformedURLException, InvalidArgumentsException {
+		String url = "http://me.li/01230";
+		String encoded  = encode(url);
+        var returnURLStr = "http://www.google.com";
+        var returnURL = new URL(returnURLStr);
+        when(svc.getURL(new URL(url),null)).thenReturn(Optional.of(returnURL));
+		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
+		Map<String, String> map = new HashMap<>();
+        map.put("shortURL", encoded);
+        input.setQueryStringParameters(map);
+		var response = getLongURL.handleRequest(input);
+		assertEquals(Integer.valueOf(200), response.getStatusCode());
+        assertEquals(returnURLStr, response.getBody());
+	}
+
+    @Test
+	public void test3() throws MalformedURLException, InvalidArgumentsException {
+		String url = "a";
+		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
+		Map<String, String> map = new HashMap<>();
+        map.put("shortURL", url);
+        input.setQueryStringParameters(map);
+		var response = getLongURL.handleRequest(input);
+		assertEquals(Integer.valueOf(400), response.getStatusCode());
+    }
+
+	@Test
+	public void test34() throws MalformedURLException, InvalidArgumentsException {
+		String url = "http://me.li/2342";
+		String encoded = encode(url);
+		when(svc.getURL(new URL(url),null)).thenReturn(Optional.empty());
+		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
+		Map<String, String> map = new HashMap<>();
+        map.put("shortURL", encoded);
+        input.setQueryStringParameters(map);
+		var response = getLongURL.handleRequest(input);
+		assertEquals(Integer.valueOf(404), response.getStatusCode());
+    	assertEquals("URL not found", response.getBody());
+    
+	}
+
+    public static String encode(String raw) {
+        return Base64.getUrlEncoder()
+                // .withPadding()
+                .encodeToString(raw.getBytes(StandardCharsets.UTF_8));
+    }
+}

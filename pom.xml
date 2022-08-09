@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.meli</groupId>
+	<artifactId>shorturls-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>geturl</module>
+		<module>redirectshorturl</module>
+		<module>deleteshorturl</module>
+		<module>createshorturl</module>
+		<module>idgenerator</module>
+		<module>cache-api</module>
+		<module>cache-redis</module>
+		<module>get-urls-common</module>
+		<module>kafkaurls</module>
+		<module>factory</module>
+		<module>dynamodao</module>
+		<module>dynamoidgenerator</module>
+		<module>securerandomgenerator</module>		
+		<module>shorturl-events</module>
+
+
+	</modules>
+
+	<properties>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<junit.jupiter.version>5.9.0</junit.jupiter.version>
+		<junit.platform.version>1.9.0</junit.platform.version>
+	</properties>
+
+	<dependencyManagement>
+
+		<dependencies>
+
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit.jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.junit.vintage</groupId>
+				<artifactId>junit-vintage-engine</artifactId>
+				<version>${junit.jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>1.10.19</version>
+				<scope>test</scope>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.18.24</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.meli</groupId>
+				<artifactId>shorturl-utils</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
+
+		</dependencies>
+	</dependencyManagement>
+
+</project>

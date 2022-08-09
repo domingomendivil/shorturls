@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAM Template for creating a short URL from another URL
+
+Globals:
+  Function:
+    Timeout: 20
+
+Parameters:
+  DynamoURL:
+    Type: String
+    Default: "http://dynamo-local:8000"
+  BaseURL:
+    Type: String
+    Default: "http://localhost:3000"
+  WriterFactory:
+    Type: String
+    Default: "shorturls.dynamodao.DynamoDAOFactory"    
+  IdGeneratorFactory:
+    Type: String
+    Default: "createshorturl.generator.SecureRandomGenerator"    
+  RandomLength:
+    Type: String
+    Default: "7"  
+  RandomAlgorithm:
+    Type: String
+    Default: "SHA1PRNG"
+  RandomSeed:
+    Type: String
+    Default: "79CVJGJ"    
+  RandomAlphabet:
+    Type: String
+    Default: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  
+Resources:
+  CreateShortURLFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: ../createshorturl
+      Handler: createshorturl.apigateway.CreateShortURLGW::handleRequest
+      Runtime: java11
+      Architectures:
+        - x86_64
+      Policies:
+      - AmazonDynamoDBFullAccess
+      MemorySize: 512
+      Environment: 
+        Variables:
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 
+          DYNAMO_URL: !Ref DynamoURL
+          BASE_URL: !Ref BaseURL
+          WRITER_FACTORY: !Ref WriterFactory
+          ID_GENERATOR_FACTORY: !Ref IdGeneratorFactory
+          RANDOM_LENGTH: !Ref RandomLength
+          RANDOM_ALPHABET: !Ref RandomAlphabet
+          RANDOM_ALGORITHM: !Ref RandomAlgorithm
+          RANDOM_SEED: !Ref RandomSeed   
+      Events:
+        CreateShortURLEvent:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /urls
+            Method: post
+  CreateShortURLHoursFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: createshorturl
+      Handler: createshorturl.apigateway.CreateShortURLHoursGW::handleRequest
+      Runtime: java11
+      Architectures:
+        - x86_64
+      Policies:
+      - AmazonDynamoDBFullAccess
+      MemorySize: 512
+      Environment: 
+        Variables:
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 
+          DYNAMO_URL: !Ref DynamoURL
+          BASE_URL: !Ref BaseURL
+          WRITER_FACTORY: !Ref WriterFactory
+          ID_GENERATOR_FACTORY: !Ref IdGeneratorFactory
+          RANDOM_LENGTH: !Ref RandomLength
+          RANDOM_ALPHABET: !Ref RandomAlphabet
+          RANDOM_ALGORITHM: !Ref RandomAlgorithm
+          RANDOM_SEED: !Ref RandomSeed   
+      Events:
+        CreateShortURLHoursEvent:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /expiringurls
+            Method: post

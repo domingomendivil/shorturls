@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAM Template for redirecting URLs from the short URL
+
+Globals:
+  Function:
+    Timeout: 20
+
+Parameters:
+  DynamoURL:
+    Type: String
+    Default: "http://dynamo-local:8000"
+  RedisURL:
+    Type: String
+    Default: "redis://password@localhost:6379/"  
+  CacheEnabled:
+    Type: String
+    Default: "false"
+  QueryFactory:
+    Type: String
+    Default: "shorturls.dynamodao.DynamoDAOFactory" 
+  BaseURL:
+    Type: String
+    Default: "http://localhost:3000"
+  CacheFactory:
+    Type: String
+    Default: "shorturls.cache.RedisCacheFactory"   
+  EventsFactory:
+    Type: String
+    Default: "com.meli.kafka.KafkaFactory"
+  CacheFactory:
+    Type: String
+    Default: "shorturls.cache.RedisCacheFactory"   
+  KafkaBrokers: 
+    Type: String
+    Default: "kafka:29092"
+  KafkaClientId: 
+    Type: String
+    Default: "client1"
+  KafkaTopicName: 
+    Type: String
+    Default: "geturl"
+  KafkaEnabled: 
+    Type: String
+    Default: "false"
+Resources:
+  RedirectShortURLFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: ../redirectshorturl
+      Handler: redirectshorturl.apigateway.RedirectShortURLGW::handleRequest
+      Runtime: java11
+      Architectures:
+        - x86_64
+      Policies:
+      - AmazonDynamoDBFullAccess
+      MemorySize: 512
+      Environment: 
+        Variables:
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 
+          DYNAMO_URL: !Ref DynamoURL
+          REDIS_URL: !Ref RedisURL
+          CACHE_ENABLED: !Ref CacheEnabled
+          QUERY_FACTORY: !Ref QueryFactory
+          BASE_URL: !Ref BaseURL
+          CACHE_FACTORY: !Ref CacheFactory
+          EVENTS_FACTORY: !Ref EventsFactory
+          KAFKA_BROKERS: !Ref KafkaBrokers
+          KAFKA_CLIENTID: !Ref KafkaClientId
+          KAFKA_TOPICNAME: !Ref KafkaTopicName
+          KAFKA_ENABLED: !Ref KafkaEnabled
+      Events:
+        RedirectShortURLEvent:
+          Type: Api 
+          Properties:
+            Path: /{code}
+            Method: get
