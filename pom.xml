@@ -19,7 +19,8 @@
 		<module>dynamoidgenerator</module>
 		<module>securerandomgenerator</module>		
 		<module>shorturl-events</module>
-
+		<module>shorturl-utils</module>
+		
 
 	</modules>
 
