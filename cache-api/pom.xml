@@ -2,17 +2,17 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.meli</groupId>
   <artifactId>shorturl-cache-api</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  	<properties>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-	</properties>
 
+  <parent>
+		<groupId>com.meli</groupId>
+		<artifactId>shorturls-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+  
   <dependencies>
     <dependency>
       <groupId>com.meli</groupId>
       <artifactId>shorturl-dao</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
