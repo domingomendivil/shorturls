@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import io.lettuce.core.RedisClient;
+import lombok.val;
 import shorturls.model.URLItem;
 
 public class RedisCache implements Cache{
@@ -16,17 +17,17 @@ public class RedisCache implements Cache{
 		this.redisClient=redisClient;
 	}
 
-	private Optional<URLItem> parse(String result) {
+	private Optional<URLItem> parse(String shortPath,String result) {
 		if (result==null) {
 			return Optional.empty();
 		}
 		String[] temp = result.split(",");
 		if ((temp!=null) && (temp.length==3)) {
-			URLItem urlItem = new URLItem();
 			try {
-				urlItem.setLongURL(new URL(temp[0]));
-				urlItem.setCreationDate(LocalDateTime.parse(temp[1]));
-				urlItem.setExpirationHours(Long.parseLong(temp[2]));
+				val longURL = new URL(temp[0]);
+				val creationDate = 	LocalDateTime.parse(temp[1]);
+				val expirationHours = Long.parseLong(temp[2]);
+				val urlItem= new URLItem(shortPath,longURL,creationDate,expirationHours);
 				return Optional.of(urlItem);
 			} catch (MalformedURLException|NumberFormatException e) {
 				//error reading from Redis Server. Should never happen
@@ -41,7 +42,7 @@ public class RedisCache implements Cache{
 		var connection =redisClient.connect();
 		var syncCommands = connection.sync();	
 		String urlItem = syncCommands.get(path);
-		return parse(urlItem);
+		return parse(path,urlItem);
 	}
 
 	@Override

@@ -31,19 +31,15 @@ public class ServiceImpl implements Service {
 	}
 
 	
-	private URLItem newURLItem(URL longURL){
+	private URLItem newURLItem(URL longURL,Long expirationHours){
 		val id = idGenerator.generateUniqueID();
-		URLItem urlItem = new URLItem();
-		urlItem.setShortPath(id);
-		urlItem.setCreationDate(LocalDateTime.now());
-		urlItem.setLongURL(longURL);
-		return urlItem;
+		return new URLItem(id,longURL,LocalDateTime.now(),expirationHours);
 	}
 
 	@Override
 	public URL createShortURL(URL longURL) throws InvalidArgumentsException {
 		if (validURL(longURL)){
-			val item = newURLItem(longURL);
+			val item = newURLItem(longURL,null);
 			events.send(item);
 			return getShortURL(item.getShortPath());
 		}else{
@@ -53,7 +49,7 @@ public class ServiceImpl implements Service {
 	}
 
 	private boolean validURL(URL longURL) {
-		var protocol = longURL.getProtocol();
+		val protocol = longURL.getProtocol();
 		return (protocol.equalsIgnoreCase("http") || (protocol.equalsIgnoreCase("https")));
 	}
 
@@ -61,8 +57,7 @@ public class ServiceImpl implements Service {
 	@Override
 	public URL createShortURL(URL longURL, Long hours) throws InvalidArgumentsException {
 		if ((validHours(hours)) && (validURL(longURL))){
-			val item = newURLItem(longURL);
-			item.setExpirationHours(hours);
+			val item = newURLItem(longURL,hours);
 			events.send(item);
 			return getShortURL(item.getShortPath());
 		}else{

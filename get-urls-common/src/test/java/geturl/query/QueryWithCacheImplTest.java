@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -30,9 +31,9 @@ public class QueryWithCacheImplTest {
 
     @Test
     public void test1() throws MalformedURLException{
-        when(query.getById("A")).thenReturn(null);
-        URLItem urlItem = new URLItem();
-        urlItem.setLongURL(new URL("http://www.google.com"));
+        URL url = new URL("http://www.google.com");
+        URLItem urlItem = new URLItem("A",url,LocalDateTime.now(),null);
+
         Optional<URLItem> item = Optional.of(urlItem);
         when(cache.getById("A")).thenReturn(item);
         var res = queryCache.getById("A");

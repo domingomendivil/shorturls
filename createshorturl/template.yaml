@@ -65,7 +65,7 @@ Resources:
   CreateShortURLHoursFunction:
     Type: AWS::Serverless::Function 
     Properties:
-      CodeUri: createshorturl
+      CodeUri: ../createshorturl
       Handler: createshorturl.apigateway.CreateShortURLHoursGW::handleRequest
       Runtime: java11
       Architectures:

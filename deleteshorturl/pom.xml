@@ -11,7 +11,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	
+
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Short URL Deletion REST API Service</name>
@@ -50,53 +50,43 @@
 			<version>1.7</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<scope>test</scope>
-		</dependency>
+	    <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.2.4</version>
+            <scope>test</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>shorturl-utils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>dynamodao</artifactId>
-			<version>1.0-SNAPSHOT</version>
 			<scope>runtime</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.meli</groupId>
-			<artifactId>shorturl-dao</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>shorturl-dao</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
 		<dependency>
-		<groupId>com.meli</groupId>
-		<artifactId>shorturl-cache-api</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+			<groupId>com.meli</groupId>
+			<artifactId>shorturl-cache-api</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>shorturl-cache-redis</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>factories</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -128,7 +118,26 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>3.2.4</version>
-				<configuration></configuration>
+				<configuration>
+					<filters>
+						<filter>
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>module-info.class</exclude>
+								<exclude>META-INF/services/reactor.blockhound.integration.BlockHoundIntegration</exclude>
+								<exclude>META-INF/versions/9/module-info.class</exclude>
+								<exclude>META-INF/maven/com.fasterxml.jackson.core/jackson-core/pom.xml</exclude>
+								<exclude>META-INF/maven/com.fasterxml.jackson.core/jackson-core/pom.properties</exclude>
+								<exclude>META-INF/*</exclude>
+								<exclude>META-INF/maven/*</exclude>
+								<exclude>META-INF/*.DSA</exclude>
+								<exclude>META-INF/*.RSA</exclude>
+								<exclude>META-INF/*.MF</exclude>
+								<exclude>META-INF/*.txt</exclude>
+							</excludes>
+						</filter>
+					</filters>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>package</phase>

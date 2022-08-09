@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
@@ -44,7 +44,6 @@ public class CreateShortURLTest {
 	@Test
 	public void test2() throws MalformedURLException, InvalidArgumentsException {
 		String url = "file://wa";
-		when(svc.createShortURL(new URL(url))).thenThrow(InvalidArgumentsException.class);
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		input.setBody(url);
 		var response = createShortURL.handleRequest(input);

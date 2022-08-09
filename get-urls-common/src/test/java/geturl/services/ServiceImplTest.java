@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -40,10 +41,9 @@ public class ServiceImplTest {
     	URL url = new URL("http://www.montevideo.com.uy");
     	var urlResponse = new URL("http://www.google.com");
     	when(idValidator.getCode(url)).thenReturn("ASF");
-    	URLItem item = new URLItem();
-    	item.setLongURL(urlResponse);
+    	URLItem item = new URLItem("ASF",urlResponse,LocalDateTime.now(),null);
 		when(query.getById("ASF")).thenReturn(Optional.of(item));
-        var res = svc.getURL(url,null);
+        var res = svc.getLongURL(url,null);
         assertEquals(urlResponse,res.get());
     }
 

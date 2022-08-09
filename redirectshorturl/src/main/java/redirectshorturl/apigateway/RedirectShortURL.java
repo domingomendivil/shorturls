@@ -22,7 +22,7 @@ public class RedirectShortURL {
         var shortPath = map.get("code");
         if (shortPath!=null && (!shortPath.equals(""))){
             try {
-                var longURL = service.getLongURL(shortPath,input.getHeaders());
+                var longURL = service.getURL(shortPath,input.getHeaders());
                 if (longURL.isEmpty()) {
                     return getNotFoundResponse();
                 } else {

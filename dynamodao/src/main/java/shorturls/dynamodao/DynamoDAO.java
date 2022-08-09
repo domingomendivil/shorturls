@@ -61,22 +61,25 @@ public class DynamoDAO implements Query,Writer,Deleter {
 	}
 
 	private URLItem getURLItem(GetItemResponse response) {
-		val urlItem = new URLItem();
+		//val urlItem = new URLItem();
 		try {
 			val responseItem = response.item();
 			val longURL = new URL(responseItem.get(LONG_URL).s());
-			urlItem.setLongURL(longURL);
-			urlItem.setShortPath(responseItem.get(PK).s());
+			//urlItem.setLongURL(longURL);
+			val shortPath = responseItem.get(PK).s();
+			//urlItem.setShortPath(responseItem.get(PK).s());
 			val str=responseItem.get(CREATION_DATE).s();
 			val date = getDate(str);
-			urlItem.setCreationDate(date);
+			//urlItem.setCreationDate(date);
 			val hoursItem = responseItem.get(EXPIRATION_HOURS);
 			if (hoursItem !=null) {
 				val hours =hoursItem.n();
 				long nro = Long.parseLong(hours);
-				urlItem.setExpirationHours(nro);
+				//urlItem.setExpirationHours(nro);
+				return new URLItem(shortPath,longURL,date,nro);
+			}else {
+				return new URLItem(shortPath,longURL,date,null);
 			}
-			return urlItem;
 		} catch (MalformedURLException e) {
 			throw new QueryException(e);
 		}

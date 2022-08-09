@@ -31,7 +31,7 @@ public class GetURLTest {
 	public void test1() throws MalformedURLException, InvalidArgumentsException {
 		String shortPath="HSFSF";
 		InvalidArgumentsException e = new InvalidArgumentsException();
-		when(svc.getLongURL(shortPath, null)).thenThrow(e);
+		when(svc.getURL(shortPath, null)).thenThrow(e);
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		Map<String, String> map = new HashMap<>();
 		map.put("code", shortPath);

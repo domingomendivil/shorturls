@@ -42,7 +42,7 @@ public class GetLongURL {
                 val shortURLDecoded = decode(shortURL);
                 if (urlValidator.isValid(shortURLDecoded)) {
                     val newUrl = new URL(shortURLDecoded);
-                    val longURL = service.getURL(newUrl, input.getHeaders());
+                    val longURL = service.getLongURL(newUrl, input.getHeaders());
                     if (longURL.isEmpty()) {
                         return getNotFoundResponse();
                     } else {

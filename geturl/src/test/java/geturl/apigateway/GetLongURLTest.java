@@ -37,7 +37,6 @@ public class GetLongURLTest {
 	public void test1() throws MalformedURLException, InvalidArgumentsException {
 		String url = "file://wa";
 		InvalidArgumentsException e = new InvalidArgumentsException();
-		when(svc.getURL(new URL(url),null)).thenThrow(e);
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		Map<String, String> map = new HashMap<>();
         map.put("shortURL", url);
@@ -53,7 +52,7 @@ public class GetLongURLTest {
 		String encoded  = encode(url);
         var returnURLStr = "http://www.google.com";
         var returnURL = new URL(returnURLStr);
-        when(svc.getURL(new URL(url),null)).thenReturn(Optional.of(returnURL));
+        when(svc.getLongURL(new URL(url),null)).thenReturn(Optional.of(returnURL));
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		Map<String, String> map = new HashMap<>();
         map.put("shortURL", encoded);
@@ -78,7 +77,7 @@ public class GetLongURLTest {
 	public void test34() throws MalformedURLException, InvalidArgumentsException {
 		String url = "http://me.li/2342";
 		String encoded = encode(url);
-		when(svc.getURL(new URL(url),null)).thenReturn(Optional.empty());
+		when(svc.getLongURL(new URL(url),null)).thenReturn(Optional.empty());
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		Map<String, String> map = new HashMap<>();
         map.put("shortURL", encoded);

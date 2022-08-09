@@ -35,10 +35,10 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public Optional<URL> getURL(URL shortURL, Map<String, String> headers) throws InvalidArgumentsException {
+	public Optional<URL> getLongURL(URL shortURL, Map<String, String> headers) throws InvalidArgumentsException {
 		try {
 			val code = idValidator.getCode(shortURL);
-			return getLongURL(code, headers);
+			return getURL(code, headers);
 		} catch (ValidationException e) {
 			throw new InvalidArgumentsException(e);
 		}
@@ -46,7 +46,7 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public Optional<URL> getLongURL(String shortPathId, Map<String, String> headers) throws InvalidArgumentsException {
+	public Optional<URL> getURL(String shortPathId, Map<String, String> headers) throws InvalidArgumentsException {
 		val urlItem = query.getById(shortPathId);
 		return urlItem.map(item -> {
 			send(item, headers);

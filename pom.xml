@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.meli</groupId>
 	<artifactId>shorturls-parent</artifactId>
@@ -17,10 +19,10 @@
 		<module>factory</module>
 		<module>dynamodao</module>
 		<module>dynamoidgenerator</module>
-		<module>securerandomgenerator</module>		
+		<module>securerandomgenerator</module>
 		<module>shorturl-events</module>
 		<module>shorturl-utils</module>
-		
+		<module>shorturl-dao</module>
 
 	</modules>
 
@@ -29,10 +31,11 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<junit.jupiter.version>5.9.0</junit.jupiter.version>
 		<junit.platform.version>1.9.0</junit.platform.version>
-			<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-			<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	
-		
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8
+		</project.reporting.outputEncoding>
+
+
 	</properties>
 
 	<dependencyManagement>
@@ -99,11 +102,30 @@
 				<version>1.0-SNAPSHOT</version>
 				<scope>runtime</scope>
 			</dependency>
-		
+
 			<dependency>
 				<groupId>com.meli</groupId>
 				<artifactId>shorturl-dao</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.meli</groupId>
+				<artifactId>shorturl-cache-api</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.meli</groupId>
+				<artifactId>factories</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.meli</groupId>
+				<artifactId>shorturl-cache-redis</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<scope>runtime</scope>
 			</dependency>
 
 		</dependencies>

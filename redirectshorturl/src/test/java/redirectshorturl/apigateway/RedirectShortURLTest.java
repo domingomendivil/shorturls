@@ -55,7 +55,7 @@ public class RedirectShortURLTest {
 		map.put("code", "ADD");
 		String responseURL ="http://www.montevideo.com.uy";
 		var url = Optional.of(new URL(responseURL));
-		when(service.getLongURL("ADD", null)).thenReturn(url);
+		when(service.getURL("ADD", null)).thenReturn(url);
 		var response = redirectShortURL.handleRequest(input);
 		assertEquals(Integer.valueOf(301), response.getStatusCode());
 		assertEquals(responseURL, response.getHeaders().get("Location"));
@@ -66,7 +66,7 @@ public class RedirectShortURLTest {
 		input.setPathParameters(map);
 		map.put("code", "ADD");
 		InvalidArgumentsException e = new InvalidArgumentsException();
-		when(service.getLongURL("ADD", null)).thenThrow(e);
+		when(service.getURL("ADD", null)).thenThrow(e);
 		var response = redirectShortURL.handleRequest(input);
 		assertEquals(Integer.valueOf(400), response.getStatusCode());
 	}
@@ -76,7 +76,7 @@ public class RedirectShortURLTest {
 	public void test5() throws MalformedURLException, InvalidArgumentsException {
 		input.setPathParameters(map);
 		map.put("code", "ADD");
-		when(service.getLongURL("ADD", null)).thenReturn(Optional.empty());
+		when(service.getURL("ADD", null)).thenReturn(Optional.empty());
 		var response = redirectShortURL.handleRequest(input);
 		assertEquals(Integer.valueOf(404), response.getStatusCode());
 	}

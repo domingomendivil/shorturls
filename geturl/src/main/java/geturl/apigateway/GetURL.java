@@ -22,7 +22,7 @@ public class GetURL {
         if (pars!=null){
             String shortURL = pars.get("code");
             try {
-                var longURL = service.getLongURL(shortURL,input.getHeaders());
+                var longURL = service.getURL(shortURL,input.getHeaders());
                 if (longURL.isEmpty()) {
                     return ResponseCreator.getNotFoundResponse();
                 }else {

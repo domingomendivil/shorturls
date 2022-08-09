@@ -1,6 +1,7 @@
 package shorturls.cache;
 
 import io.lettuce.core.RedisClient;
+import lombok.Getter;
 
 public class RedisCacheFactory {
 
@@ -8,13 +9,10 @@ public class RedisCacheFactory {
 		
 	}
 	
-	private static RedisCache redisCache;
+	@Getter(lazy=true)private static final RedisCache instance = init();
 	
-	public static synchronized RedisCache getInstance() {
-		if (redisCache==null) {
-			String redisURL = System.getenv("REDIS_URL");
-			redisCache =new RedisCache(RedisClient.create(redisURL));
-		}
-		return redisCache;
+	private static RedisCache init() {
+		String redisURL = System.getenv("REDIS_URL");
+		return new RedisCache(RedisClient.create(redisURL));
 	}
 }

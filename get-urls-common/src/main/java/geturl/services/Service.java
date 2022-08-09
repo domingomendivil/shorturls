@@ -30,8 +30,8 @@ public interface Service {
 	 * @throws InvalidArgumentsException the exception thrown in case that the short URL
 	 * is invalid.
 	 */
-	public Optional<URL> getURL(URL shortURL,Map<String,String> headers) throws InvalidArgumentsException ;
+	public Optional<URL> getLongURL(URL shortURL,Map<String,String> headers) throws InvalidArgumentsException ;
 	
-	public Optional<URL> getLongURL(String shortPath,Map<String,String> headers) throws InvalidArgumentsException ;
+	public Optional<URL> getURL(String shortPath,Map<String,String> headers) throws InvalidArgumentsException ;
 		
 }
