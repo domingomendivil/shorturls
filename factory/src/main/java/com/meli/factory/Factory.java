@@ -6,7 +6,7 @@ public class Factory<A> {
 	
 	private A instance;
 	
-	static Object getObject(String factoryClass,String factoryMethod) throws ConfigurationException {
+	private static Object getObject(String factoryClass,String factoryMethod) throws ConfigurationException {
 		try {
 			Class<?> aclass = Class.forName(factoryClass);
 			Method method = aclass.getMethod(factoryMethod, null);

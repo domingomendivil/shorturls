@@ -16,7 +16,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
 import createshorturl.services.InvalidArgumentsException;
 import createshorturl.services.Service;
-import createshorturl.services.ServiceException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreateShortURLHoursTest {
