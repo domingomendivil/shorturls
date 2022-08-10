@@ -32,7 +32,9 @@ Parameters:
   RandomAlphabet:
     Type: String
     Default: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  
+  CacheEnabled:
+    Type: String
+    Default: "false"
 Resources:
   CreateShortURLFunction:
     Type: AWS::Serverless::Function 
