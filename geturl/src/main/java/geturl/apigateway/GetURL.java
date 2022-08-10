@@ -29,7 +29,7 @@ public class GetURL {
                     return ResponseCreator.getOKResponse(longURL.get().toString());
                 }
             } catch (InvalidArgumentsException e) {
-                return ResponseCreator.getBadRequestResponse();
+                //error in request, return next in the code
             }
 
         }

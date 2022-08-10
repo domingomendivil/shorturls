@@ -12,9 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.meli.events.Events;
+
 import shorturls.dao.Query;
 import shorturls.model.URLItem;
 import urlutils.idvalidator.IdValidator;
@@ -31,7 +32,7 @@ public class ServiceImplTest {
 
     @Mock
     private Query query;
-
+	
     @Mock
     private Events events;
 
@@ -47,12 +48,15 @@ public class ServiceImplTest {
         assertEquals(urlResponse,res.get());
     }
 
-/**    @Test(expected = InvalidArgumentsException.class)
-    public void testGetLongURL2() throws MalformedURLException, InvalidArgumentsException{
-        svc.getURL(new URL("http://www.montevideo.com.uy/deportes/index.html"),null);    
+    @Test(expected = InvalidArgumentsException.class)
+    public void testGetLongURL2() throws MalformedURLException, InvalidArgumentsException, ValidationException{
+    	URL url = new URL("http://www.montevideo.com.uy");
+    	ValidationException e = new ValidationException();
+		when(idValidator.getCode(url)).thenThrow(e);
+        svc.getLongURL(url,null);    
     }
 
-    @Test(expected = InvalidArgumentsException.class)
+/**    @Test(expected = InvalidArgumentsException.class)
     public void testGetLongURL3() throws MalformedURLException, InvalidArgumentsException{
         svc.getURL(new URL("http://www.montevideo.com.uy/index.html"),null);    
     }

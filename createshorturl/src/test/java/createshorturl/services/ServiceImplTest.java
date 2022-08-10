@@ -66,5 +66,19 @@ public class ServiceImplTest {
 		var url = svc.createShortURL(new URL("http://www.montevideo.com.uy"), 10000L);
 		assertEquals(new URL("http://localhost:8000/DFJKSX"),url);
 	}
+	
+	@Test
+	public void testCreateShortURL7() throws MalformedURLException, InvalidArgumentsException {
+		when(generator.generateUniqueID()).thenReturn("DFJKSX");
+		when(baseURL.toURL()).thenReturn("http://localhost:8000/");
+		var url = svc.createShortURL(new URL("https://www.montevideo.com.uy"), 10000L);
+		assertEquals(new URL("http://localhost:8000/DFJKSX"),url);
+	}
+	
+	@Test(expected=InvalidArgumentsException.class)
+	public void testCreateShortURL8() throws MalformedURLException, InvalidArgumentsException {
+		var url = svc.createShortURL(new URL("ftp://site.edu.uy"), 10000L);
+		assertEquals(new URL("http://localhost:8000/DFJKSX"),url);
+	}
 
 }

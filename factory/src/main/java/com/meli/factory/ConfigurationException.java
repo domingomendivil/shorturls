@@ -6,6 +6,10 @@ public class ConfigurationException extends RuntimeException {
 		super(e);
 	}
 
+	public ConfigurationException(String msg) {
+		super(msg);
+	}
+
 	/**
 	 * 
 	 */

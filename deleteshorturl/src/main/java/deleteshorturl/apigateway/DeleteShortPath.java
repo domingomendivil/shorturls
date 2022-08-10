@@ -25,11 +25,14 @@ public class DeleteShortPath {
         val pars = input.getPathParameters();
         if (pars!=null){
             String shortPath = pars.get("code");
+            if (shortPath!=null)
             try {
                 if (service.deleteURL(shortPath))
                     return getOKResponse("URL deleted");
+                else
+                	return getNotFoundResponse();
             } catch (InvalidArgumentsException e) {
-                return getBadRequestResponse();
+                //bad request, return next in code
             }       
         }
         return getBadRequestResponse();

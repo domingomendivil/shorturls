@@ -112,7 +112,8 @@
 							<artifact>*:*</artifact>
 							<excludes>
 								<exclude>module-info.class</exclude>
-								<exclude>META-INF/services/reactor.blockhound.integration.BlockHoundIntegration</exclude>
+								<exclude>META-INF/services/reactor.blockhound.integration.BlockHoundIntegration
+								</exclude>
 								<exclude>META-INF/versions/9/module-info.class</exclude>
 								<exclude>META-INF/maven/com.fasterxml.jackson.core/jackson-core/pom.xml
 								</exclude>
@@ -137,6 +138,7 @@
 					</execution>
 				</executions>
 			</plugin>
+	
 		</plugins>
 	</build>
 

@@ -27,6 +27,8 @@ public class ServiceImpl implements Service {
 	private final IdValidator idValidator;
 
 	private final Events events;
+	
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	public ServiceImpl(Query query, IdValidator idValidator, Events events) {
 		this.query = query;
@@ -61,7 +63,7 @@ public class ServiceImpl implements Service {
 			headers.put("longURL", urlItem.getLongURL().toString());
 			headers.put("creationDate", urlItem.getCreationDate().toString());
 			try {
-				val json = new ObjectMapper().writeValueAsString(headers);
+				val json = objectMapper.writeValueAsString(headers);
 				events.send(shortPath, json);
 			} catch (JsonProcessingException e) {
 				// this exception is not thrown

@@ -1,0 +1,124 @@
+openapi: 3.0.1
+info:
+  title: "ShortURL services"
+  version: "1.0"
+paths:
+  /urls:
+    post: 
+      servers: 
+      - url: "https://5vezhb8yj3.execute-api.us-east-1.amazonaws.com/{basePath}"
+        variables:
+          basePath:
+            default: "/Prod" 
+      tags:
+        - URL
+      summary: Creates a new short URL
+      description: Given an URL it creates a new short URL
+      operationId: postUrl
+      requestBody:
+        content: 
+          text/plain:
+            schema:
+              type: string
+              example: http://www.google.com
+          application/json:
+            schema:
+               $ref: '#/components/schemas/URL'
+        description: The original URL to be shortened
+      responses:
+        '200':
+          description: URL created
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: http://me.li/XjD8xL
+        '400':
+          description: Bad request due to a wrong URL format. Only http and https URLs are permitted.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Bad Request
+  /urls/{code}:
+    get:
+      servers: 
+      - url: "https://3q72xenzi2.execute-api.us-east-1.amazonaws.com/{basePath}"
+        variables:
+          basePath:
+            default: "/Prod" 
+      summary: Returns the original URL
+      description: Returns the original URL associated with the short URL
+      operationId: getURL
+      parameters:
+        - name: code
+          in: path
+          description: Code of the short URL
+          required: true
+          schema:
+            type: string
+            example: vkjS8X
+      responses:
+        '200':
+          description: Returns the origintal URL
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: http://www.elpais.com.uy 
+        '400':
+          description: Bad request due to a wrong code format. Codes have a format according to the selected encoding used, which usually is a base62 encoding. 
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Bad Request
+        '404':
+          description: URL not found
+    delete:
+      servers: 
+      - url: "https://yx4mly91y7.execute-api.us-east-1.amazonaws.com/{basPath}"
+        variables:
+          basePath:
+            default: "/Prod" 
+      summary: Deletes a short URL
+      description: Deletes the short URL associated with an original URL
+      operationId: deleteShortURL
+      parameters:
+        - name: code
+          in: path
+          description: Code of the short URL
+          required: true
+          schema:
+            type: string
+            example: vkjS8X
+      responses:
+        '202':
+          description: The 
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: http://www.elpais.com.uy 
+        '400':
+          description: Bad request due to a wrong code format. Codes have a format according to the selected encoding used, which usually is a base62 encoding. 
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Bad Request
+        '404':
+          description: Short URL not found
+components:
+  schemas:
+    URL:
+      type: object
+      properties:
+        url:
+          type: string
+          example: http://www.google.com
+        hours:
+          type: integer
+          example: 10
+          minimum: 0
+          description: The hours after which the short URL expires and is deleted automatically

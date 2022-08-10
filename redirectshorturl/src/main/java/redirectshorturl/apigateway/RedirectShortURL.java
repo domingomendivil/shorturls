@@ -29,7 +29,7 @@ public class RedirectShortURL {
                     return getMovedResponse(longURL.get().toString());
                 }
             } catch (InvalidArgumentsException e) {
-                return getBadRequestResponse();
+            	//bad request, return next in code
             }
         }
         return getBadRequestResponse();

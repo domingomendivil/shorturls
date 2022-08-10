@@ -50,16 +50,6 @@ public class CreateShortURLTest {
 		assertEquals(Integer.valueOf(400), response.getStatusCode());
 	}
 	
-	@Test
-	public void test3() throws MalformedURLException, InvalidArgumentsException {
-		String url = "http://www.montevideo.com.uy";
-		ServiceException e = new ServiceException();
-		when(svc.createShortURL(new URL(url))).thenThrow(e);
-		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
-		input.setBody(url);
-		var response = createShortURL.handleRequest(input);
-		assertEquals(Integer.valueOf(500), response.getStatusCode());
-	}
-
+	
 
 }

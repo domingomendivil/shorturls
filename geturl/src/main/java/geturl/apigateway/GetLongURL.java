@@ -50,8 +50,7 @@ public class GetLongURL {
                     }
                 }
             } catch (InvalidArgumentsException | MalformedURLException| IllegalArgumentException e) {
-                e.printStackTrace();
-                return getBadRequestResponse();
+               //error in request, return next in the code
             }
         }
 

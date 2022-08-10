@@ -16,7 +16,7 @@ public class ResponseCreator {
 	
 	private static  APIGatewayProxyResponseEvent getTextResponse() {
 		Map<String, String> headers = new HashMap<>();
-		headers.put("Content-Type", "text/html");
+		headers.put("Content-Type", "text/plain");
 		return new APIGatewayProxyResponseEvent().withHeaders(headers);
 	}
 	
