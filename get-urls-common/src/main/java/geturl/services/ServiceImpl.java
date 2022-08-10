@@ -10,6 +10,7 @@ import com.meli.events.Events;
 
 import lombok.val;
 import shorturls.dao.Query;
+import shorturls.exceptions.InvalidArgumentException;
 import shorturls.model.URLItem;
 import urlutils.idvalidator.IdValidator;
 import urlutils.idvalidator.ValidationException;
@@ -37,18 +38,18 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public Optional<URL> getLongURL(URL shortURL, Map<String, String> headers) throws InvalidArgumentsException {
+	public Optional<URL> getLongURL(URL shortURL, Map<String, String> headers) throws InvalidArgumentException {
 		try {
 			val code = idValidator.getCode(shortURL);
 			return getURL(code, headers);
 		} catch (ValidationException e) {
-			throw new InvalidArgumentsException(e);
+			throw new InvalidArgumentException(e);
 		}
 
 	}
 
 	@Override
-	public Optional<URL> getURL(String shortPathId, Map<String, String> headers) throws InvalidArgumentsException {
+	public Optional<URL> getURL(String shortPathId, Map<String, String> headers) throws InvalidArgumentException {
 		val urlItem = query.getById(shortPathId);
 		return urlItem.map(item -> {
 			send(item, headers);

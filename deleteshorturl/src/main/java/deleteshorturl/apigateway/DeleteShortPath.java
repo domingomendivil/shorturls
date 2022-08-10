@@ -1,17 +1,15 @@
 package deleteshorturl.apigateway;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import static shorturls.apigateway.ResponseCreator.getBadRequestResponse;
+import static shorturls.apigateway.ResponseCreator.getNotFoundResponse;
+import static shorturls.apigateway.ResponseCreator.getOKResponse;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
-import deleteshorturl.services.InvalidArgumentsException;
 import deleteshorturl.services.Service;
 import lombok.val;
-import static shorturls.apigateway.ResponseCreator.getOKResponse;
-import static shorturls.apigateway.ResponseCreator.getNotFoundResponse;
-import static shorturls.apigateway.ResponseCreator.getBadRequestResponse;
+import shorturls.exceptions.InvalidArgumentException;
 
 public class DeleteShortPath {
 
@@ -31,7 +29,7 @@ public class DeleteShortPath {
                     return getOKResponse("URL deleted");
                 else
                 	return getNotFoundResponse();
-            } catch (InvalidArgumentsException e) {
+            } catch (InvalidArgumentException e) {
                 //bad request, return next in code
             }       
         }

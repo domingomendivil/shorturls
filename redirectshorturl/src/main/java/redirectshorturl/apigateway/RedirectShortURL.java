@@ -1,13 +1,14 @@
 package redirectshorturl.apigateway;
 
+import static shorturls.apigateway.ResponseCreator.getBadRequestResponse;
+import static shorturls.apigateway.ResponseCreator.getMovedResponse;
+import static shorturls.apigateway.ResponseCreator.getNotFoundResponse;
+
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
-import geturl.services.InvalidArgumentsException;
 import geturl.services.Service;
-import static shorturls.apigateway.ResponseCreator.getNotFoundResponse;
-import static shorturls.apigateway.ResponseCreator.getMovedResponse;
-import static shorturls.apigateway.ResponseCreator.getBadRequestResponse;
+import shorturls.exceptions.InvalidArgumentException;
 
 public class RedirectShortURL {
  
@@ -28,7 +29,7 @@ public class RedirectShortURL {
                 } else {
                     return getMovedResponse(longURL.get().toString());
                 }
-            } catch (InvalidArgumentsException e) {
+            } catch (InvalidArgumentException e) {
             	//bad request, return next in code
             }
         }

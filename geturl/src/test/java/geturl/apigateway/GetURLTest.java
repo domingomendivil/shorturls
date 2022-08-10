@@ -15,8 +15,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
-import geturl.services.InvalidArgumentsException;
 import geturl.services.Service;
+import shorturls.exceptions.InvalidArgumentException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GetURLTest {
@@ -28,9 +28,9 @@ public class GetURLTest {
 	private Service svc;
 
 	@Test
-	public void test1() throws MalformedURLException, InvalidArgumentsException {
+	public void test1() throws MalformedURLException, InvalidArgumentException {
 		String shortPath="HSFSF";
-		InvalidArgumentsException e = new InvalidArgumentsException();
+		InvalidArgumentException e = new InvalidArgumentException("Invalid URL");
 		when(svc.getURL(shortPath, null)).thenThrow(e);
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		Map<String, String> map = new HashMap<>();
@@ -38,6 +38,7 @@ public class GetURLTest {
 		input.setPathParameters(map);
 		var response = getURL.handleRequest(input);
 		assertEquals(Integer.valueOf(400), response.getStatusCode());
+		assertEquals("Invalid URL", response.getBody());
 	}
 
 }

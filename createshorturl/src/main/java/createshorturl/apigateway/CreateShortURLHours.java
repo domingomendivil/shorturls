@@ -10,10 +10,10 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import createshorturl.services.InvalidArgumentsException;
 import createshorturl.services.Service;
 import createshorturl.services.ServiceException;
 import shorturls.apigateway.ResponseCreator;
+import shorturls.exceptions.InvalidArgumentException;
 
 public class CreateShortURLHours {
 
@@ -43,7 +43,7 @@ public class CreateShortURLHours {
 				var newURL = new URL(url);
 				var shortURL = service.createShortURL(newURL,urlHours.getHours());
 				return ResponseCreator.getWillBeCreatedResponse(shortURL.toString());
-			}  catch (MalformedURLException| InvalidArgumentsException e) {
+			}  catch (MalformedURLException| InvalidArgumentException e) {
 				return ResponseCreator.getBadRequestResponse();
 			} catch (ServiceException e) {
 				return ResponseCreator.getInternalErrorResponse();

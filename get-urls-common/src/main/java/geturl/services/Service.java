@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
 
+import shorturls.exceptions.InvalidArgumentException;
+
 /**
  * The Service interface, which is responsible for the logic and communicates between
  * the data layer and the API. 
@@ -30,8 +32,8 @@ public interface Service {
 	 * @throws InvalidArgumentsException the exception thrown in case that the short URL
 	 * is invalid.
 	 */
-	public Optional<URL> getLongURL(URL shortURL,Map<String,String> headers) throws InvalidArgumentsException ;
+	public Optional<URL> getLongURL(URL shortURL,Map<String,String> headers) throws InvalidArgumentException ;
 	
-	public Optional<URL> getURL(String shortPath,Map<String,String> headers) throws InvalidArgumentsException ;
+	public Optional<URL> getURL(String shortPath,Map<String,String> headers) throws InvalidArgumentException ;
 		
 }

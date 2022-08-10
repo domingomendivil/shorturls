@@ -1,6 +1,7 @@
 package deleteshorturl.apigateway;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 
@@ -8,14 +9,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
-import deleteshorturl.services.InvalidArgumentsException;
 import deleteshorturl.services.Service;
 import lombok.val;
+import shorturls.exceptions.InvalidArgumentException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DeleteShortPathTest {
@@ -45,7 +45,7 @@ public class DeleteShortPathTest {
     }
     
     @Test
-    public void test3() throws InvalidArgumentsException{
+    public void test3() throws InvalidArgumentException{
     	val input = new APIGatewayProxyRequestEvent();
     	val pars = new HashMap<String,String>();
     	pars.put("code", "nvasdkh");
@@ -56,7 +56,7 @@ public class DeleteShortPathTest {
     }
     
     @Test
-    public void test4() throws InvalidArgumentsException{
+    public void test4() throws InvalidArgumentException{
     	val input = new APIGatewayProxyRequestEvent();
     	val pars = new HashMap<String,String>();
     	pars.put("code", "nvasdkh");

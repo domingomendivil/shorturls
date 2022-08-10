@@ -1,5 +1,9 @@
 package createshorturl.apigateway;
 
+import static shorturls.apigateway.ResponseCreator.getBadRequestResponse;
+import static shorturls.apigateway.ResponseCreator.getInternalErrorResponse;
+import static shorturls.apigateway.ResponseCreator.getWillBeCreatedResponse;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -8,12 +12,9 @@ import org.apache.commons.validator.routines.UrlValidator;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
-import createshorturl.services.InvalidArgumentsException;
 import createshorturl.services.Service;
 import createshorturl.services.ServiceException;
-import static shorturls.apigateway.ResponseCreator.getBadRequestResponse;
-import static shorturls.apigateway.ResponseCreator.getInternalErrorResponse;
-import static shorturls.apigateway.ResponseCreator.getWillBeCreatedResponse;
+import shorturls.exceptions.InvalidArgumentException;
 
 public class CreateShortURL {
 
@@ -31,7 +32,7 @@ public class CreateShortURL {
 				var newURL = new URL(longURL);
 				var shortURL = service.createShortURL(newURL);
 				return getWillBeCreatedResponse(shortURL.toString());
-			}  catch (MalformedURLException| InvalidArgumentsException e) {
+			}  catch (MalformedURLException| InvalidArgumentException e) {
 				return getBadRequestResponse();
 			} catch (ServiceException e) {
 				return getInternalErrorResponse();

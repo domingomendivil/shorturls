@@ -1,7 +1,7 @@
 package deleteshorturl.services;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.net.MalformedURLException;
@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import shorturls.dao.Deleter;
+import shorturls.exceptions.InvalidArgumentException;
 import urlutils.idvalidator.IdValidator;
 import urlutils.idvalidator.ValidationException;
 
@@ -30,8 +31,8 @@ public class ServiceImplTest {
     private Deleter deleter;
 
     
-    @Test(expected = InvalidArgumentsException.class)
-    public void testDeleteShortURL2() throws MalformedURLException, InvalidArgumentsException, ValidationException{
+    @Test(expected = InvalidArgumentException.class)
+    public void testDeleteShortURL2() throws MalformedURLException, InvalidArgumentException, ValidationException{
     	URL url = new URL("http://www.montevideo.com.uy");
     	ValidationException e = new ValidationException();
     	when(idValidator.getCode(url)).thenThrow(e);
@@ -39,7 +40,7 @@ public class ServiceImplTest {
     }
 
     @Test
-    public void testDeleteShortURL3() throws MalformedURLException, InvalidArgumentsException, ValidationException{
+    public void testDeleteShortURL3() throws MalformedURLException, InvalidArgumentException, ValidationException{
         String shortPath="FKSLC5S";
         URL url  = new URL("http://localhost:8000/FKSLC5S");
         when(idValidator.getCode(url)).thenReturn(shortPath);
@@ -48,7 +49,7 @@ public class ServiceImplTest {
     }
     
     @Test
-    public void testDeleteShortURL4() throws MalformedURLException, InvalidArgumentsException, ValidationException{
+    public void testDeleteShortURL4() throws MalformedURLException, InvalidArgumentException, ValidationException{
         String shortPath="FKSLC5S";
         URL url  = new URL("http://localhost:8000/FKSLC5S");
         when(idValidator.getCode(url)).thenReturn(shortPath);
@@ -57,7 +58,7 @@ public class ServiceImplTest {
     }
     
     @Test
-    public void testDeleteShortPath1() throws MalformedURLException, InvalidArgumentsException, ValidationException{
+    public void testDeleteShortPath1() throws MalformedURLException, InvalidArgumentException, ValidationException{
         String shortPath="FKSLC5S";
         when(idValidator.isValid(shortPath)).thenReturn(true);
         when(deleter.deleteById(shortPath)).thenReturn(false);
@@ -65,15 +66,15 @@ public class ServiceImplTest {
     }
     
     @Test
-    public void testDeleteShortPath2() throws MalformedURLException, InvalidArgumentsException, ValidationException{
+    public void testDeleteShortPath2() throws MalformedURLException, InvalidArgumentException, ValidationException{
         String shortPath="FKSLC5S";
         when(idValidator.isValid(shortPath)).thenReturn(true);
         when(deleter.deleteById(shortPath)).thenReturn(true);
         assertTrue(svc.deleteURL(shortPath));    
     }
     
-    @Test(expected = InvalidArgumentsException.class)
-    public void testDeleteShortPath3() throws MalformedURLException, InvalidArgumentsException, ValidationException{
+    @Test(expected = InvalidArgumentException.class)
+    public void testDeleteShortPath3() throws MalformedURLException, InvalidArgumentException, ValidationException{
         String shortPath="FKSLC5S";
         when(idValidator.isValid(shortPath)).thenReturn(false);
         svc.deleteURL(shortPath);    

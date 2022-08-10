@@ -19,8 +19,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
-import geturl.services.InvalidArgumentsException;
 import geturl.services.Service;
+import shorturls.exceptions.InvalidArgumentException;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,20 +34,21 @@ public class GetLongURLTest {
 	private Service svc;
 
     @Test
-	public void test1() throws MalformedURLException, InvalidArgumentsException {
+	public void test1() throws MalformedURLException, InvalidArgumentException {
 		String url = "file://wa";
-		InvalidArgumentsException e = new InvalidArgumentsException();
+		InvalidArgumentException e = new InvalidArgumentException("Invalid URL");
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		Map<String, String> map = new HashMap<>();
         map.put("shortURL", url);
         input.setQueryStringParameters(map);
 		var response = getLongURL.handleRequest(input);
 		assertEquals(Integer.valueOf(400), response.getStatusCode());
+		assertEquals("Invalid URL", response.getBody());
 	}
 
 
     @Test
-	public void test2() throws MalformedURLException, InvalidArgumentsException {
+	public void test2() throws MalformedURLException, InvalidArgumentException {
 		String url = "http://me.li/01230";
 		String encoded  = encode(url);
         var returnURLStr = "http://www.google.com";
@@ -63,7 +64,7 @@ public class GetLongURLTest {
 	}
 
     @Test
-	public void test3() throws MalformedURLException, InvalidArgumentsException {
+	public void test3() throws MalformedURLException, InvalidArgumentException {
 		String url = "a";
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		Map<String, String> map = new HashMap<>();
@@ -74,7 +75,7 @@ public class GetLongURLTest {
     }
 
 	@Test
-	public void test34() throws MalformedURLException, InvalidArgumentsException {
+	public void test34() throws MalformedURLException, InvalidArgumentException {
 		String url = "http://me.li/2342";
 		String encoded = encode(url);
 		when(svc.getLongURL(new URL(url),null)).thenReturn(Optional.empty());

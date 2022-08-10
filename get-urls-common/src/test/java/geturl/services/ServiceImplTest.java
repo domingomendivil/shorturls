@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.meli.events.Events;
 
 import shorturls.dao.Query;
+import shorturls.exceptions.InvalidArgumentException;
 import shorturls.model.URLItem;
 import urlutils.idvalidator.IdValidator;
 import urlutils.idvalidator.ValidationException;
@@ -38,7 +39,7 @@ public class ServiceImplTest {
 
 
     @Test
-    public void testGetLongURL1() throws MalformedURLException, InvalidArgumentsException, ValidationException{
+    public void testGetLongURL1() throws MalformedURLException, InvalidArgumentException, ValidationException{
     	URL url = new URL("http://www.montevideo.com.uy");
     	var urlResponse = new URL("http://www.google.com");
     	when(idValidator.getCode(url)).thenReturn("ASF");
@@ -48,26 +49,26 @@ public class ServiceImplTest {
         assertEquals(urlResponse,res.get());
     }
 
-    @Test(expected = InvalidArgumentsException.class)
-    public void testGetLongURL2() throws MalformedURLException, InvalidArgumentsException, ValidationException{
+    @Test(expected = InvalidArgumentException.class)
+    public void testGetLongURL2() throws MalformedURLException, InvalidArgumentException, ValidationException{
     	URL url = new URL("http://www.montevideo.com.uy");
     	ValidationException e = new ValidationException();
 		when(idValidator.getCode(url)).thenThrow(e);
         svc.getLongURL(url,null);    
     }
 
-/**    @Test(expected = InvalidArgumentsException.class)
-    public void testGetLongURL3() throws MalformedURLException, InvalidArgumentsException{
+/**    @Test(expected = InvalidArgumentException.class)
+    public void testGetLongURL3() throws MalformedURLException, InvalidArgumentException{
         svc.getURL(new URL("http://www.montevideo.com.uy/index.html"),null);    
     }
 
-    @Test(expected = InvalidArgumentsException.class)
-    public void testGetLongURL4() throws MalformedURLException, InvalidArgumentsException{
+    @Test(expected = InvalidArgumentException.class)
+    public void testGetLongURL4() throws MalformedURLException, InvalidArgumentException{
         svc.getURL(new URL("file:///sdcard"),null);    
     }
 
-    @Test(expected = InvalidArgumentsException.class)
-    public void testGetLongURL5() throws MalformedURLException, InvalidArgumentsException{
+    @Test(expected = InvalidArgumentException.class)
+    public void testGetLongURL5() throws MalformedURLException, InvalidArgumentException{
         svc.getURL(new URL("file:///sdcard"),null);    
     }**/
 

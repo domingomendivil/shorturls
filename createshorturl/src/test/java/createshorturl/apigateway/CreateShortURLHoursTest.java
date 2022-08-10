@@ -14,8 +14,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
-import createshorturl.services.InvalidArgumentsException;
 import createshorturl.services.Service;
+import shorturls.exceptions.InvalidArgumentException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreateShortURLHoursTest {
@@ -27,7 +27,7 @@ public class CreateShortURLHoursTest {
 	private CreateShortURLHours createShortURLHours;
 
 	@Test
-	public void test1() throws MalformedURLException, InvalidArgumentsException {
+	public void test1() throws MalformedURLException, InvalidArgumentException {
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"3\"}";
 		String url = "http://www.montevideo.com.uy";
 		String shortURL ="http://me.li/XDFUI";
@@ -42,7 +42,7 @@ public class CreateShortURLHoursTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void test2() throws MalformedURLException, InvalidArgumentsException {
+	public void test2() throws MalformedURLException, InvalidArgumentException {
 		String url = "file://wa";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(url);
@@ -51,7 +51,7 @@ public class CreateShortURLHoursTest {
 	}
 	
 	@Test
-	public void test3() throws MalformedURLException, InvalidArgumentsException {
+	public void test3() throws MalformedURLException, InvalidArgumentException {
 		String url = "http://www.montevideo.com.uy";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(url);
@@ -60,7 +60,7 @@ public class CreateShortURLHoursTest {
 	}
 
 	@Test
-	public void test5() throws MalformedURLException, InvalidArgumentsException {
+	public void test5() throws MalformedURLException, InvalidArgumentException {
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"A\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
@@ -69,7 +69,7 @@ public class CreateShortURLHoursTest {
 	
 	}
 	@Test
-	public void test6() throws MalformedURLException, InvalidArgumentsException {
+	public void test6() throws MalformedURLException, InvalidArgumentException {
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"-1\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
@@ -78,7 +78,7 @@ public class CreateShortURLHoursTest {
 	}
 
 	@Test
-	public void test7() throws MalformedURLException, InvalidArgumentsException {
+	public void test7() throws MalformedURLException, InvalidArgumentException {
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"0\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
@@ -88,7 +88,7 @@ public class CreateShortURLHoursTest {
 
 
 	@Test
-	public void test8() throws MalformedURLException, InvalidArgumentsException {
+	public void test8() throws MalformedURLException, InvalidArgumentException {
 		String json = "{\"url\": \"file://a\", \"hours\": \"1\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
@@ -97,7 +97,7 @@ public class CreateShortURLHoursTest {
 	}
 
 	@Test
-	public void test9() throws MalformedURLException, InvalidArgumentsException {
+	public void test9() throws MalformedURLException, InvalidArgumentException {
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"1\",\"hours2\": \"1\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);

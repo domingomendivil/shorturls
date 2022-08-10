@@ -2,6 +2,8 @@ package deleteshorturl.services;
 
 import java.net.URL;
 
+import shorturls.exceptions.InvalidArgumentException;
+
 /**
  * The Service interface, which is responsible for the logic and communicates between
  * the data layer and the API. 
@@ -27,9 +29,9 @@ public interface Service {
 	 * @param shortURL the short URL to delete
 	 * @throws InvalidArgumentsException
 	 */
-	public boolean deleteURL(URL shortURL) throws InvalidArgumentsException;
+	public boolean deleteURL(URL shortURL) throws InvalidArgumentException;
 	
 
-	public boolean deleteURL(String shortPath) throws InvalidArgumentsException;
+	public boolean deleteURL(String shortPath) throws InvalidArgumentException;
 
 }

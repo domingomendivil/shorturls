@@ -16,8 +16,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
-import geturl.services.InvalidArgumentsException;
 import geturl.services.Service;
+import shorturls.exceptions.InvalidArgumentException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RedirectShortURLTest {
@@ -50,7 +50,7 @@ public class RedirectShortURLTest {
 	}
 	
 	@Test
-	public void test3() throws MalformedURLException, InvalidArgumentsException {
+	public void test3() throws MalformedURLException, InvalidArgumentException {
 		input.setPathParameters(map);
 		map.put("code", "ADD");
 		String responseURL ="http://www.montevideo.com.uy";
@@ -62,18 +62,19 @@ public class RedirectShortURLTest {
 	}
 	
 	@Test
-	public void test4() throws MalformedURLException, InvalidArgumentsException {
+	public void test4() throws MalformedURLException, InvalidArgumentException {
 		input.setPathParameters(map);
 		map.put("code", "ADD");
-		InvalidArgumentsException e = new InvalidArgumentsException();
+		InvalidArgumentException e = new InvalidArgumentException("Invalid URL");
 		when(service.getURL("ADD", null)).thenThrow(e);
 		var response = redirectShortURL.handleRequest(input);
 		assertEquals(Integer.valueOf(400), response.getStatusCode());
+		assertEquals("Invalid URL", response.getBody());
 	}
 	
 
 	@Test
-	public void test5() throws MalformedURLException, InvalidArgumentsException {
+	public void test5() throws MalformedURLException, InvalidArgumentException {
 		input.setPathParameters(map);
 		map.put("code", "ADD");
 		when(service.getURL("ADD", null)).thenReturn(Optional.empty());

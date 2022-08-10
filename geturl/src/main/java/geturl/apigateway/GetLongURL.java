@@ -16,9 +16,9 @@ import org.apache.commons.validator.routines.UrlValidator;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
-import geturl.services.InvalidArgumentsException;
 import geturl.services.Service;
 import lombok.val;
+import shorturls.exceptions.InvalidArgumentException;
 
 public class GetLongURL {
 
@@ -49,7 +49,7 @@ public class GetLongURL {
                         return getOKResponse(longURL.get().toString());
                     }
                 }
-            } catch (InvalidArgumentsException | MalformedURLException| IllegalArgumentException e) {
+            } catch (InvalidArgumentException | MalformedURLException| IllegalArgumentException e) {
                //error in request, return next in the code
             }
         }

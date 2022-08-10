@@ -14,9 +14,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
-import createshorturl.services.InvalidArgumentsException;
 import createshorturl.services.Service;
-import createshorturl.services.ServiceException;
+import shorturls.exceptions.InvalidArgumentException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreateShortURLTest {
@@ -28,7 +27,7 @@ public class CreateShortURLTest {
 	private CreateShortURL createShortURL;
 
 	@Test
-	public void test1() throws MalformedURLException, InvalidArgumentsException {
+	public void test1() throws MalformedURLException, InvalidArgumentException {
 		String url = "http://www.montevideo.com.uy";
 		String shortURL ="http://me.li/XDFUI";
 		URL returnURL = new URL(shortURL);
@@ -42,7 +41,7 @@ public class CreateShortURLTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void test2() throws MalformedURLException, InvalidArgumentsException {
+	public void test2() throws MalformedURLException, InvalidArgumentException {
 		String url = "file://wa";
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		input.setBody(url);
