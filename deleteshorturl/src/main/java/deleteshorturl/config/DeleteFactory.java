@@ -9,8 +9,10 @@ import static shorturls.constants.Constants.RANDOM_ALPHABET;
 
 import com.meli.factory.Factory;
 
+import deleteshorturl.apigateway.DeleteShortPath;
 import deleteshorturl.apigateway.DeleteShortURL;
 import deleteshorturl.dao.DeleterDao;
+import deleteshorturl.services.Service;
 import deleteshorturl.services.ServiceImpl;
 import lombok.Getter;
 import lombok.val;
@@ -26,9 +28,14 @@ public class DeleteFactory {
 	}
 
 	@Getter(lazy = true)
-	private static final DeleteShortURL deleteShortURL = init();
+	private static final DeleteShortURL deleteShortURL = initDeleteShortURL();
 
-	private static DeleteShortURL init() {
+	@Getter(lazy = true)
+	private static final DeleteShortPath deleteShortPath = initDeleteShortPath();
+
+	private final static Service service = getService();
+
+	private static Service getService(){
 		val deleteFactory = getenv(DELETER_FACTORY);
 		val cacheEnabledStr = getenv(CACHE_ENABLED);
 		var deleter = new Factory<Deleter>().getInstance(deleteFactory);
@@ -41,8 +48,15 @@ public class DeleteFactory {
 		val baseURL = new BaseURL(getenv(BASE_URL));
 		val alphabet = getenv(RANDOM_ALPHABET);
 		val idValidator = new IdValidatorImpl(baseURL, alphabet);
-		val service = new ServiceImpl(deleter, idValidator);
+		return new ServiceImpl(deleter, idValidator);
+	}
+	
+	private static DeleteShortURL initDeleteShortURL() {
 		return new DeleteShortURL(service);
+	}
+
+	private static DeleteShortPath initDeleteShortPath() {
+		return new DeleteShortPath(service);
 	}
 
 }

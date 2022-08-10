@@ -30,4 +30,6 @@ public interface Service {
 	public boolean deleteURL(URL shortURL) throws InvalidArgumentsException;
 	
 
+	public boolean deleteURL(String shortPath) throws InvalidArgumentsException;
+
 }

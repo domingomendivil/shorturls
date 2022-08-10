@@ -1,0 +1,12 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sam-deleteshorturl"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-bte5stw6kjxj"
+s3_prefix = "sam-deleteshorturl"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "BaseURL=\"http://localhost:3000\" DynamoURL=\"http://dynamo-local:8000\" DeleterFactory=\"shorturls.dynamodao.DynamoDAOFactory\" CacheFactory=\"shorturl.cache.RedisCacheFactory\" CacheEnabled=\"false\" RandomAlphabet=\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\""
+image_repositories = []

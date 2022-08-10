@@ -1,0 +1,13 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sam-geturl"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-bte5stw6kjxj"
+s3_prefix = "sam-geturl"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+parameter_overrides = "DynamoURL=\"http://dynamo-local:8000\" BaseURL=\"http://127.0.0.1:3000\" RedisURL=\"redis://redis-server:6379/\" CacheEnabled=\"false\" QueryFactory=\"shorturls.dynamodao.DynamoDAOFactory\" CacheFactory=\"shorturls.cache.RedisCacheFactory\" EventsFactory=\"com.meli.kafka.KafkaFactory\" KafkaBrokers=\"kafka:29092\" KafkaClientId=\"client1\" KafkaTopicName=\"geturl\" KafkaEnabled=\"false\""
+image_repositories = []

@@ -35,4 +35,14 @@ public class ServiceImpl implements Service {
 		
 	}
 
+	@Override
+	public boolean deleteURL(String shortPath) throws InvalidArgumentsException {
+		if (idValidator.isValid(shortPath)){
+			return deleter.deleteById(shortPath);
+		}else{
+			throw new InvalidArgumentsException();
+		}
+	
+	}
+
 }
