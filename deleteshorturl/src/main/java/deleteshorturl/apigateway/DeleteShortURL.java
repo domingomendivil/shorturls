@@ -35,15 +35,11 @@ public class DeleteShortURL {
                 val shortPath = new URL(shortURL);
                 if (service.deleteURL(shortPath)){
                     return getOKResponse("URL deleted");
-                }else{
-                    return getNotFoundResponse();
                 }
             } catch (InvalidArgumentsException|MalformedURLException e) {
                 return getBadRequestResponse();
             }
-
-        } else {
-            return getBadRequestResponse();
         }
+        return getBadRequestResponse();
     }
 }

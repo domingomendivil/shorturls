@@ -26,17 +26,13 @@ public class DeleteShortPath {
         if (pars!=null){
             String shortPath = pars.get("code");
             try {
-                if (service.deleteURL(shortPath)){
+                if (service.deleteURL(shortPath))
                     return getOKResponse("URL deleted");
-                }else{
-                    return getNotFoundResponse();
-                }
             } catch (InvalidArgumentsException e) {
                 return getBadRequestResponse();
-            }
-        }else{
-            return getBadRequestResponse();
+            }       
         }
+        return getBadRequestResponse();
     }
     
 }
