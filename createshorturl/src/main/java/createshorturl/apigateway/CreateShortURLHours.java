@@ -17,7 +17,7 @@ import shorturls.exceptions.InvalidArgumentException;
 
 public class CreateShortURLHours {
 
-	private Service service;
+	private final Service service;
 
 	public CreateShortURLHours(Service service) {
 		this.service = service;

@@ -1,6 +1,6 @@
 package deleteshorturl.config;
 
-public class ConfigurationException extends RuntimeException {
+final public class ConfigurationException extends RuntimeException {
 
 	public ConfigurationException(String msg, Throwable e) {
 		super(msg,e);

@@ -13,7 +13,7 @@ import shorturls.exceptions.InvalidArgumentException;
 
 public class DeleteShortPath {
 
-    private Service service;
+    private final Service service;
 
     public DeleteShortPath(Service service) {
         this.service=service;

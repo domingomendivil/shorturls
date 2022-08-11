@@ -13,7 +13,7 @@ public class RedisCache implements Cache{
 	
 	private final RedisClient redisClient;
 	
-	public RedisCache(RedisClient redisClient) {
+	public RedisCache( RedisClient redisClient) {
 		this.redisClient=redisClient;
 	}
 
@@ -40,7 +40,7 @@ public class RedisCache implements Cache{
 	@Override
 	public Optional<URLItem> getById(String path) {
 		var connection =redisClient.connect();
-		var syncCommands = connection.sync();	
+		var syncCommands = connection.	sync();	
 		String urlItem = syncCommands.get(path);
 		return parse(path,urlItem);
 	}

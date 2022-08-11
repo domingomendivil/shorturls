@@ -21,7 +21,7 @@ import shorturls.dao.Deleter;
 import urlutils.idvalidator.BaseURL;
 import urlutils.idvalidator.IdValidatorImpl;
 
-public class DeleteFactory {
+public final class DeleteFactory {
 
 	private DeleteFactory() {
 		// cannot instantiate this class

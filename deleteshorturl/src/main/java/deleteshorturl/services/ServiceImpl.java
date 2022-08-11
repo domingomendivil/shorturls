@@ -12,7 +12,7 @@ import urlutils.idvalidator.ValidationException;
  * with data layer and the unique id generator.
  *
  */
-public class ServiceImpl implements Service {
+final public class ServiceImpl implements Service {
 
 	private final Deleter deleter;
 
