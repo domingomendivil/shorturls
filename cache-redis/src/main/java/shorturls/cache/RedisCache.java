@@ -42,6 +42,7 @@ public class RedisCache implements Cache{
 		var connection =redisClient.connect();
 		var syncCommands = connection.	sync();	
 		String urlItem = syncCommands.get(path);
+		System.out.println("URL item redis "+urlItem);
 		return parse(path,urlItem);
 	}
 
@@ -50,6 +51,7 @@ public class RedisCache implements Cache{
 		var connection =redisClient.connect();
 		var syncCommands = connection.sync();	
 		String str = format(urlItem);
+		System.out.println("redis put "+str);
 		syncCommands.set(path, str);
 	}
 
