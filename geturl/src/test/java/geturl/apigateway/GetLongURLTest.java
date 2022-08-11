@@ -75,7 +75,7 @@ public class GetLongURLTest {
     }
 
 	@Test
-	public void test34() throws MalformedURLException, InvalidArgumentException {
+	public void test4() throws MalformedURLException, InvalidArgumentException {
 		String url = "http://me.li/2342";
 		String encoded = encode(url);
 		when(svc.getLongURL(new URL(url),null)).thenReturn(Optional.empty());

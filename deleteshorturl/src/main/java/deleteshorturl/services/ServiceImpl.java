@@ -14,11 +14,18 @@ import urlutils.idvalidator.ValidationException;
  */
 final public class ServiceImpl implements Service {
 
+	/*
+	 * Deleter interface for deleting the short URL
+	 */
 	private final Deleter deleter;
 
 
+	/*
+	 * Validator responsible for validating the correct format of the short URL 
+	 */
 	private final IdValidator idValidator;
 
+	
 	public ServiceImpl(Deleter deleter, IdValidator idValidator) {
 		this.idValidator = idValidator;
 		this.deleter=deleter;

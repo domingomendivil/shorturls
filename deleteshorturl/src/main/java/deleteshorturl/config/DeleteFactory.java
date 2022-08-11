@@ -21,18 +21,32 @@ import shorturls.dao.Deleter;
 import urlutils.idvalidator.BaseURL;
 import urlutils.idvalidator.IdValidatorImpl;
 
+/**
+ * Factory class that injects the different components and finally
+ * returns instances for the API Gateway 
+ * DeleteShortURL and DeleteShortPath classes.
+ */
 public final class DeleteFactory {
 
 	private DeleteFactory() {
 		// cannot instantiate this class
 	}
 
+	/*
+	 * The deleteShortURL instance to return
+	 */
 	@Getter(lazy = true)
 	private static final DeleteShortURL deleteShortURL = initDeleteShortURL();
 
+	/*
+	 * The deleteShortPath instance to return
+	 */
 	@Getter(lazy = true)
 	private static final DeleteShortPath deleteShortPath = initDeleteShortPath();
 
+	/*
+	 * Service layer to be injected to the API Gateway classes
+	 */
 	private final static Service service = getService();
 
 	private static Service getService(){

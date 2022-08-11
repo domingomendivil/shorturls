@@ -40,9 +40,9 @@ public class RedisCache implements Cache{
 	@Override
 	public Optional<URLItem> getById(String path) {
 		var connection =redisClient.connect();
-		var syncCommands = connection.	sync();	
+		var syncCommands = connection.sync();	
 		String urlItem = syncCommands.get(path);
-		System.out.println("URL item redis "+urlItem);
+		System.out.println("item obtenido "+urlItem);
 		return parse(path,urlItem);
 	}
 

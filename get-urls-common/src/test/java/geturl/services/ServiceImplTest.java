@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.meli.events.Events;
 
+import lombok.val;
 import shorturls.dao.Query;
 import shorturls.exceptions.InvalidArgumentException;
 import shorturls.model.URLItem;
@@ -40,19 +41,27 @@ public class ServiceImplTest {
 
     @Test
     public void testGetLongURL1() throws MalformedURLException, InvalidArgumentException, ValidationException{
-    	URL url = new URL("http://www.montevideo.com.uy");
-    	var urlResponse = new URL("http://www.google.com");
+    	val url = new URL("http://www.montevideo.com.uy");
+    	val urlResponse = new URL("http://www.google.com");
     	when(idValidator.getCode(url)).thenReturn("ASF");
-    	URLItem item = new URLItem("ASF",urlResponse,LocalDateTime.now(),null);
+    	val item = new URLItem("ASF",urlResponse,LocalDateTime.now(),null);
 		when(query.getById("ASF")).thenReturn(Optional.of(item));
-        var res = svc.getLongURL(url,null);
+		val res = svc.getLongURL(url,null);
         assertEquals(urlResponse,res.get());
     }
 
     @Test(expected = InvalidArgumentException.class)
     public void testGetLongURL2() throws MalformedURLException, InvalidArgumentException, ValidationException{
-    	URL url = new URL("http://www.montevideo.com.uy");
-    	ValidationException e = new ValidationException();
+    	val url = new URL("http://www.montevideo.com.uy");
+    	val e = new ValidationException();
+		when(idValidator.getCode(url)).thenThrow(e);
+        svc.getLongURL(url,null);    
+    }
+    
+    @Test(expected = InvalidArgumentException.class)
+    public void testGetLongURL3() throws MalformedURLException, InvalidArgumentException, ValidationException{
+    	val url = new URL("http://www.montevideo.com.uy");
+    	val e = new ValidationException();
 		when(idValidator.getCode(url)).thenThrow(e);
         svc.getLongURL(url,null);    
     }

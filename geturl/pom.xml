@@ -8,20 +8,16 @@
 		<artifactId>shorturls-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-
-
-	<groupId>com.meli</groupId>
 	<artifactId>geturl</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>Short URL Get REST API Service</name>
+	<name>API Get URL</name>
 
 	<dependencies>
 
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>3.2.4</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -71,7 +67,6 @@
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>events</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -82,6 +77,18 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.meli</groupId>
+			<artifactId>dynamodao</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.meli</groupId>
+			<artifactId>shorturl-cache-redis</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
 	</dependencies>
 
 
@@ -90,7 +97,7 @@
 			<dependency>
 				<groupId>software.amazon.awssdk</groupId>
 				<artifactId>bom</artifactId>
-				<version>2.17.241</version>
+				<version>${amazon.awssdk.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -105,7 +112,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.2.4</version>
+				<version>${maven.shade.plugin.version}</version>
 				<configuration>
 					<filters>
 						<filter>

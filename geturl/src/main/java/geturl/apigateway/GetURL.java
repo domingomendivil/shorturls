@@ -30,8 +30,7 @@ public class GetURL {
                 }
             } catch (InvalidArgumentException e) {
                 //error in request, return next in the code
-            }
-
+            } 
         }
         return ResponseCreator.getBadRequestResponse();
     }

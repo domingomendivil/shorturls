@@ -6,7 +6,6 @@ import static shorturls.constants.Constants.CACHE_ENABLED;
 import static shorturls.constants.Constants.CACHE_FACTORY;
 import static shorturls.constants.Constants.WRITER_FACTORY;
 
-
 import com.meli.factory.Factory;
 
 import createshorturl.apigateway.CreateShortURL;
@@ -14,13 +13,13 @@ import createshorturl.apigateway.CreateShortURLHours;
 import createshorturl.events.EventsImplDAO;
 import createshorturl.events.WriterWithCache;
 import createshorturl.generator.IDGenerator;
-import createshorturl.services.BaseURL;
 import createshorturl.services.Service;
 import createshorturl.services.ServiceImpl;
 import lombok.Getter;
 import lombok.val;
 import shorturls.cache.Cache;
 import shorturls.dao.Writer;
+import urlutils.idvalidator.BaseURL;
 
 public class CreateFactory {
 

@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import createshorturl.events.Events;
 import createshorturl.generator.IDGenerator;
 import shorturls.exceptions.InvalidArgumentException;
+import urlutils.idvalidator.BaseURL;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServiceImplTest {

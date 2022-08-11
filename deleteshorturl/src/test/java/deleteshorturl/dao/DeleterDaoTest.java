@@ -13,7 +13,7 @@ import shorturls.cache.Cache;
 import shorturls.dao.Deleter;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DeleterDAOTest {
+public class DeleterDaoTest {
 	
 	@InjectMocks
 	private DeleterDao dao;

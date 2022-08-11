@@ -26,8 +26,6 @@ public class GetLongURL {
 
     private final Service service;
     
-    private final Encoder encoder  = Base64.getUrlEncoder();
-    
     private final Decoder decoder  = Base64.getUrlDecoder();
     
     public GetLongURL(Service service) {
@@ -55,10 +53,6 @@ public class GetLongURL {
         }
 
         return getBadRequestResponse();
-    }
-
-    public String encode(String raw) {
-        return encoder.encodeToString(raw.getBytes(StandardCharsets.UTF_8));
     }
 
     public String decode(String raw) {

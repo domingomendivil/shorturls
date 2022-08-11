@@ -51,6 +51,12 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		
+		<dependency>
+			<groupId>com.meli</groupId>
+			<artifactId>shorturl-utils</artifactId>
+		</dependency>
 	</dependencies>
 
 
@@ -59,7 +65,7 @@
 			<dependency>
 				<groupId>software.amazon.awssdk</groupId>
 				<artifactId>bom</artifactId>
-				<version>2.17.241</version>
+				<version>${amazon.awssdk.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -74,20 +80,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.8</version>
 				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
 					<execution>
 						<id>jacoco-check</id>
 						<goals>

@@ -8,7 +8,6 @@ import static shorturls.constants.Constants.QUERY_FACTORY;
 import static shorturls.constants.Constants.RANDOM_ALPHABET;
 
 import com.meli.events.Events;
-import com.meli.factory.ConfigurationException;
 import com.meli.factory.Factory;
 
 import geturl.query.QueryWithCacheImpl;
@@ -17,6 +16,7 @@ import geturl.services.ServiceImpl;
 import lombok.Getter;
 import lombok.val;
 import shorturls.cache.Cache;
+import shorturls.config.ConfigurationException;
 import shorturls.config.ShortURLProperties;
 import shorturls.dao.Query;
 import urlutils.idvalidator.BaseURL;
@@ -51,7 +51,8 @@ public class ServiceFactory {
 			val alphabet = properties.getProperty(RANDOM_ALPHABET);
 			val idValidator = new IdValidatorImpl(baseURL, alphabet);
 			return new ServiceImpl(query, idValidator, events);	
-		}catch (ConfigurationException e) {
+		}catch (com.meli.factory.ConfigurationException e) {
+			e.printStackTrace();
 			throw new shorturls.config.ConfigurationException(e);
 		}
 

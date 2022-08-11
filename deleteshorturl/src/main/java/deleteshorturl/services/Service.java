@@ -31,7 +31,16 @@ public interface Service {
 	 */
 	public boolean deleteURL(URL shortURL) throws InvalidArgumentException;
 	
-
+	
+	/**
+	 * Deletes a short URL based on its short path. If the delete succeeds it returns
+	 * true. Otherwise it returns false. 
+	 * In case that the code (shortPath) associated withe short URL is invalid, 
+	 * it throws an InvalidArgumentException.
+	 * @param shortPath The code of the short URL after the base URL
+	 * @return
+	 * @throws InvalidArgumentException the exception thrown in case of an invalid code
+	 */
 	public boolean deleteURL(String shortPath) throws InvalidArgumentException;
 
 }
