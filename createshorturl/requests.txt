@@ -1,0 +1,3 @@
+curl -X POST https://yfy4m0d014.execute-api.us-east-1.amazonaws.com/Prod/urls -H 'Content-type: text/plain' -d http://www.google.com  
+curl -X POST https://yfy4m0d014.execute-api.us-east-1.amazonaws.com/Prod/urls -H 'Content-type: application/json' -d '{"url":"http://www.peñarol.org","hours":"1"}'
+curl -X POST http://localhost:3000/urls  -H 'content-type: application/json' -d  '{"url":"http://www.peñarol.org","hours":"1"}'

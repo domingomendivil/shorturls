@@ -11,10 +11,6 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<jackson.version>2.13.3</jackson.version>
-	</properties>
-
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>API Create Short URL</name>
@@ -126,6 +122,13 @@
 			<groupId>com.meli</groupId>
 			<artifactId>shorturl-cache-api</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.meli</groupId>
+			<artifactId>shorturl-cache-redis</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
 
 	</dependencies>
 

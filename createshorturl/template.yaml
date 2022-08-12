@@ -14,6 +14,9 @@ Parameters:
   BaseURL:
     Type: String
     Default: "http://localhost:3000"
+  RedisURL:
+    Type: String
+    Default: "redis://redis-server:6379/"  
   WriterFactory:
     Type: String
     Default: "shorturls.dynamodao.DynamoDAOFactory"    
@@ -35,6 +38,9 @@ Parameters:
   CacheEnabled:
     Type: String
     Default: "false"
+  CacheFactory:
+    Type: String
+    Default: "shorturls.cache.RedisCacheFactory"
 Resources:
   CreateShortURLFunction:
     Type: AWS::Serverless::Function 
@@ -46,6 +52,7 @@ Resources:
         - x86_64
       Policies:
       - AmazonDynamoDBFullAccess
+      - AmazonVPCCrossAccountNetworkInterfaceOperations
       MemorySize: 512
       Environment: 
         Variables:
@@ -57,7 +64,10 @@ Resources:
           RANDOM_LENGTH: !Ref RandomLength
           RANDOM_ALPHABET: !Ref RandomAlphabet
           RANDOM_ALGORITHM: !Ref RandomAlgorithm
-          RANDOM_SEED: !Ref RandomSeed   
+          RANDOM_SEED: !Ref RandomSeed
+          REDIS_URL: !Ref RedisURL
+          CACHE_ENABLED: !Ref CacheEnabled
+          CACHE_FACTORY: !Ref CacheFactory  
       Events:
         CreateShortURLEvent:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -74,6 +84,7 @@ Resources:
         - x86_64
       Policies:
       - AmazonDynamoDBFullAccess
+      - AmazonVPCCrossAccountNetworkInterfaceOperations
       MemorySize: 512
       Environment: 
         Variables:
@@ -85,7 +96,10 @@ Resources:
           RANDOM_LENGTH: !Ref RandomLength
           RANDOM_ALPHABET: !Ref RandomAlphabet
           RANDOM_ALGORITHM: !Ref RandomAlgorithm
-          RANDOM_SEED: !Ref RandomSeed   
+          RANDOM_SEED: !Ref RandomSeed
+          REDIS_URL: !Ref RedisURL
+          CACHE_ENABLED: !Ref CacheEnabled
+          CACHE_FACTORY: !Ref CacheFactory
       Events:
         CreateShortURLHoursEvent:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
