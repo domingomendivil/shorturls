@@ -33,9 +33,9 @@ public class ServiceImpl implements Service {
 	}
 
 	
-	private URLItem newURLItem(URL longURL,Long expirationHours){
+	private URLItem newURLItem(URL longURL,Long expirationTime){
 		val id = idGenerator.generateUniqueID();
-		return new URLItem(id,longURL,LocalDateTime.now(),expirationHours);
+		return new URLItem(id,longURL,LocalDateTime.now(),expirationTime);
 	}
 
 	@Override
@@ -57,18 +57,24 @@ public class ServiceImpl implements Service {
 
 
 	@Override
-	public URL createShortURL(URL longURL, Long hours) throws InvalidArgumentException {
-		if ((validHours(hours)) && (validURL(longURL))){
-			val item = newURLItem(longURL,hours);
+	public URL createShortURL(URL longURL, Long time) throws InvalidArgumentException {
+		if ((validSeconds(time)) && (validURL(longURL))){
+			val seconds = getEpochSeconds(time);
+			val item = newURLItem(longURL,seconds);
 			events.send(item);
 			return getShortURL(item.getShortPath());
 		}else{
-			throw new InvalidArgumentException("Expiration hours must be between  invalid");
+			throw new InvalidArgumentException("Invalid arguments");
 		}
 	}
 
-	private boolean validHours(Long hours) {
-		return ((hours >= 1) && (hours<=10000));
+	private Long getEpochSeconds(Long time) {
+		return (System.currentTimeMillis()/1000)+time;
+	}
+
+
+	private boolean validSeconds(Long time) {
+		return (time > 0);
 	}
 
 	private URL getShortURL(String id) {
@@ -77,6 +83,11 @@ public class ServiceImpl implements Service {
 		} catch (MalformedURLException e) {
 			throw new ServiceException("An internal error has ocurred creating the short URL",e);
 		}
+	}
+
+	public static void main(String[] args) {
+		Long n =  100L/3;
+		System.out.println(n);
 	}
 	
 }

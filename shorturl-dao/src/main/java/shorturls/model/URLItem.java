@@ -39,7 +39,7 @@ public class URLItem {
 	/*
 	 * 
 	 */
-	private Long expirationHours;
+	private Long expirationTime;
     
 	
 	

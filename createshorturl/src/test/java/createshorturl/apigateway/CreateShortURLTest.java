@@ -67,7 +67,7 @@ public class CreateShortURLTest {
 
 	@Test
 	public void test3() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"3\"}";
+		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"3\"}";
 		String url = "http://www.montevideo.com.uy";
 		String shortURL ="http://me.li/XDFUI";
 		URL returnURL = new URL(shortURL);
@@ -103,7 +103,7 @@ public class CreateShortURLTest {
 
 	@Test
 	public void test6() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"A\"}";
+		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"A\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
 		setJson(input);
@@ -113,7 +113,7 @@ public class CreateShortURLTest {
 	}
 	@Test
 	public void test7() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"-1\"}";
+		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"-1\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
 		setJson(input);
@@ -123,7 +123,7 @@ public class CreateShortURLTest {
 
 	@Test
 	public void test8() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"0\"}";
+		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"0\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
 		setJson(input);
@@ -134,7 +134,7 @@ public class CreateShortURLTest {
 
 	@Test
 	public void test9() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"file://a\", \"hours\": \"1\"}";
+		String json = "{\"url\": \"file://a\", \"seconds\": \"1\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
 		setJson(input);
@@ -144,7 +144,7 @@ public class CreateShortURLTest {
 
 	@Test
 	public void test10() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"1\",\"hours2\": \"1\"}";
+		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"1\",\"seconds2\": \"1\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
 		setJson(input);
@@ -154,7 +154,7 @@ public class CreateShortURLTest {
 
 	@Test
 	public void test11() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"hours\": \"1\",\"hours2\": \"1\"}";
+		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"1\",\"seconds2\": \"1\"}";
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
 		Map<String,String> headers = new HashMap<>();

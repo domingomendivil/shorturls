@@ -56,10 +56,6 @@ public class ServiceImplTest {
 		svc.createShortURL(new URL("http://www.montevideo.com.uy"), 0L);
 	}
 
-	@Test(expected = InvalidArgumentException.class)
-	public void testCreateShortURL5() throws MalformedURLException, InvalidArgumentException {
-		svc.createShortURL(new URL("http://www.montevideo.com.uy"), 10001L);
-	}
 
 	@Test
 	public void testCreateShortURL6() throws MalformedURLException, InvalidArgumentException {

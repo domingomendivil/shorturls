@@ -34,7 +34,7 @@ public class DynamoDAO implements Query,Writer,Deleter {
 	private static final String LONG_URL="longURL";
 	private static final String CREATION_DATE="creationDate";
 	private static final String TTL = "ttl";
-	private static final String EXPIRATION_HOURS = "expirationHours";
+	private static final String EXPIRATION_TIME = "expirationHours";
 
     public DynamoDAO(DynamoDbClient client){
         this.client=client;
@@ -65,17 +65,13 @@ public class DynamoDAO implements Query,Writer,Deleter {
 		try {
 			val responseItem = response.item();
 			val longURL = new URL(responseItem.get(LONG_URL).s());
-			//urlItem.setLongURL(longURL);
 			val shortPath = responseItem.get(PK).s();
-			//urlItem.setShortPath(responseItem.get(PK).s());
 			val str=responseItem.get(CREATION_DATE).s();
 			val date = getDate(str);
-			//urlItem.setCreationDate(date);
-			val hoursItem = responseItem.get(EXPIRATION_HOURS);
-			if (hoursItem !=null) {
-				val hours =hoursItem.n();
+			val time = responseItem.get(EXPIRATION_TIME);
+			if (time !=null) {
+				val hours =time.n();
 				long nro = Long.parseLong(hours);
-				//urlItem.setExpirationHours(nro);
 				return new URLItem(shortPath,longURL,date,nro);
 			}else {
 				return new URLItem(shortPath,longURL,date,null);
@@ -84,7 +80,7 @@ public class DynamoDAO implements Query,Writer,Deleter {
 			throw new QueryException(e);
 		}
 	}
-
+	
 	private LocalDateTime getDate(String s) {
 		return LocalDateTime.parse(s);
 	}
@@ -95,13 +91,10 @@ public class DynamoDAO implements Query,Writer,Deleter {
 		item.put(PK,  fromS(urlItem.getShortPath()));
 		item.put(LONG_URL,  fromS(urlItem.getLongURL().toString()));
 		item.put(CREATION_DATE,  fromS(urlItem.getCreationDate().toString()));
-		val expirationHours= urlItem.getExpirationHours();
-		if (expirationHours!=null){
-			item.put(EXPIRATION_HOURS,fromN(expirationHours.toString()));
-			//TTL in Dynamodb is expressed in epoch time
-			//The hours must be converted to miliseconds and then 
-			//the current time must be added to get the new epoch time
-			Long ttl = System.currentTimeMillis() +(3600000*expirationHours);
+		val expirationTime= urlItem.getExpirationTime();
+		if (expirationTime!=null){
+			item.put(EXPIRATION_TIME,fromN(expirationTime.toString()));
+			Long ttl = expirationTime;
 		    item.put(TTL,fromN(ttl.toString()));
 		}
 		val request = PutItemRequest.builder()

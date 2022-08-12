@@ -9,7 +9,7 @@ import static shorturls.constants.Constants.WRITER_FACTORY;
 import com.meli.factory.Factory;
 
 import createshorturl.apigateway.CreateShortURL;
-import createshorturl.apigateway.CreateShortURLHours;
+import createshorturl.apigateway.CreateShortURLSeconds;
 import createshorturl.events.EventsImplDAO;
 import createshorturl.events.WriterWithCache;
 import createshorturl.generator.IDGenerator;
@@ -31,7 +31,7 @@ public class CreateFactory {
 	private static final CreateShortURL createShortURL = new CreateShortURL(getService());
 
 	@Getter(lazy = true)
-	private static final CreateShortURLHours createShortURLHours = new CreateShortURLHours(getService());
+	private static final CreateShortURLSeconds createShortURLSeconds = new CreateShortURLSeconds(getService());
 
 	@Getter(lazy = true)
 	private static final Service service = initService();

@@ -35,12 +35,12 @@ public class CreateShortURL {
 	private APIGatewayProxyResponseEvent handleURLHours(final String body, final APIGatewayProxyRequestEvent input) {
 		try{
 			System.out.println("body "+body);
-			val urlHours=mapper.readValue(body,URLHours.class);
-			val url = urlHours.getUrl();
+			val urlExpire=mapper.readValue(body,URLExpire.class);
+			val url = urlExpire.getUrl();
 			System.out.println("url "+url);
-			val hours=urlHours.getHours();
-			System.out.println("hours "+hours);
-			if (hours <=0){
+			val seconds=urlExpire.getSeconds();
+			System.out.println("hours "+seconds);
+			if (seconds <=0){
 				System.out.println("hours not valid");
 				return ResponseCreator.getBadRequestResponse();
 			}
@@ -50,7 +50,7 @@ public class CreateShortURL {
 				try {
 					System.out.println("url isValid "+isValid);
 					val newURL = new URL(url);
-					val  shortURL = service.createShortURL(newURL,urlHours.getHours());
+					val  shortURL = service.createShortURL(newURL,urlExpire.getSeconds());
 					return ResponseCreator.getWillBeCreatedResponse(shortURL.toString());
 				}  catch (MalformedURLException| InvalidArgumentException e) {
 					System.out.println("mal formed url ");

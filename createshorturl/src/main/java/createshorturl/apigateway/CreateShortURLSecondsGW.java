@@ -13,12 +13,12 @@ import createshorturl.config.CreateFactory;
  * AWS Lambda Handler request for creating a short URL associated with a given
  * long URL
  */
-public class CreateShortURLHoursGW implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class CreateShortURLSecondsGW implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-	private final CreateShortURLHours createShortURLHours = CreateFactory.getCreateShortURLHours();
+	private final CreateShortURLSeconds createShortURLSeconds= CreateFactory.getCreateShortURLSeconds();
 
 	public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-		return createShortURLHours.handleRequest(input);
+		return createShortURLSeconds.handleRequest(input);
 	}
 	
 

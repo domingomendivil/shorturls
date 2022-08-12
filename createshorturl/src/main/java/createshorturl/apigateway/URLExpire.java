@@ -1,9 +1,9 @@
 package createshorturl.apigateway;
 
 
-public class URLHours {
+public class URLExpire {
     private String url;
-    private Long hours;
+    private Long seconds;
     
 
     public String getUrl(){
@@ -13,10 +13,10 @@ public class URLHours {
         this.url=url;
     }
 
-    public Long getHours(){
-        return hours;
+    public Long getSeconds(){
+        return seconds;
     }
-    public void setHours(Long hours){
-        this.hours=hours;
+    public void setSeconds(Long seconds){
+        this.seconds=seconds;
     }
 }
