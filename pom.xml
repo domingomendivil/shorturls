@@ -24,6 +24,7 @@
 		<module>shorturl-utils</module>
 		<module>shorturl-dao</module>
 
+		<module>dynamoevents</module>
 	</modules>
 
 	<properties>
@@ -44,19 +45,19 @@
 	<dependencyManagement>
 
 		<dependencies>
-		
-				<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
 
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
@@ -71,6 +72,14 @@
 				<version>${junit.jupiter.version}</version>
 				<scope>test</scope>
 			</dependency>
+
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-params</artifactId>
+				<version>${junit.jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+
 
 			<dependency>
 				<groupId>org.mockito</groupId>
@@ -180,8 +189,9 @@
 						<filter>
 							<artifact>*:*</artifact>
 							<excludes>
-							<exclude>module-info.class</exclude>
-								<exclude>META-INF/services/reactor.blockhound.integration.BlockHoundIntegration</exclude>
+								<exclude>module-info.class</exclude>
+								<exclude>META-INF/services/reactor.blockhound.integration.BlockHoundIntegration
+								</exclude>
 								<exclude>module-info.class</exclude>
 								<exclude>META-INF/versions/9/module-info.class</exclude>
 								<exclude>META-INF/maven/com.fasterxml.jackson.core/jackson-core/pom.xml

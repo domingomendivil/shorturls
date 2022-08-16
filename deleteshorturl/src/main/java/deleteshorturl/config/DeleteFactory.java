@@ -47,7 +47,7 @@ public final class DeleteFactory {
 	/*
 	 * Service layer to be injected to the API Gateway classes
 	 */
-	private final static Service service = getService();
+	private static final  Service service = getService();
 
 	private static Service getService(){
 		val deleteFactory = getenv(DELETER_FACTORY);

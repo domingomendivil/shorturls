@@ -7,12 +7,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import createshorturl.services.Service;
 import shorturls.exceptions.InvalidArgumentException;
@@ -33,9 +36,7 @@ public class CreateShortURLSecondsTest {
 		String shortURL ="http://me.li/XDFUI";
 		URL returnURL = new URL(shortURL);
 		when(svc.createShortURL(new URL(url),3L)).thenReturn(returnURL);
-		var input = new APIGatewayProxyRequestEvent();
-		input.setBody(json);
-		var response = createShortURLHours.handleRequest(input);
+		var response = handleRequest(json);
 		assertEquals(Integer.valueOf(201), response.getStatusCode());
 		assertEquals(shortURL, response.getBody());
 	}
@@ -44,65 +45,35 @@ public class CreateShortURLSecondsTest {
 	@Test
 	public void test2() throws MalformedURLException, InvalidArgumentException {
 		String url = "file://wa";
-		var input = new APIGatewayProxyRequestEvent();
-		input.setBody(url);
-		var response = createShortURLHours.handleRequest(input);
+		var response = handleRequest(url);
 		assertEquals(Integer.valueOf(400), response.getStatusCode());
 	}
 	
 	@Test
 	public void test3() throws MalformedURLException, InvalidArgumentException {
 		String url = "http://www.montevideo.com.uy";
-		var input = new APIGatewayProxyRequestEvent();
-		input.setBody(url);
-		var response = createShortURLHours.handleRequest(input);
+		var response = handleRequest(url);
 		assertEquals(Integer.valueOf(400), response.getStatusCode());
 	}
 
-	@Test
-	public void test5() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"A\"}";
-		var input = new APIGatewayProxyRequestEvent();
-		input.setBody(json);
-		var response = createShortURLHours.handleRequest(input);
+	@ParameterizedTest
+	@ValueSource(strings= {
+			"{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"A\"}",
+			"{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"-1\"}",
+			"{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"0\"}",
+			"{\"url\": \"file://a\", \"seconds\": \"1\"}",
+			"{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"1\",\"seconds2\": \"1\"}"
+	})
+	public void test5(String arg) throws MalformedURLException, InvalidArgumentException {
+		var response = handleRequest(arg);
 		assertEquals(Integer.valueOf(400), response.getStatusCode());
 	
 	}
-	@Test
-	public void test6() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"-1\"}";
-		var input = new APIGatewayProxyRequestEvent();
-		input.setBody(json);
-		var response = createShortURLHours.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
-	}
 
-	@Test
-	public void test7() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"0\"}";
+	private APIGatewayProxyResponseEvent handleRequest(String body) {
 		var input = new APIGatewayProxyRequestEvent();
-		input.setBody(json);
-		var response = createShortURLHours.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
-	}
-
-
-	@Test
-	public void test8() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"file://a\", \"seconds\": \"1\"}";
-		var input = new APIGatewayProxyRequestEvent();
-		input.setBody(json);
-		var response = createShortURLHours.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
-	}
-
-	@Test
-	public void test9() throws MalformedURLException, InvalidArgumentException {
-		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"1\",\"seconds2\": \"1\"}";
-		var input = new APIGatewayProxyRequestEvent();
-		input.setBody(json);
-		var response = createShortURLHours.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
+		input.setBody(body);
+		return createShortURLHours.handleRequest(input);
 	}
 
 

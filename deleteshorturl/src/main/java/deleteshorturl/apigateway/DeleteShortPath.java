@@ -13,27 +13,27 @@ import shorturls.exceptions.InvalidArgumentException;
 
 public class DeleteShortPath {
 
-    private final Service service;
+	private final Service service;
 
-    public DeleteShortPath(Service service) {
-        this.service=service;
-    }
+	public DeleteShortPath(Service service) {
+		this.service = service;
+	}
 
-    public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
-        val pars = input.getPathParameters();
-        if (pars!=null){
-            String shortPath = pars.get("code");
-            if (shortPath!=null)
-            try {
-                if (service.deleteURL(shortPath))
-                    return getOKResponse("URL deleted");
-                else
-                	return getNotFoundResponse();
-            } catch (InvalidArgumentException e) {
-                //bad request, return next in code
-            }       
-        }
-        return getBadRequestResponse();
-    }
-    
+	public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
+		val pars = input.getPathParameters();
+		if (pars != null) {
+			String shortPath = pars.get("code");
+			if (shortPath != null)
+				try {
+					if (service.deleteURL(shortPath))
+						return getOKResponse("URL deleted");
+					else
+						return getNotFoundResponse();
+				} catch (InvalidArgumentException e) {
+					// bad request, return next in code
+				}
+		}
+		return getBadRequestResponse();
+	}
+
 }

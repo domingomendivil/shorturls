@@ -2,6 +2,6 @@ package createshorturl.generator;
 
 import java.math.BigInteger;
 
-interface Base62Encoder {
+interface Encoder {
     public String encode(BigInteger value);
 }

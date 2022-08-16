@@ -117,8 +117,8 @@ components:
         url:
           type: string
           example: http://www.google.com
-        hours:
+        seconds:
           type: integer
           example: 10
           minimum: 0
-          description: The hours after which the short URL expires and is deleted automatically
+          description: The seconds after which the short URL expires and is deleted automatically

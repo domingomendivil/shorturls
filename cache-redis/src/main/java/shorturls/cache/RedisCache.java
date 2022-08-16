@@ -43,7 +43,6 @@ public class RedisCache implements Cache{
 		var connection =redisClient.connect();
 		var syncCommands = connection.sync();	
 		String urlItem = syncCommands.get(path);
-		System.out.println("item obtained "+urlItem);
 		return parse(path,urlItem);
 	}
 
@@ -52,7 +51,6 @@ public class RedisCache implements Cache{
 		var connection =redisClient.connect();
 		var syncCommands = connection.sync();	
 		String str = format(urlItem);
-		System.out.println("redis put "+str);
 		Long expirationTime=urlItem.getExpirationTime();
 		if (expirationTime==null){
 			syncCommands.set(path, str);

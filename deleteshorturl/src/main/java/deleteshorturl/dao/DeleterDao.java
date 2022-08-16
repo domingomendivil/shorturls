@@ -9,7 +9,7 @@ import shorturls.dao.Deleter;
  * if the delete is successful it deletes the
  * item from the cache. 
  */
-final public class DeleterDao implements Deleter{
+public final class DeleterDao implements Deleter{
 
 	/**
 	 * The deleter interface, you should pass a database implementation

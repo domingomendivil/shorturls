@@ -6,8 +6,6 @@ import static shorturls.apigateway.ResponseCreator.getWillBeCreatedResponse;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
@@ -22,6 +20,7 @@ import lombok.val;
 import shorturls.apigateway.ResponseCreator;
 import shorturls.exceptions.InvalidArgumentException;
 
+
 public class CreateShortURL {
 
 	private final Service service;
@@ -31,44 +30,39 @@ public class CreateShortURL {
 	public CreateShortURL(Service service) {
 		this.service = service;
 	}
+	
+	private APIGatewayProxyResponseEvent getShortURL(String url,URLExpire urlExpire){
+		try {
+			val newURL = new URL(url);
+			val  shortURL = service.createShortURL(newURL,urlExpire.getSeconds());
+			return ResponseCreator.getWillBeCreatedResponse(shortURL.toString());
+		}  catch (MalformedURLException| InvalidArgumentException e) {
+			return ResponseCreator.getBadRequestResponse();
+		} catch (ServiceException e) {
+			return ResponseCreator.getInternalErrorResponse();
+		}
+	}
 
-	private APIGatewayProxyResponseEvent handleURLHours(final String body, final APIGatewayProxyRequestEvent input) {
+	private APIGatewayProxyResponseEvent handleURLExpires(final String body) {
 		try{
-			System.out.println("body "+body);
 			val urlExpire=mapper.readValue(body,URLExpire.class);
 			val url = urlExpire.getUrl();
-			System.out.println("url "+url);
 			val seconds=urlExpire.getSeconds();
-			System.out.println("hours "+seconds);
 			if (seconds <=0){
-				System.out.println("hours not valid");
 				return ResponseCreator.getBadRequestResponse();
 			}
-				
 			val isValid = UrlValidator.getInstance().isValid(url);
 			if (isValid) {
-				try {
-					System.out.println("url isValid "+isValid);
-					val newURL = new URL(url);
-					val  shortURL = service.createShortURL(newURL,urlExpire.getSeconds());
-					return ResponseCreator.getWillBeCreatedResponse(shortURL.toString());
-				}  catch (MalformedURLException| InvalidArgumentException e) {
-					System.out.println("mal formed url ");
-					return ResponseCreator.getBadRequestResponse();
-				} catch (ServiceException e) {
-					return ResponseCreator.getInternalErrorResponse();
-				}
+				return getShortURL(url,urlExpire);
 			} else {
-				System.out.println("url isn't valid");
 				return ResponseCreator.getBadRequestResponse();
 			}
 		}catch(JsonProcessingException e){
-			System.out.println("parse json exception");
 			return ResponseCreator.getBadRequestResponse();
 		}
 	}
 
-	private APIGatewayProxyResponseEvent handleURL(final String body, final APIGatewayProxyRequestEvent input) {
+	private APIGatewayProxyResponseEvent handleURL(final String body) {
 		val isValid = UrlValidator.getInstance().isValid(body);
 		if (isValid) {
 			try {
@@ -88,13 +82,11 @@ public class CreateShortURL {
 	
 	public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
 		val contentType = input.getHeaders().get("content-type");
-		System.out.println("content-type "+contentType);
 		val body = input.getBody();
-		System.out.println("body "+body);
 		if ("text/plain".equals(contentType)){
-			return handleURL(body,input);
+			return handleURL(body);
 		}else if (("application/json").equals(contentType)){
-			return handleURLHours(body,input);
+			return handleURLExpires(body);
 		}else{
 			return getBadRequestResponse();
 		}

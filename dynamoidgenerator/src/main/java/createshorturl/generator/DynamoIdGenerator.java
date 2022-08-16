@@ -11,20 +11,52 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
 
+/**
+ * This class implements IDGenerator interface for obtaining a unique short code used in short URLs.
+ * A base62 encoded counter is used, which is an incremented atomic counter calculated in DynamoDb.
+ * This code, should not be used as secure code with secure short URLs, 
+ * because it's not securely generated, as it can be easily guessed.
+ * It can be used safely accross one AWS region, to avoid collisions in generating short URLs. 
+ * The operation is not idempotent, that means that if connection goes down after you update
+ * you won't know if the update was successful, and where you should retry the operation. 
+ * Another problem you have with using dynamodb counters is the hot partition problem.
+ */
 public class DynamoIdGenerator implements IDGenerator {
+	
+	/*
+	 * Attribute value for incrementing one to the counter
+	 */
+	private static final AttributeValue one = fromN("1");
 
+	/*
+	 * Table used for storing the atomic counter
+	 */
+	
 	private static final String TABLE_URL_ITEM = "URLItem";
 
+	/*
+	 * DynamoDb client used for connecting and making operations. In this case, update the counter.
+	 */
 	private final DynamoDbClient client;
 	
-	private final Base62Encoder encoder;
+	/*
+	 * Encoder used to encode the counter stored.
+	 */
+	private final Encoder encoder;
 	
+	/*
+	 * ShortURL is the name of the primary key where the counter is stored 
+	 */
 	private static final String PK="shortURL";
 	
-	DynamoIdGenerator(DynamoDbClient client,Base62Encoder encoder) {
+	/*
+	 * constructor class
+	 */
+	DynamoIdGenerator(DynamoDbClient client,Encoder encoder) {
 		this.client=client;
 		this.encoder=encoder;
 	}
+	
 	
 	@Override
 	public String generateUniqueID() {
@@ -32,11 +64,15 @@ public class DynamoIdGenerator implements IDGenerator {
 		return encoder.encode(nro);
 	}
 	
+	/*
+	 * Method for getting the next counter. It basically increments atomically the record
+	 * whose key is "shortURL" and value is "counter". The new counter is then returned.
+	 */
 	private BigInteger nextCounter() {
 		HashMap<String, AttributeValue> itemKey = new HashMap<>();
 		itemKey.put(PK, fromS("counter"));
 		HashMap<String, AttributeValue> attributeValues = new HashMap<>();
-		attributeValues.put(":incr", fromN("1"));
+		attributeValues.put(":incr", one);
 		UpdateItemRequest request = UpdateItemRequest.builder()
 				.tableName(TABLE_URL_ITEM).key(itemKey)
 				.returnValues(ReturnValue.UPDATED_NEW)

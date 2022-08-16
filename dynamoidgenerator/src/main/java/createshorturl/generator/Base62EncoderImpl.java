@@ -1,8 +1,11 @@
 package createshorturl.generator;
 
 import java.math.BigInteger;
-
-class Base62EncoderImpl implements Base62Encoder{
+/**
+ * Base62 encoder used to encode the counters generated. 
+ * 
+ */
+class Base62EncoderImpl implements Encoder{
 
 	private static final String BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	

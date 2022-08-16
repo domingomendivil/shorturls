@@ -1,12 +1,15 @@
 package createshorturl.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -41,41 +44,34 @@ public class ServiceImplTest {
 		assertEquals(new URL("http://localhost:8000/DFJKSX"), url);
 	}
 
-	@Test(expected = InvalidArgumentException.class)
-	public void testCreateShortURL2() throws MalformedURLException, InvalidArgumentException {
-		svc.createShortURL(new URL("file:///sdcard"));
+	@ParameterizedTest
+	@ValueSource(strings= {"file:///sdcard","ftp://site.edu.uy"})
+	public void testCreateShortURL2(String arg) throws MalformedURLException, InvalidArgumentException {
+		assertThrows(InvalidArgumentException.class, () -> svc.createShortURL(new URL(arg)));
 	}
 
-	@Test(expected = InvalidArgumentException.class)
-	public void testCreateShortURL3() throws MalformedURLException, InvalidArgumentException {
-		svc.createShortURL(new URL("http://www.montevideo.com.uy"), -1L);
-	}
-
-	@Test(expected = InvalidArgumentException.class)
-	public void testCreateShortURL4() throws MalformedURLException, InvalidArgumentException {
-		svc.createShortURL(new URL("http://www.montevideo.com.uy"), 0L);
+	@ParameterizedTest
+	@ValueSource(longs= {0L,1L})
+	public void testCreateShortURL3(long arg) throws MalformedURLException, InvalidArgumentException {
+		assertThrows(InvalidArgumentException.class, () ->svc.createShortURL(new URL("http://www.montevideo.com.uy"), arg));
 	}
 
 
-	@Test
-	public void testCreateShortURL6() throws MalformedURLException, InvalidArgumentException {
+	@ParameterizedTest
+	@ValueSource(strings= {"http://www.montevideo.com.uy","https://www.montevideo.com.uy"})
+	public void testCreateShortURL6(String arg) throws MalformedURLException, InvalidArgumentException {
 		when(generator.generateUniqueID()).thenReturn("DFJKSX");
 		when(baseURL.toURL()).thenReturn("http://localhost:8000/");
-		var url = svc.createShortURL(new URL("http://www.montevideo.com.uy"), 10000L);
+		var url = svc.createShortURL(new URL(arg), 10000L);
 		assertEquals(new URL("http://localhost:8000/DFJKSX"),url);
 	}
 	
+	
 	@Test
-	public void testCreateShortURL7() throws MalformedURLException, InvalidArgumentException {
+	public void testCreateShortURL9() throws MalformedURLException, InvalidArgumentException {
 		when(generator.generateUniqueID()).thenReturn("DFJKSX");
 		when(baseURL.toURL()).thenReturn("http://localhost:8000/");
-		var url = svc.createShortURL(new URL("https://www.montevideo.com.uy"), 10000L);
-		assertEquals(new URL("http://localhost:8000/DFJKSX"),url);
-	}
-	
-	@Test(expected=InvalidArgumentException.class)
-	public void testCreateShortURL8() throws MalformedURLException, InvalidArgumentException {
-		var url = svc.createShortURL(new URL("ftp://site.edu.uy"), 10000L);
+		var url = svc.createShortURL(new URL("https://www.montevideo.com.uy"), 99999999999L);
 		assertEquals(new URL("http://localhost:8000/DFJKSX"),url);
 	}
 

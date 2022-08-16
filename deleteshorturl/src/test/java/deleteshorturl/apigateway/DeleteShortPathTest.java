@@ -27,6 +27,8 @@ public class DeleteShortPathTest {
     private DeleteShortPath deleteShortPath;
     
     
+    
+    
     @Test
     public void test1() {
     	val input = new APIGatewayProxyRequestEvent();
@@ -36,20 +38,14 @@ public class DeleteShortPathTest {
     
     @Test
     public void test2() {
-    	val input = new APIGatewayProxyRequestEvent();
-    	val pars = new HashMap<String,String>();
-    	pars.put("code", null);
-		input.setPathParameters(pars);
+    	val input = getInputParameters(null);
     	var res = deleteShortPath.handleRequest(input);
     	assertEquals(Integer.valueOf(400), res.getStatusCode());
     }
     
     @Test
     public void test3() throws InvalidArgumentException{
-    	val input = new APIGatewayProxyRequestEvent();
-    	val pars = new HashMap<String,String>();
-    	pars.put("code", "nvasdkh");
-		input.setPathParameters(pars);
+    	val input = getInputParameters("nvasdkh");
 		when(svc.deleteURL("nvasdkh")).thenReturn(true);
     	var res = deleteShortPath.handleRequest(input);
     	assertEquals(Integer.valueOf(200), res.getStatusCode());
@@ -57,13 +53,18 @@ public class DeleteShortPathTest {
     
     @Test
     public void test4() throws InvalidArgumentException{
-    	val input = new APIGatewayProxyRequestEvent();
-    	val pars = new HashMap<String,String>();
-    	pars.put("code", "nvasdkh");
-		input.setPathParameters(pars);
+		val input = getInputParameters("nvasdkh");
 		when(svc.deleteURL("nvasdkh")).thenReturn(false);
     	var res = deleteShortPath.handleRequest(input);
     	assertEquals(Integer.valueOf(404), res.getStatusCode());
+    }
+    
+    private APIGatewayProxyRequestEvent getInputParameters(String shortPath) {
+    	val input = new APIGatewayProxyRequestEvent();
+    	val pars = new HashMap<String,String>();
+    	pars.put("code", shortPath);
+    	input.setPathParameters(pars);
+    	return input;
     }
     
     

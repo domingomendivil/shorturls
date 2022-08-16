@@ -12,7 +12,7 @@ import urlutils.idvalidator.ValidationException;
  * with data layer and the unique id generator.
  *
  */
-final public class ServiceImpl implements Service {
+public final class ServiceImpl implements Service {
 
 	/*
 	 * Deleter interface for deleting the short URL

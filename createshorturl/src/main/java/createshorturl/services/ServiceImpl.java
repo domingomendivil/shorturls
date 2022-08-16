@@ -85,9 +85,4 @@ public class ServiceImpl implements Service {
 		}
 	}
 
-	public static void main(String[] args) {
-		Long n =  100L/3;
-		System.out.println(n);
-	}
-	
 }
