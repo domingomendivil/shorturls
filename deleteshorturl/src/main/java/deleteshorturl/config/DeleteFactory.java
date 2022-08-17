@@ -1,6 +1,5 @@
 package deleteshorturl.config;
 
-import static java.lang.System.getenv;
 import static shorturls.constants.Constants.BASE_URL;
 import static shorturls.constants.Constants.CACHE_ENABLED;
 import static shorturls.constants.Constants.CACHE_FACTORY;
@@ -17,6 +16,7 @@ import deleteshorturl.services.ServiceImpl;
 import lombok.Getter;
 import lombok.val;
 import shorturls.cache.Cache;
+import shorturls.config.ShortURLProperties;
 import shorturls.dao.Deleter;
 import urlutils.idvalidator.BaseURL;
 import urlutils.idvalidator.IdValidatorImpl;
@@ -47,20 +47,20 @@ public final class DeleteFactory {
 	/*
 	 * Service layer to be injected to the API Gateway classes
 	 */
-	private static final  Service service = getService();
+	private static final  Service service = getService(new ShortURLProperties());
 
-	private static Service getService(){
-		val deleteFactory = getenv(DELETER_FACTORY);
-		val cacheEnabledStr = getenv(CACHE_ENABLED);
+	private static Service getService(ShortURLProperties props){
+		val deleteFactory = props.getProperty(DELETER_FACTORY);
+		val cacheEnabledStr = props.getProperty(CACHE_ENABLED);
 		var deleter = new Factory<Deleter>().getInstance(deleteFactory);
 		val cacheEnabled = Boolean.valueOf(cacheEnabledStr);
 		if (cacheEnabled) {
-			val cacheFactory = getenv(CACHE_FACTORY);
+			val cacheFactory = props.getProperty(CACHE_FACTORY);
 			val cache = new Factory<Cache>().getInstance(cacheFactory);
 			deleter = new DeleterDao(deleter, cache);
 		}
-		val baseURL = new BaseURL(getenv(BASE_URL));
-		val alphabet = getenv(RANDOM_ALPHABET);
+		val baseURL = new BaseURL(props.getProperty(BASE_URL));
+		val alphabet = props.getProperty(RANDOM_ALPHABET);
 		val idValidator = new IdValidatorImpl(baseURL, alphabet);
 		return new ServiceImpl(deleter, idValidator);
 	}

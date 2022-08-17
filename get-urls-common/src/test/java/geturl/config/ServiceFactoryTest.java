@@ -8,14 +8,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import com.meli.events.Events;
 import com.meli.factory.Factory;
 
-import shorturls.cache.Cache;
 import shorturls.config.ConfigurationException;
 import shorturls.config.ShortURLProperties;
 import shorturls.constants.Constants;
-import shorturls.dao.Query;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServiceFactoryTest {

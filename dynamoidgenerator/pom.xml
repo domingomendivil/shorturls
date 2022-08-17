@@ -55,6 +55,18 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.meli</groupId>
+			<artifactId>shorturl-utils</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.meli</groupId>
+			<artifactId>dynamo-utils</artifactId>
+			<scope>compile</scope>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
 
 

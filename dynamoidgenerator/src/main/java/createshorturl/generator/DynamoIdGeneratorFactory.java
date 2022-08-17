@@ -1,9 +1,11 @@
 package createshorturl.generator;
 
-import java.net.URI;
+import com.meli.dynamo.DynamoDbClientFactory;
 
 import lombok.Getter;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import lombok.val;
+import shorturls.config.ConfigurationException;
+import shorturls.config.ShortURLProperties;
 
 /**
  * Factory for creating an instance of the DynamoIdGenerator
@@ -11,28 +13,25 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 public class DynamoIdGeneratorFactory {
 	
 	@Getter(lazy=true) //Lombok Getter annotation is used to facilitate getting an instance lazily
-	private static final DynamoIdGenerator instance = init();
+	private static final DynamoIdGenerator instance = init(new ShortURLProperties());
 	
 	
-	/*
-	 * System property to know the URL to connect to Dynamodb 
-	 */
-	private static final String dynamoURL = System.getenv("DYNAMO_URL");
 	
 	/*
 	 * Method for creating a new instance of the DynamoIdGenerator class
 	 */
-	public final static DynamoIdGenerator init() {
-		DynamoDbClient client;
-        if ((dynamoURL==null) || (dynamoURL.equals(""))){
-            client=  DynamoDbClient.create();  //If no URL is provided, it's implicitly obtained from AWS 
-        }else {  
-            client = DynamoDbClient
-            .builder().
-            endpointOverride(URI.create(dynamoURL)).build();
-        }
+	public final static DynamoIdGenerator init(ShortURLProperties properties) {
+		val client = DynamoDbClientFactory.getClient();
 		Encoder base62Encoder = new Base62EncoderImpl(); //a base62 encoder is used by default
-		return new DynamoIdGenerator(client, base62Encoder);
+		 val str = properties.getProperty("DYNAMO_RANDOM_RANGE");
+		try {
+	            Long randomRange = Long.parseLong(str);
+	            Randomizer randomizer = new Randomizer(randomRange);
+	            return new DynamoIdGenerator(client, base62Encoder,randomizer);
+	            
+	        }catch (NumberFormatException e){
+	            throw new ConfigurationException("Error parsing DYNAMO_RANDOM_RANGE number",e);
+	        }
 	}
 	
 

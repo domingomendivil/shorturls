@@ -11,14 +11,32 @@ import geturl.services.Service;
 import lombok.val;
 import shorturls.exceptions.InvalidArgumentException;
 
+/**
+ * ApiGateway class for redirecting short URLs to the original URL.
+ * It was separated in a standalone class that can be unit tested.
+ *
+ */
 public class RedirectShortURL {
  
+	/*
+	 * Service layer responsible for getting the original URL
+	 */
     private final Service service;
 
+    /*
+     * Constructor, where the service layer is injected
+     */
     public RedirectShortURL(Service service){
         this.service=service;
     }
     
+    /*
+     * Method responsible for handling http requests. It validates the http request
+     * and if it's valid, it extracts the short url, which is passed as parameter
+     * to the getURL method of the service layer.
+     * In case the original URL is found, it is returned in the Location header
+     * with a redirect status code. Otherwise, an HTTP 404 is returned.
+     */
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
     	val map =input.getPathParameters();
         val shortPath = map.get("code");

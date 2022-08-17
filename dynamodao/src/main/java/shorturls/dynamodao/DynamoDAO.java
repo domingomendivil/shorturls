@@ -24,18 +24,27 @@ import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
 
-
+/**
+ * Data access implementing the three interfaces for
+ * CRUD operations of URL items over DynamoDB 
+ */
 public class DynamoDAO implements Query,Writer,Deleter {
 
-	private static final String TABLE_URL_ITEM = "URLItem";
+	/*
+	 * Dynamodb Table used for storing URL items
+	 */
+	protected static final String TABLE_URL_ITEM = "URLItem";
 
+	/*
+	 * Thread safe client
+	 */
 	private final DynamoDbAsyncClient client;
 	
-	private static final String PK="shortURL";
-	private static final String LONG_URL="longURL";
-	private static final String CREATION_DATE="creationDate";
-	private static final String TTL = "ttl";
-	private static final String EXPIRATION_TIME = "expirationHours";
+	protected static final String PK="shortURL";
+	protected static final String LONG_URL="longURL";
+	protected static final String CREATION_DATE="creationDate";
+	protected static final String TTL = "ttl";
+	protected static final String EXPIRATION_TIME = "expirationHours";
 
     public DynamoDAO(DynamoDbAsyncClient client){
         this.client=client;
@@ -52,8 +61,6 @@ public class DynamoDAO implements Query,Writer,Deleter {
 		.tableName(TABLE_URL_ITEM)
 		.key(key)
 		.build();
-		
-
 		try {
 			val response = client.getItem(request).get();
 			if (response.hasItem()){
@@ -114,19 +121,22 @@ public class DynamoDAO implements Query,Writer,Deleter {
 	public boolean deleteById(String shortPath) {
 		val itemKey = new HashMap<String, AttributeValue>();
 		itemKey.put(PK, AttributeValue.fromS(shortPath));
-		DeleteItemRequest request = DeleteItemRequest.builder()
+		val request = DeleteItemRequest.builder()
 				.tableName(TABLE_URL_ITEM)
 				.key(itemKey)
 				.returnValues(ReturnValue.ALL_OLD)
 				.build(); 
 		val res = client.deleteItem(request);
-		int nro;
 		try {
-			nro = res.get().sdkHttpResponse().statusCode();
+			int nro = res.get().sdkHttpResponse().statusCode();
 			return nro==200;
 		} catch (InterruptedException|ExecutionException e) {
 			return false;
 		} 
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(LocalDateTime.now());
 	}
     
 }

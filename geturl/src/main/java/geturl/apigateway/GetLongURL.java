@@ -20,18 +20,33 @@ import geturl.services.Service;
 import lombok.val;
 import shorturls.exceptions.InvalidArgumentException;
 
+/**
+ * Class responsible for handling HTTP Get URL requests.
+ * It was separated as a standalone to be well unit tested.
+ */
 public class GetLongURL {
 
+	/*
+	 * URLValidator is used to validate that URLs are well formatted
+	 */
     private static final UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
 
+    /*
+     * Service layer that given the short URL gets the original URL 
+     */
     private final Service service;
     
+    /*
+     * Base64 decoder used to decode URLs that come encoded in query parameters of the URL
+     */
     private final Decoder decoder  = Base64.getUrlDecoder();
+    
     
     public GetLongURL(Service service) {
         this.service = service;
     }
 
+    
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
         val pars = input.getQueryStringParameters();
         if (pars != null) {

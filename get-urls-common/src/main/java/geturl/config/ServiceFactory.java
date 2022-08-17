@@ -29,10 +29,9 @@ public class ServiceFactory {
 	}
 	
 	
-	private static final ShortURLProperties properties = new ShortURLProperties();
 
 	@Getter(lazy = true)
-	private static final Service instance = init(properties,new Factory<Query>(),new Factory<Cache>(),new Factory<Events>());
+	private static final Service instance = init(new ShortURLProperties(),new Factory<Query>(),new Factory<Cache>(),new Factory<Events>());
 
 	
 	static Service init(ShortURLProperties properties,Factory<Query> queryFactory,Factory<Cache> cacheFactory,Factory<Events> eventsFactory) {

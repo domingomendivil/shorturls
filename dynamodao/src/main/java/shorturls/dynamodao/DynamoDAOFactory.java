@@ -2,34 +2,31 @@ package shorturls.dynamodao;
 
 import java.net.URI;
 
+import com.meli.dynamo.DynamoDbClientFactory;
+
 import lombok.Getter;
+import lombok.val;
 import shorturls.config.ShortURLProperties;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-
+/**
+ * Factory class for instantiating DynamoDAO
+ * 
+ *
+ */
 public class DynamoDAOFactory {
 
  
     private DynamoDAOFactory(){
-
+    	//Factory class cannot be instantiated
     }
 
     @Getter(lazy=true) private static final DynamoDAO instance = init();
 
-    private static DynamoDAO init(){
-		 String dynamoURL = new ShortURLProperties().getProperty("DYNAMO_URL");
-    	 var client = getDynamoDBClient(dynamoURL);
+    private static final DynamoDAO init(){
+       val client = DynamoDbClientFactory.getClient();
        return new DynamoDAO(client);
     }
 
-
-	private static final synchronized DynamoDbAsyncClient getDynamoDBClient(String dynamoURL) {
-		if ((dynamoURL == null) || (dynamoURL.equals(""))) {
-			return DynamoDbAsyncClient.create();
-		} else {
-			return DynamoDbAsyncClient.builder().endpointOverride(URI.create(dynamoURL)).build();
-		}
-	}
 
     
 }

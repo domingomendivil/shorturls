@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meli.events.Events;
 
 import lombok.val;
@@ -63,17 +61,13 @@ public class DynamoEvents implements Events{
 	private static final AttributeValue one = fromN("1");
 
 	
-	
-	/*
-	 * Object used for converting json to map values and viceversa
-	 */
-	private final ObjectMapper mapper = new ObjectMapper();
-	
 
 	public DynamoEvents(DynamoDbAsyncClient client,Long randomRange) {
 		this.client = client; 
 		this.randomRange = randomRange;
 	}
+	
+	
 	
 
 	private void updateItem(String shortPath,String key,String value){
@@ -104,22 +98,12 @@ public class DynamoEvents implements Events{
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void send(String shortPath, String msg) {
-		
-		Map<String, String> map;
-		try {
-			map = mapper.readValue(msg, Map.class);
-			Iterator<String> it = map.keySet().iterator();
-			while (it.hasNext()) {
-				String nextKey = it.next();
-				updateItem(shortPath,nextKey,map.get(nextKey));
-			}
-		} catch (JsonProcessingException e) {
-			//this error should never happen, as the Json String
-			//is generated securely from the HTTP Get headers when 
-			//redirecting URLs from short URLs
+	public void send(String shortPath, Map<String,String> msg) {
+		Iterator<String> it = msg.keySet().iterator();
+		while (it.hasNext()) {
+			String nextKey = it.next();
+			updateItem(shortPath,nextKey,msg.get(nextKey));
 		}
-
 	}
 
 	/*

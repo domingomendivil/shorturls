@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
 import geturl.services.Service;
+import lombok.val;
 import shorturls.exceptions.InvalidArgumentException;
 
 
@@ -79,7 +80,7 @@ public class GetLongURLTest {
 		String url = "http://me.li/2342";
 		String encoded = encode(url);
 		when(svc.getLongURL(new URL(url),null)).thenReturn(Optional.empty());
-		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
+		val input = new APIGatewayProxyRequestEvent();
 		Map<String, String> map = new HashMap<>();
         map.put("shortURL", encoded);
         input.setQueryStringParameters(map);

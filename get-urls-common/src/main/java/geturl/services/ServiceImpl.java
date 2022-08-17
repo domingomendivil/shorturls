@@ -4,8 +4,6 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meli.events.Events;
 
 import lombok.val;
@@ -23,14 +21,34 @@ import urlutils.idvalidator.ValidationException;
  */
 public class ServiceImpl implements Service {
 
+	/*
+	 * Query data layer for getting the URL
+	 */
 	private final Query query;
 
+	/*
+	 * IdValidator validates that the code used in the short URLs.
+	 * The code is the part after the base URL. 
+	 * E.g. in http://me.li/XKJFx7, the code is XKJFx7
+	 * Codes can be invalid if for example invalid characters are used.
+	 * E.g. X/JFx7 is an invalid code  
+	 */
 	private final IdValidator idValidator;
 
+	/*
+	 * Events layer where the getURL event is sent
+	 */
 	private final Events events;
 	
-	private final ObjectMapper objectMapper = new ObjectMapper();
 
+
+
+	/**
+	 * Public constructor where the Query, IdValidator and Events object are injected
+	 * @param query
+	 * @param idValidator
+	 * @param events
+	 */
 	public ServiceImpl(Query query, IdValidator idValidator, Events events) {
 		this.query = query;
 		this.idValidator = idValidator;
@@ -57,18 +75,14 @@ public class ServiceImpl implements Service {
 		});
 	}
 
+	
 	private void send(URLItem urlItem, Map<String, String> headers) {
 		if (headers != null) {
 			val shortPath = urlItem.getShortPath();
 			headers.put("shortURL", urlItem.getShortPath());
 			headers.put("longURL", urlItem.getLongURL().toString());
 			headers.put("creationDate", urlItem.getCreationDate().toString());
-			try {
-				val json = objectMapper.writeValueAsString(headers);
-				events.send(shortPath, json);
-			} catch (JsonProcessingException e) {
-				// this exception is not thrown
-			}
+			events.send(shortPath, headers);
 		}
 	}
 

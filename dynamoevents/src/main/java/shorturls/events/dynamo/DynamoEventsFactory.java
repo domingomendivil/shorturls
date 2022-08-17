@@ -2,7 +2,10 @@ package shorturls.events.dynamo;
 
 import java.net.URI;
 
+import com.meli.dynamo.DynamoDbClientFactory;
+
 import lombok.Getter;
+import lombok.val;
 import shorturls.config.ConfigurationException;
 import shorturls.config.ShortURLProperties;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
@@ -13,22 +16,11 @@ public class DynamoEventsFactory {
 
   
     @Getter(lazy=true) //Lombok Getter annotation is used to facilitate getting an instance lazily
-	private static final DynamoEvents instance = init();
+	private static final DynamoEvents instance = init(new ShortURLProperties());
 
-    private static final DynamoEvents init(){
-        ShortURLProperties properties = new ShortURLProperties();
-    
-        String dynamoURL = properties.getProperty("DYNAMO_URL");
-    
-        DynamoDbAsyncClient client;
-        if ((dynamoURL==null) || (dynamoURL.equals(""))){
-            client=  DynamoDbAsyncClient.create();  //If no URL is provided, it's implicitly obtained from AWS 
-        }else {  
-            client = DynamoDbAsyncClient
-            .builder().
-            endpointOverride(URI.create(dynamoURL)).build();
-        }
-        String str = properties.getProperty("DYNAMO_RANDOM_RANGE");
+    private static final DynamoEvents init(ShortURLProperties properties){
+    	DynamoDbAsyncClient client = DynamoDbClientFactory.getClient();
+        val str = properties.getProperty("DYNAMO_RANDOM_RANGE");
         try {
             Long randomRange = Long.parseLong(str);
             return new DynamoEvents(client,randomRange);

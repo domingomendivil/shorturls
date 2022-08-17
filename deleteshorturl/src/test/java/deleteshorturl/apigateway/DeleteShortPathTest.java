@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import deleteshorturl.services.Service;
 import lombok.val;
@@ -27,20 +28,23 @@ public class DeleteShortPathTest {
     private DeleteShortPath deleteShortPath;
     
     
+    private void assertBadRequest(APIGatewayProxyResponseEvent res) {
+    	assertEquals(Integer.valueOf(400), res.getStatusCode());
+    }
     
     
     @Test
     public void test1() {
     	val input = new APIGatewayProxyRequestEvent();
     	val res = deleteShortPath.handleRequest(input);
-    	assertEquals(Integer.valueOf(400), res.getStatusCode());
+    	assertBadRequest(res);
     }
     
     @Test
     public void test2() {
     	val input = getInputParameters(null);
     	var res = deleteShortPath.handleRequest(input);
-    	assertEquals(Integer.valueOf(400), res.getStatusCode());
+    	assertBadRequest(res);
     }
     
     @Test

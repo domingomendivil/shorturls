@@ -2,56 +2,53 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   Short URL Generator
-  SAM Template for Short URL generator
+  SAM Template for Get URLs service (part of the Short URL generator)
 
 Globals:
   Function:
     Timeout: 20
 
 Parameters:
-  DynamoURL:
+  DynamoURL: #Connection URL to the DynamoDB instance
     Type: String
     Default: "http://dynamo-local:8000"
-  BaseURL:
+  BaseURL: #Base URL of short URLs that are generated, e.g. http://me.li
     Type: String
     Default: "http://127.0.0.1:3000"
-  RedisURL:
+  RedisURL: #Connection URL to the Redis cache cluster instance
     Type: String
     Default: "redis://redis-server:6379/"  
-  CacheEnabled:
+  CacheEnabled: #If enabled, cache is used
     Type: String
     Default: "false"
-  QueryFactory:
+  QueryFactory: #Factory class used to configure the querying to the data layer
     Type: String
     Default: "shorturls.dynamodao.DynamoDAOFactory" 
-  CacheFactory:
-    Type: String
-    Default: "shorturls.cache.RedisCacheFactory"   
-  EventsFactory:
+  EventsFactory:  #Factory class used to configure events sending 
     Type: String
     Default: "shorturls.events.dynamo.DynamoEventsFactory"
-    #Default: "com.meli.kafka.KafkaFactory"
-  CacheFactory:
+  CacheFactory: #Factory class used to configure cache
     Type: String
     Default: "shorturls.cache.RedisCacheFactory"
-  KafkaBrokers: 
+  KafkaBrokers:  #List of comma separated connections to brokers
     Type: String
     Default: "kafka:29092"
-  KafkaClientId: 
+  KafkaClientId:  #Client id used to communicate to Kafka
     Type: String
     Default: "client1"
-  KafkaTopicName: 
+  KafkaTopicName: #Kafka topic where the event is sent to 
     Type: String
     Default: "geturl"
-  KafkaEnabled: 
+  KafkaEnabled:  #If enabled, events are sent to the kafka instance configured
     Type: String
     Default: "false"
-  RandomAlphabet:
+  RandomAlphabet:  #Alphabet used for generating short URLs
     Type: String
     Default: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  DynamoRandomRange:
-    Type: String
+  DynamoRandomRange: #Random range used as suffix of partition keys for avoiding hot partitions on DynamoDB
+    Type: Number
     Default: 5
+    MinValue: 1
 Resources:
   GetURLFunction:
     Type: AWS::Serverless::Function 
@@ -82,7 +79,7 @@ Resources:
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
       Events:
         GetURLEvent:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /urls/{code}
             Method: get
@@ -99,7 +96,7 @@ Resources:
       MemorySize: 512
       Environment: 
         Variables:
-          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 
           DYNAMO_URL: !Ref DynamoURL
           BASE_URL: !Ref BaseURL
           REDIS_URL: !Ref RedisURL
@@ -114,7 +111,7 @@ Resources:
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
       Events:
         GetLongURLEvent:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api 
           Properties:
             Path: /longURLS
             Method: get

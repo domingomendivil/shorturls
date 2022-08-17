@@ -1,19 +1,105 @@
 package shorturls.dynamodao;
 
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.fromN;
+import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.fromS;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import lombok.val;
+import shorturls.model.URLItem;
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
+
+@RunWith(MockitoJUnitRunner.class)
 public class DynamoDAOTest {
 
-   // @InjectMocks
+    @InjectMocks
     private DynamoDAO dynamoDAO;
 
-    //@Mock
-    private DynamoDbClient client;
+    @Mock
+    private DynamoDbAsyncClient client;
 
-    public void test1(){
 
+    
+    private GetItemResponse getResponse(String pk,String longURL,String creationDate,Long expirationTime) {
+    	Map<String, AttributeValue> item = new HashMap<>();
+    	item.put(DynamoDAO.LONG_URL,fromS(longURL));
+		item.put(DynamoDAO.PK, fromS(pk));
+		item.put(DynamoDAO.CREATION_DATE, fromS(creationDate));
+		item.put(DynamoDAO.EXPIRATION_TIME, fromN(expirationTime.toString()));
+		return GetItemResponse.builder().item(item).build();
     }
+    
+    private GetItemResponse getEmptyResponse() {
+		return GetItemResponse.builder().build();
+    }
+    
+    private GetItemRequest getRequest(String code) {
+    	val key = new HashMap<String, AttributeValue>();
+		key.put(DynamoDAO.PK, fromS(code));
+		return  GetItemRequest.builder()
+		.tableName(DynamoDAO.TABLE_URL_ITEM)
+		.key(key)
+		.build();
+    }
+    
+    private URLItem getItem(String code,String url,String date,Long expirationTime)  throws MalformedURLException{
+		val creationDate = LocalDateTime.parse(date);
+		return new URLItem(code,new URL(url),creationDate,expirationTime);
+    }
+    
+    @Test	
+    public void testGetById1() throws MalformedURLException{
+    	val code = "code";
+		val request = getRequest(code);
+		val dateStr ="2022-08-17T14:05:32.247299";
+		val url="http://www.google.com";
+		val response =getResponse(code,url,dateStr,10L);
+		val future = CompletableFuture.completedFuture(response);
+		when(client.getItem(request)).thenReturn(future);
+    	Long expirationTime =10L;
+		val urlItem = getItem(code,url,dateStr,10L);
+    	val res= dynamoDAO.getById(code);
+    	assertEquals(urlItem,res.get());
+    }
+    
+    @Test	
+    public void testGetById2() throws MalformedURLException{
+    	val code = "code";
+    	val request = getRequest(code);
+		val response =getEmptyResponse();
+		val future = CompletableFuture.completedFuture(response);
+		when(client.getItem(request)).thenReturn(future);
+    	Long expirationTime =10L;
+    	val res= dynamoDAO.getById(code);
+    	assertEquals(Optional.empty(),res);
+    }
+    
     /**@Test
+    public void testInsert() {
+    	val dateStr ="2022-08-17T14:05:32.247299";
+    	URLItem item = getItem("code","http://www.google.com",dateStr,10L);
+		dynamoDAO.insert(item);
+    }
+
+    
+   /** @Test
     public void testDeleteById1(){
         val key = new HashMap<String, AttributeValue> ();
         key.put("shortPath", fromS("a"));
@@ -23,7 +109,7 @@ public class DynamoDAOTest {
         .build();
         when(client.deleteItem(req)).thenReturn(response);
         dynamoDAO.deleteById("a");
-    }**/
+    }
 
     
     /**@Test

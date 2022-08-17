@@ -25,6 +25,7 @@
 		<module>shorturl-dao</module>
 
 		<module>dynamoevents</module>
+		<module>dynamo-utils</module>
 	</modules>
 
 	<properties>

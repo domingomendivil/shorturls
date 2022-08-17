@@ -2,7 +2,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.meli</groupId>
 	<artifactId>kafka-events</artifactId>
 
 	<parent>
@@ -11,8 +10,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<version>0.0.1-SNAPSHOT</version>
-	<properties>	
+	<properties>
 		<slf4j.version>1.7.36</slf4j.version>
 	</properties>
 
@@ -26,7 +24,6 @@
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>events</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -39,7 +36,6 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.13.3</version>
 		</dependency>
 
 		<dependency>
@@ -58,6 +54,27 @@
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.meli</groupId>
+			<artifactId>shorturl-utils</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
 	</dependencies>

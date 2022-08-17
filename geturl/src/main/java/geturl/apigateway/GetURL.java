@@ -8,6 +8,11 @@ import lombok.val;
 import shorturls.apigateway.ResponseCreator;
 import shorturls.exceptions.InvalidArgumentException;
 
+/**
+ * 
+ * @author d0178
+ *
+ */
 public class GetURL {
 
     private final Service service;
@@ -22,7 +27,7 @@ public class GetURL {
         if (pars!=null){
             String shortURL = pars.get("code");
             try {
-                var longURL = service.getURL(shortURL,input.getHeaders());
+                val longURL = service.getURL(shortURL,input.getHeaders());
                 if (longURL.isEmpty()) {
                     return ResponseCreator.getNotFoundResponse();
                 }else {

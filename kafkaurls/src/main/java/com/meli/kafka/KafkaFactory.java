@@ -1,20 +1,31 @@
 package com.meli.kafka;
 
+import lombok.Getter;
+import shorturls.config.ShortURLProperties;
+
+/**
+ * Factory class responsible for instantiating the KafkaEvents class
+ * 
+ *
+ */
 public class KafkaFactory {
 	
-	private static KafkaEvents kafkaEvents;
+	/*
+	 * Lombok Getter annotation to facilitate the lazy instantiation of the KafkaEvents class
+	 */
+	@Getter(lazy=true)
+	private static final KafkaEvents instance = init(new ShortURLProperties());
 	
-	private static final String BROKERS = System.getenv("KAFKA_BROKERS");
-	private static final String CLIENT_ID = System.getenv("KAFKA_CLIENTID");
-	private static final String TOPIC_NAME = System.getenv("KAFKA_TOPICNAME");
-	private static final String ENABLED = System.getenv("KAFKA_ENABLED");
-	
-	public static synchronized KafkaEvents getInstance() {
-		if (kafkaEvents==null) {
-			Boolean enabled= Boolean.valueOf(ENABLED);
-			kafkaEvents = new KafkaEvents(enabled,BROKERS,CLIENT_ID,TOPIC_NAME);
-		}
-		return kafkaEvents;
+	/*
+	 * Instantiation method of the KafkaEvents class
+	 */
+	private static final KafkaEvents init(ShortURLProperties props) {
+		String brokers = props.getProperty("KAFKA_BROKERS");
+		String clientId = props.getProperty("KAFKA_CLIENTID");
+		String topicName = props.getProperty("KAFKA_TOPICNAME");
+		String enabledStr = props.getProperty("KAFKA_ENABLED");
+		Boolean enabled= Boolean.valueOf(enabledStr);
+		return new KafkaEvents(enabled,brokers,clientId,topicName);
 	}
 
 }

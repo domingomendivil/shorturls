@@ -1,21 +1,23 @@
 package createshorturl.generator;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.fromN;
 import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.fromS;
 
 import java.math.BigInteger;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import lombok.val;
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
@@ -27,21 +29,24 @@ import software.amazon.awssdk.services.dynamodb.model.UpdateItemResponse;
 @RunWith(MockitoJUnitRunner.class)
 public class DynamoIdGeneratorTest {
 	
-	@InjectMocks
-	private DynamoIdGenerator idGenerator;
-	
 	@Mock
 	private Encoder encoder;
 	
 	@Mock
-	private DynamoDbClient client;
+	private DynamoDbAsyncClient client = Mockito.mock(DynamoDbAsyncClient.class);
 	
+	@Mock
+	private Randomizer randomizer;
+	
+	@InjectMocks
+	private DynamoIdGenerator idGenerator;
 	
 	@Test
 	public void test1() {
 		HashMap<String, AttributeValue> itemKey = new HashMap<>();
-		itemKey.put("shortURL", fromS("counter"));
-		HashMap<String, AttributeValue> attributeValues = new HashMap<>();
+		when(randomizer.getRandomSuffix()).thenReturn("R");
+		itemKey.put("shortURL", fromS("counterR"));
+		val attributeValues = new HashMap<String, AttributeValue>();
 		attributeValues.put(":incr", fromN("1"));
 		UpdateItemRequest request = UpdateItemRequest.builder()
 				.tableName("URLItem").key(itemKey)
@@ -49,12 +54,13 @@ public class DynamoIdGeneratorTest {
 				.updateExpression("SET LastID = LastID + :incr")
 				.expressionAttributeValues(attributeValues).build();
 		AttributeValue attr = AttributeValue.fromN("10");
-		Map<String, AttributeValue> values = new HashMap<>();
+		val values = new HashMap<String, AttributeValue>();
 		values.put("LastID", attr);
 		UpdateItemResponse response = UpdateItemResponse.builder().attributes(values).build();
-		when(client.updateItem(request)).thenReturn(response);
+		CompletableFuture<UpdateItemResponse> res = CompletableFuture.completedFuture(response);
+		when(client.updateItem(request)).thenReturn(res);
 		when(encoder.encode(BigInteger.valueOf(10L))).thenReturn("ASD");
-		Assert.assertEquals("ASD",idGenerator.generateUniqueID());
+		assertEquals("ASD",idGenerator.generateUniqueID());
 	}
 
 }

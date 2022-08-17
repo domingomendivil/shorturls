@@ -10,6 +10,11 @@ import io.lettuce.core.SetArgs;
 import lombok.val;
 import shorturls.model.URLItem;
 
+/**
+ * Implementation of the shorturls.cache.Cache interface
+ * for interacting with Redis Cluster
+ *
+ */
 public class RedisCache implements Cache{
 	
 	private final RedisClient redisClient;
@@ -40,18 +45,18 @@ public class RedisCache implements Cache{
 	
 	@Override
 	public Optional<URLItem> getById(String path) {
-		var connection =redisClient.connect();
-		var syncCommands = connection.sync();	
-		String urlItem = syncCommands.get(path);
+		val connection =redisClient.connect();
+		val syncCommands = connection.sync();	
+		val urlItem = syncCommands.get(path);
 		return parse(path,urlItem);
 	}
 
 	@Override
 	public void put(String path, URLItem urlItem) {
-		var connection =redisClient.connect();
-		var asyncCmds = connection.async();	
-		String str = format(urlItem);
-		Long expirationTime=urlItem.getExpirationTime();
+		val connection =redisClient.connect();
+		val asyncCmds = connection.async();	
+		val str = format(urlItem);
+		val expirationTime=urlItem.getExpirationTime();
 		if (expirationTime==null){
 			asyncCmds.set(path, str);
 		}else{
@@ -62,7 +67,7 @@ public class RedisCache implements Cache{
 	}
 
 	private String format(URLItem urlItem) {
-		Long expirationHours=urlItem.getExpirationTime();
+		var expirationHours=urlItem.getExpirationTime();
 		if (expirationHours==null){
 			expirationHours=0L;
 		}
@@ -71,8 +76,8 @@ public class RedisCache implements Cache{
 
 	@Override
 	public boolean delete(String path) {
-		var connection =redisClient.connect();
-		var syncCommands = connection.sync();
+		val connection =redisClient.connect();
+		val syncCommands = connection.sync();
 		return syncCommands.del(path) > 0;
 	}
 

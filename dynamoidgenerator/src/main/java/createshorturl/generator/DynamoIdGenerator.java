@@ -5,8 +5,10 @@ import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.from
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import shorturls.exceptions.ShortURLRuntimeException;
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
@@ -37,7 +39,7 @@ public class DynamoIdGenerator implements IDGenerator {
 	/*
 	 * DynamoDb client used for connecting and making operations. In this case, update the counter.
 	 */
-	private final DynamoDbClient client;
+	private final DynamoDbAsyncClient client;
 	
 	/*
 	 * Encoder used to encode the counter stored.
@@ -50,11 +52,18 @@ public class DynamoIdGenerator implements IDGenerator {
 	private static final String PK="shortURL";
 	
 	/*
+	 * Randomizer for getting the random suffix in primary keys, 
+	 * to avoid hot partitions.
+	 */
+	private final Randomizer randomizer;
+	
+	/*
 	 * constructor class
 	 */
-	DynamoIdGenerator(DynamoDbClient client,Encoder encoder) {
+	public DynamoIdGenerator(DynamoDbAsyncClient client,Encoder encoder,Randomizer randomizer) {
 		this.client=client;
 		this.encoder=encoder;
+		this.randomizer = randomizer;
 	}
 	
 	
@@ -70,7 +79,7 @@ public class DynamoIdGenerator implements IDGenerator {
 	 */
 	private BigInteger nextCounter() {
 		HashMap<String, AttributeValue> itemKey = new HashMap<>();
-		itemKey.put(PK, fromS("counter"));
+		itemKey.put(PK, fromS("counter"+randomizer.getRandomSuffix()));
 		HashMap<String, AttributeValue> attributeValues = new HashMap<>();
 		attributeValues.put(":incr", one);
 		UpdateItemRequest request = UpdateItemRequest.builder()
@@ -78,10 +87,21 @@ public class DynamoIdGenerator implements IDGenerator {
 				.returnValues(ReturnValue.UPDATED_NEW)
 				.updateExpression("SET LastID = LastID + :incr")
 				.expressionAttributeValues(attributeValues).build();
-		var response  = client.updateItem(request);
-		var nro =response.attributes().get("LastID");
-		return new BigInteger(nro.n(),10);
+		try {
+			System.out.println("antes del get");
+
+			var response  = client.updateItem(request).get();
+			System.out.println("response "+response);
+
+			System.out.println("dps del get");
+			var nro =response.attributes().get("LastID");
+			return new BigInteger(nro.n(),10);
+			
+		}catch(ExecutionException|InterruptedException e) {
+			throw new ShortURLRuntimeException("Error in getting DynamoDB next counter");
+		}
 	}
+	
 
 
 

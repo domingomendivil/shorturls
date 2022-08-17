@@ -1,55 +1,53 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  SAM Template for redirecting URLs from the short URL
+  SAM Template for redirecting URLs from the short URL (part of the Short URL generator)
 
 Globals:
   Function:
     Timeout: 20
 
 Parameters:
-  DynamoURL:
+  DynamoURL: #Connection URL to the DynamoDB instance
     Type: String
     Default: "http://dynamo-local:8000"
-  RedisURL:
+  RedisURL: #Connection URL to the Redis cache cluster instance
     Type: String
     Default: "redis://password@localhost:6379/"  
-  CacheEnabled:
+  CacheEnabled: #If enabled, cache is used
     Type: String
     Default: "false"
-  QueryFactory:
+  QueryFactory: #Factory class used to configure the querying to the data layer
     Type: String
     Default: "shorturls.dynamodao.DynamoDAOFactory"
-  BaseURL:
+  BaseURL: #Base URL of short URLs that are generated, e.g. http://me.li
     Type: String
     Default: "http://localhost:3000"
-  CacheFactory:
-    Type: String
-    Default: "shorturls.cache.RedisCacheFactory"   
-  EventsFactory:
+  EventsFactory: #Factory class used to configure events sending 
     Type: String
     Default:  "shorturls.events.dynamo.DynamoEventsFactory"
-  CacheFactory:
+  CacheFactory: #Factory class used to configure cache
     Type: String
     Default: "shorturls.cache.RedisCacheFactory"   
-  KafkaBrokers: 
+  KafkaBrokers:  #List of comma separated connections to brokers
     Type: String
     Default: "kafka:29092"
-  KafkaClientId: 
+  KafkaClientId:  #Client id used to communicate to Kafka
     Type: String
     Default: "client1"
-  KafkaTopicName: 
+  KafkaTopicName: #Kafka topic where the event is sent to 
     Type: String
     Default: "geturl"
-  KafkaEnabled: 
+  KafkaEnabled:  #If enabled, events are sent to the kafka instance configured
     Type: String
     Default: "false"
-  RandomAlphabet:
+  RandomAlphabet: #Alphabet used for generating short URLs
     Type: String
     Default: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  DynamoRandomRange:
-    Type: String
+  DynamoRandomRange: #Random range used as suffix of partition keys for avoiding hot partitions on DynamoDB
+    Type: Number
     Default: 5
+    MinValue: 1
 Resources:
   RedirectShortURLFunction:
     Type: AWS::Serverless::Function 
