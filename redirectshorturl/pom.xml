@@ -76,6 +76,12 @@
 
 		<dependency>
 			<groupId>com.meli</groupId>
+			<artifactId>dynamoevents</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.meli</groupId>
 			<artifactId>events</artifactId>
 			<scope>runtime</scope>
 		</dependency>

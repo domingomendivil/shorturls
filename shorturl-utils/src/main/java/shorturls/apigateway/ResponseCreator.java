@@ -3,6 +3,7 @@ package shorturls.apigateway;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
@@ -13,6 +14,19 @@ public class ResponseCreator {
 	}
 
 
+	
+private static final String random() {
+    int leftLimit = 48; // numeral '0'
+    int rightLimit = 122; // letter 'z'
+    int targetStringLength = 10;
+    Random random = new Random();
+
+    return random.ints(leftLimit, rightLimit + 1)
+      .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+      .limit(targetStringLength)
+      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+      .toString();
+}
 	
 	private static  APIGatewayProxyResponseEvent getTextResponse() {
 		Map<String, String> headers = new HashMap<>();
@@ -38,8 +52,8 @@ public class ResponseCreator {
 		 if (reqHeaders!=null){
 			var cookie= reqHeaders.get("Cookie");
 			if (cookie==null){
-				String sessionId = Math.random()+"".substring(7);
-				String newCookie = String.format("sessionid=%; SameSite=Strict", sessionId);
+				String sessionId = random();
+				String newCookie = "sessionid="+sessionId+"; SameSite=Strict";
 				headers.put("Set-Cookie", newCookie);
 			 }
 		 }
@@ -74,9 +88,5 @@ public class ResponseCreator {
 		 return response.withStatusCode(202).withBody(url);
 		
 	}
-	
-	
-	
-	
 	
 }
