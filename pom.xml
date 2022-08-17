@@ -172,6 +172,13 @@
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 
+			<dependency>
+				<groupId>com.meli</groupId>
+				<artifactId>dynamoevents</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<scope>runtime</scope>
+			</dependency>
+
 
 		</dependencies>
 	</dependencyManagement>
@@ -262,7 +269,7 @@
 										<limit>
 											<counter>LINE</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>0.5</minimum>
+											<minimum>0.4</minimum>
 										</limit>
 									</limits>
 								</rule>

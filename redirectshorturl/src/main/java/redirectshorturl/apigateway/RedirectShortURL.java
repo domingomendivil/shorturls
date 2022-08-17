@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import geturl.services.Service;
+import lombok.val;
 import shorturls.exceptions.InvalidArgumentException;
 
 public class RedirectShortURL {
@@ -19,15 +20,17 @@ public class RedirectShortURL {
     }
     
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
-    	var map =input.getPathParameters();
-        var shortPath = map.get("code");
+    	val map =input.getPathParameters();
+        val shortPath = map.get("code");
         if (shortPath!=null && (!shortPath.equals(""))){
             try {
-                var longURL = service.getURL(shortPath,input.getHeaders());
+                val headers=input.getHeaders();
+                var longURL = service.getURL(shortPath,headers);
                 if (longURL.isEmpty()) {
                     return getNotFoundResponse();
                 } else {
-                    return getMovedResponse(longURL.get().toString());
+
+                    return getMovedResponse(headers,longURL.get().toString());
                 }
             } catch (InvalidArgumentException e) {
             	//bad request, return next in code

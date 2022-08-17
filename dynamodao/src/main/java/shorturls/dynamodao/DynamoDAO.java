@@ -8,6 +8,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import lombok.val;
 import shorturls.dao.Deleter;
@@ -15,7 +16,7 @@ import shorturls.dao.Query;
 import shorturls.dao.QueryException;
 import shorturls.dao.Writer;
 import shorturls.model.URLItem;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
@@ -28,7 +29,7 @@ public class DynamoDAO implements Query,Writer,Deleter {
 
 	private static final String TABLE_URL_ITEM = "URLItem";
 
-	private final DynamoDbClient client;
+	private final DynamoDbAsyncClient client;
 	
 	private static final String PK="shortURL";
 	private static final String LONG_URL="longURL";
@@ -36,7 +37,7 @@ public class DynamoDAO implements Query,Writer,Deleter {
 	private static final String TTL = "ttl";
 	private static final String EXPIRATION_TIME = "expirationHours";
 
-    public DynamoDAO(DynamoDbClient client){
+    public DynamoDAO(DynamoDbAsyncClient client){
         this.client=client;
     }
 
@@ -52,12 +53,18 @@ public class DynamoDAO implements Query,Writer,Deleter {
 		.key(key)
 		.build();
 		
-		val response = client.getItem(request);
-		if (response.hasItem()) {
-			return Optional.of(getURLItem(response));
-		}else{
+
+		try {
+			val response = client.getItem(request).get();
+			if (response.hasItem()){
+				return Optional.of(getURLItem(response));
+			}else{
+				return Optional.empty();
+			}
+		} catch (InterruptedException|ExecutionException e) {
 			return Optional.empty();
-		}
+		} 
+		
 	}
 
 	private URLItem getURLItem(GetItemResponse response) {
@@ -113,8 +120,13 @@ public class DynamoDAO implements Query,Writer,Deleter {
 				.returnValues(ReturnValue.ALL_OLD)
 				.build(); 
 		val res = client.deleteItem(request);
-		res.sdkHttpResponse().statusCode();
-		return res.sdkHttpResponse().statusCode()==200;
+		int nro;
+		try {
+			nro = res.get().sdkHttpResponse().statusCode();
+			return nro==200;
+		} catch (InterruptedException|ExecutionException e) {
+			return false;
+		} 
 	}
     
 }

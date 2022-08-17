@@ -29,13 +29,11 @@ Parameters:
     Default: "shorturls.cache.RedisCacheFactory"   
   EventsFactory:
     Type: String
-    Default: "com.meli.kafka.KafkaFactory"
+    Default: "shorturls.events.dynamo.DynamoEventsFactory"
+    #Default: "com.meli.kafka.KafkaFactory"
   CacheFactory:
     Type: String
-    Default: "shorturls.cache.RedisCacheFactory"   
-  EventsFactory:
-    Type: String
-    Default: "com.meli.kafka.KafkaFactory"
+    Default: "shorturls.cache.RedisCacheFactory"
   KafkaBrokers: 
     Type: String
     Default: "kafka:29092"
@@ -51,6 +49,9 @@ Parameters:
   RandomAlphabet:
     Type: String
     Default: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  DynamoRandomRange:
+    Type: String
+    Default: 5
 Resources:
   GetURLFunction:
     Type: AWS::Serverless::Function 
@@ -78,7 +79,7 @@ Resources:
           KAFKA_TOPICNAME: !Ref KafkaTopicName
           KAFKA_ENABLED: !Ref KafkaEnabled
           RANDOM_ALPHABET: !Ref RandomAlphabet
-
+          DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
       Events:
         GetURLEvent:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -110,6 +111,7 @@ Resources:
           KAFKA_CLIENTID: !Ref KafkaClientId
           KAFKA_TOPICNAME: !Ref KafkaTopicName
           KAFKA_ENABLED: !Ref KafkaEnabled
+          DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
       Events:
         GetLongURLEvent:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api

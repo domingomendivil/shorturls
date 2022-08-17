@@ -27,6 +27,8 @@ public class CreateShortURL {
 
 	private final ObjectMapper mapper = new ObjectMapper();
 
+	static final String CONTENT_TYPE="content-type";
+
 	public CreateShortURL(Service service) {
 		this.service = service;
 	}
@@ -81,7 +83,8 @@ public class CreateShortURL {
 
 	
 	public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
-		val contentType = input.getHeaders().get("content-type");
+		val contentType = input.getHeaders().get(CONTENT_TYPE);
+		System.out.println(CONTENT_TYPE+": "+contentType);
 		val body = input.getBody();
 		if ("text/plain".equals(contentType)){
 			return handleURL(body);

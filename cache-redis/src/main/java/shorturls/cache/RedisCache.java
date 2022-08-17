@@ -49,14 +49,14 @@ public class RedisCache implements Cache{
 	@Override
 	public void put(String path, URLItem urlItem) {
 		var connection =redisClient.connect();
-		var syncCommands = connection.sync();	
+		var asyncCmds = connection.async();	
 		String str = format(urlItem);
 		Long expirationTime=urlItem.getExpirationTime();
 		if (expirationTime==null){
-			syncCommands.set(path, str);
+			asyncCmds.set(path, str);
 		}else{
 			SetArgs setArgs= SetArgs.Builder.exAt(expirationTime);
-			syncCommands.set(path, str, setArgs);
+			asyncCmds.set(path, str, setArgs);
 		}	
 		
 	}

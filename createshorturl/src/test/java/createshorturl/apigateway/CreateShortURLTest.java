@@ -34,13 +34,13 @@ public class CreateShortURLTest {
 
 	private void setPlainText(APIGatewayProxyRequestEvent input){
 		Map<String,String> headers = new HashMap<>();
-		headers.put("content-type","text/plain");
+		headers.put(CreateShortURL.CONTENT_TYPE,"text/plain");
 		input.setHeaders(headers);
 	}
 
 	private void setJson(APIGatewayProxyRequestEvent input){
 		Map<String,String> headers = new HashMap<>();
-		headers.put("content-type","application/json");
+		headers.put(CreateShortURL.CONTENT_TYPE,"application/json");
 		input.setHeaders(headers);
 	}
 	
@@ -128,7 +128,7 @@ public class CreateShortURLTest {
 		var input = new APIGatewayProxyRequestEvent();
 		input.setBody(json);
 		Map<String,String> headers = new HashMap<>();
-		headers.put("content-type","text/html");
+		headers.put(CreateShortURL.CONTENT_TYPE,"text/html");
 		input.setHeaders(headers);
 		val response = createShortURL.handleRequest(input);
 		assertBadRequest(response);

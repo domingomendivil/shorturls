@@ -4,12 +4,12 @@ import java.net.URI;
 
 import lombok.Getter;
 import shorturls.config.ShortURLProperties;
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 public class DynamoDAOFactory {
 
-    private static final String dynamoURL = new ShortURLProperties().getProperty("DYNAMO_URL");
-
+ 
     private DynamoDAOFactory(){
 
     }
@@ -17,18 +17,17 @@ public class DynamoDAOFactory {
     @Getter(lazy=true) private static final DynamoDAO instance = init();
 
     private static DynamoDAO init(){
+		 String dynamoURL = new ShortURLProperties().getProperty("DYNAMO_URL");
     	 var client = getDynamoDBClient(dynamoURL);
        return new DynamoDAO(client);
     }
 
 
-	private static final synchronized DynamoDbClient getDynamoDBClient(String dynamoURL) {
+	private static final synchronized DynamoDbAsyncClient getDynamoDBClient(String dynamoURL) {
 		if ((dynamoURL == null) || (dynamoURL.equals(""))) {
-			System.out.println("dynamo client ***************");
-			return DynamoDbClient.create();
+			return DynamoDbAsyncClient.create();
 		} else {
-			System.out.println("dynamoURL :"+dynamoURL);
-			return DynamoDbClient.builder().endpointOverride(URI.create(dynamoURL)).build();
+			return DynamoDbAsyncClient.builder().endpointOverride(URI.create(dynamoURL)).build();
 		}
 	}
 

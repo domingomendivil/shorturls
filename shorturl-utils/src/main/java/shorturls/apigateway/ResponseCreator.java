@@ -31,9 +31,20 @@ public class ResponseCreator {
 		 return response.withStatusCode(400).withBody("Invalid URL");
 	}
 
-	public static APIGatewayProxyResponseEvent getMovedResponse(String url) {
+	public static APIGatewayProxyResponseEvent getMovedResponse(Map<String,String> reqHeaders,String url) {
+		
 		 Map<String,String> headers = new HashMap<>();
 		 headers.put("Location",url);
+		 if (reqHeaders!=null){
+			var cookie= reqHeaders.get("Cookie");
+			if (cookie==null){
+				String sessionId = Math.random()+"".substring(7);
+				String newCookie = String.format("sessionid=%; SameSite=Strict", sessionId);
+				headers.put("Set-Cookie", newCookie);
+			 }
+		 }
+		
+
 		 return new APIGatewayProxyResponseEvent().withStatusCode(301).withHeaders(headers);
 	}
 	
@@ -41,8 +52,13 @@ public class ResponseCreator {
 	public static APIGatewayProxyResponseEvent getOKResponse(String body) {
 		 var response  = getTextResponse();
 		 return response.withStatusCode(200).withBody(body);
-		
 	}
+
+	public static APIGatewayProxyResponseEvent getOKResponseCookie(String body) {
+		var response  = getTextResponse();
+		return response.withStatusCode(200).withBody(body);
+   }
+
 	public static APIGatewayProxyResponseEvent getInternalErrorResponse() {
 		 var response  = getTextResponse();
 		 return response.withStatusCode(500).withBody("An Internal Error has ocurred");

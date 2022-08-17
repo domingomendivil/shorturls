@@ -18,6 +18,7 @@ import shorturls.exceptions.InvalidArgumentException;
 public class CreateShortURLSeconds {
 
 	private final Service service;
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	public CreateShortURLSeconds(Service service) {
 		this.service = service;
@@ -25,7 +26,6 @@ public class CreateShortURLSeconds {
 
 	public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
 		String body = input.getBody();
-		ObjectMapper mapper = new ObjectMapper();
 		URLExpire urlHours;
 		try{
 			urlHours=mapper.readValue(body,URLExpire.class);
