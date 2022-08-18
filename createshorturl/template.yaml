@@ -106,6 +106,7 @@ Resources:
           REDIS_URL: !Ref RedisURL
           CACHE_ENABLED: !Ref CacheEnabled
           CACHE_FACTORY: !Ref CacheFactory
+          DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
       Events:
         CreateShortURLHoursEvent:
           Type: Api 

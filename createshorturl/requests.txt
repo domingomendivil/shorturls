@@ -1,3 +1,3 @@
-curl -X POST https://h9c42we4qk.execute-api.us-east-1.amazonaws.com/Prod/urls -H 'Content-type: text/plain' -d http://www.google.com  
-curl -X POST https://h9c42we4qk.execute-api.us-east-1.amazonaws.com/Prod/urls -H 'Content-type: application/json' -d '{"url":"http://www.peñarol.org","seconds":"1"}'
+curl -X POST https://5bupexrvdk.execute-api.us-east-1.amazonaws.com/Prod/urls -H 'Content-type: text/plain' -d http://www.google.com  
+curl -X POST https://5bupexrvdk.execute-api.us-east-1.amazonaws.com/Prod/urls -H 'Content-type: application/json' -d '{"url":"http://www.peñarol.org","seconds":"1"}'
 curl -X POST http://localhost:3000/urls  -H 'content-type: application/json' -d  '{"url":"http://www.peñarol.org","seconds":"1"}'
