@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
 import shorturls.exceptions.ShortURLRuntimeException;
+import shorturls.random.Randomizer;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
@@ -79,7 +80,7 @@ public class DynamoIdGenerator implements IDGenerator {
 	 */
 	private BigInteger nextCounter() {
 		HashMap<String, AttributeValue> itemKey = new HashMap<>();
-		itemKey.put(PK, fromS("counter"+randomizer.getRandomSuffix()));
+		itemKey.put(PK, fromS("counter"+randomizer.getRandomInt()));
 		HashMap<String, AttributeValue> attributeValues = new HashMap<>();
 		attributeValues.put(":incr", one);
 		UpdateItemRequest request = UpdateItemRequest.builder()

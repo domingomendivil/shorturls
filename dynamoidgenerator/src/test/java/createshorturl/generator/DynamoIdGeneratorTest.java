@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import lombok.val;
+import shorturls.random.Randomizer;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
@@ -44,8 +45,8 @@ public class DynamoIdGeneratorTest {
 	@Test
 	public void test1() {
 		HashMap<String, AttributeValue> itemKey = new HashMap<>();
-		when(randomizer.getRandomSuffix()).thenReturn("R");
-		itemKey.put("shortURL", fromS("counterR"));
+		when(randomizer.getRandomInt()).thenReturn(5);
+		itemKey.put("shortURL", fromS("counter5"));
 		val attributeValues = new HashMap<String, AttributeValue>();
 		attributeValues.put(":incr", fromN("1"));
 		UpdateItemRequest request = UpdateItemRequest.builder()

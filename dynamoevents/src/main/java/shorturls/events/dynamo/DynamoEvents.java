@@ -6,12 +6,14 @@ import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.from
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 import com.meli.events.Events;
 
 import lombok.val;
+import shorturls.random.Randomizer;
+import shorturls.random.RandomizerImpl;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedException;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
@@ -26,18 +28,17 @@ import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
  * 
  */
 public class DynamoEvents implements Events{
-	
+
 	/*
-	 * DynamoDB client used for interacting and making operations, in
-	 * this case updating records
+	 * Client for connecting to DynamoDb
 	 */
 	private final DynamoDbAsyncClient client;
 	
+
 	/*
-	 * range used for getting the random suffix in primary keys, 
-	 * to avoid hot partitions.
+	 * Class utility for generating random integers
 	 */
-	private final Long randomRange;
+	private final Randomizer randomizer;
 
 	
 	/*
@@ -62,9 +63,9 @@ public class DynamoEvents implements Events{
 
 	
 
-	public DynamoEvents(DynamoDbAsyncClient client,Long randomRange) {
+	public DynamoEvents(DynamoDbAsyncClient client,Randomizer randomizer) {
 		this.client = client; 
-		this.randomRange = randomRange;
+		this.randomizer= randomizer;
 	}
 	
 	
@@ -72,7 +73,7 @@ public class DynamoEvents implements Events{
 
 	private void updateItem(String shortPath,String key,String value){
 		val itemKey = new HashMap<String, AttributeValue>();
-		itemKey.put(PK, fromS(shortPath+getRandomSuffix()));
+		itemKey.put(PK, fromS(shortPath+randomizer.getRandomInt()));
 		itemKey.put(METADATA,fromS(key));
 		val attributeValues = new HashMap<String, AttributeValue>();
 		attributeValues.put(":incr", one);
@@ -96,7 +97,6 @@ public class DynamoEvents implements Events{
 
 
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void send(String shortPath, Map<String,String> msg) {
 		Iterator<String> it = msg.keySet().iterator();
@@ -106,15 +106,6 @@ public class DynamoEvents implements Events{
 		}
 	}
 
-	/*
-	 * This suffix is added to the primary key to avoid "Hot partitions" 
-	 * Counters for each of the suffixes must be added together to get the total count
-	 * Randomization assures that tha primary keys are uniformly distributed across
-	 * all the available DynamoDB partitions.
-	 */
-	private String getRandomSuffix() {
-		double l =Math.floor(Math.random() * (randomRange + 1));
-		return l+"";
-	}
+
 	
 }

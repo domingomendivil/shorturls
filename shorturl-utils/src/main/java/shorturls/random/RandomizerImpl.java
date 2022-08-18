@@ -1,9 +1,14 @@
-package createshorturl.generator;
+package shorturls.random;
 
-public class Randomizer {
-	
-	private final Long randomRange;
-	public Randomizer(Long randomRange) {
+import java.util.Random;
+
+public class RandomizerImpl implements Randomizer{
+    
+    private final Random random = new Random();
+
+	private final Integer randomRange;
+
+	public RandomizerImpl(Integer randomRange) {
 		this.randomRange=randomRange;
 	}
 
@@ -13,8 +18,7 @@ public class Randomizer {
 	 * Randomization assures that tha primary keys are uniformly distributed across
 	 * all the available DynamoDB partitions.
 	 */
-	public String getRandomSuffix() {
-		double l =Math.floor(Math.random() * (randomRange + 1));
-		return l+"";
+	public Integer getRandomInt() {
+		return Integer.valueOf(random.nextInt(randomRange));
 	}
 }
