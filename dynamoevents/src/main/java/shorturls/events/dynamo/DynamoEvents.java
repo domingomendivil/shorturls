@@ -87,7 +87,7 @@ public class DynamoEvents implements Events{
 		UpdateItemRequest request = getUpdateRequest(itemKey,"set evalue= :evalue, ecounter = ecounter +:incr")
 				.conditionExpression("attribute_exists(ecounter)").expressionAttributeValues(attributeValues).build();
 		try{
-			 val response= client.updateItem(request).get();
+			 client.updateItem(request).get();
 		}catch(ExecutionException e){
 			val request2 = getUpdateRequest(itemKey,"set evalue= :evalue, ecounter = :incr").expressionAttributeValues(attributeValues).build();
 			client.updateItem(request2);

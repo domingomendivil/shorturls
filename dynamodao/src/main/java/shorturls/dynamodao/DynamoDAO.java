@@ -74,7 +74,6 @@ public class DynamoDAO implements Query,Writer,Deleter {
 	}
 
 	private URLItem getURLItem(GetItemResponse response) {
-		//val urlItem = new URLItem();
 		try {
 			val responseItem = response.item();
 			val longURL = new URL(responseItem.get(LONG_URL).s());
@@ -131,15 +130,12 @@ public class DynamoDAO implements Query,Writer,Deleter {
 				.build(); 
 		val res = client.deleteItem(request);
 		try {
-			int nro = res.get().sdkHttpResponse().statusCode();
-			return nro==200;
+			val hasAttributes= res.get().hasAttributes();
+			return hasAttributes;
 		} catch (InterruptedException|ExecutionException e) {
 			return false;
 		} 
 	}
-	
-	public static void main(String[] args) {
-		System.out.println(LocalDateTime.now());
-	}
+
     
 }

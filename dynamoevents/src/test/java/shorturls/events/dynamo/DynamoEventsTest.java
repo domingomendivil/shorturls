@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import shorturls.random.Randomizer;
@@ -27,12 +28,13 @@ public class DynamoEventsTest {
 	@Mock
 	private DynamoDbAsyncClient client;
 	
-/**	@Test
+	/**@Test
 	public void test1() {
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("location","Argentina");
 		when(randomizer.getRandomInt()).thenReturn(1);
 		dynamoEvents.send("code", map);
-	}**/
-    
+		Mockito.verify(client).update
+	}
+    */
 }

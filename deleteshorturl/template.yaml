@@ -20,7 +20,7 @@ Parameters:
     Default: "shorturls.dynamodao.DynamoDAOFactory"    
   CacheFactory:
     Type: String
-    Default: "shorturl.cache.RedisCacheFactory"
+    Default: "shorturls.cache.RedisCacheFactory"
   CacheEnabled:
     Type: String
     Default: "false"
@@ -38,6 +38,7 @@ Resources:
         - x86_64
       Policies:
       - AmazonDynamoDBFullAccess
+      - AmazonVPCCrossAccountNetworkInterfaceOperations
       MemorySize: 512
       Environment: 
         Variables:
@@ -49,7 +50,7 @@ Resources:
           CACHE_ENABLED: !Ref CacheEnabled
           RANDOM_ALPHABET: !Ref RandomAlphabet
       Events:
-        DelteShortURLevent:
+        DeleteShortURLevent:
           Type: Api 
           Properties:
             Path: /shortURL
@@ -75,8 +76,8 @@ Resources:
           CACHE_ENABLED: !Ref CacheEnabled
           RANDOM_ALPHABET: !Ref RandomAlphabet
       Events:
-        DelteShortURLevent:
+        DeleteShortURLevent:
           Type: Api 
           Properties:
-            Path: /shortURL
+            Path: /urls/{code}
             Method: delete
