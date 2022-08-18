@@ -79,9 +79,6 @@ public class ServiceImpl implements Service {
 	private void send(URLItem urlItem, Map<String, String> headers) {
 		if (headers != null) {
 			val shortPath = urlItem.getShortPath();
-			headers.put("shortURL", urlItem.getShortPath());
-			headers.put("longURL", urlItem.getLongURL().toString());
-			headers.put("creationDate", urlItem.getCreationDate().toString());
 			events.send(shortPath, headers);
 		}
 	}

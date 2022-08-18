@@ -1,12 +1,18 @@
 package shorturls.apigateway;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.StringJoiner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import lombok.val;
+import shorturls.exceptions.ShortURLRuntimeException;
 
 /**
  * Utility class for generating HTTP responses with different status codes
@@ -35,7 +41,7 @@ public class ResponseCreator {
 
 	private static APIGatewayProxyResponseEvent getTextResponse() {
 		val headers = new HashMap<String, String>();
-		headers.put("Content-Type", "text/plain; charset=utf-8");
+		headers.put("content-type", "text/plain; charset=utf-8");
 		return new APIGatewayProxyResponseEvent().withHeaders(headers);
 	}
 
@@ -52,17 +58,22 @@ public class ResponseCreator {
 	public static APIGatewayProxyResponseEvent getMovedResponse(Map<String, String> reqHeaders, String url,String cookieConfig) {
 
 		val headers = new HashMap<String, String>();
-		headers.put("Location", url);
-		if (reqHeaders != null) {
-			val cookie = reqHeaders.get("Cookie");
-			if (cookie == null) {
-				String sessionId = random();
-				String newCookie = "sessionid=" + sessionId + cookieConfig;
-				headers.put("Set-Cookie", newCookie);
+		try {
+			headers.put("Location", toPuniCode(url));
+			headers.put("content-type", "text/plain; charset=utf-8");
+			if (reqHeaders != null) {
+				val cookie = reqHeaders.get("Cookie");
+				if (cookie == null) {
+					String sessionId = random();
+					String newCookie = "sessionid=" + sessionId + cookieConfig;
+					headers.put("Set-Cookie", newCookie);
+				}
 			}
-		}
 
-		return new APIGatewayProxyResponseEvent().withStatusCode(301).withHeaders(headers);
+			return new APIGatewayProxyResponseEvent().withStatusCode(301).withHeaders(headers);
+		}catch (MalformedURLException e) {
+			throw new ShortURLRuntimeException("Error encoding URL "+url,e);
+		}
 	}
 
 	public static APIGatewayProxyResponseEvent getOKResponse(String body) {
@@ -89,6 +100,21 @@ public class ResponseCreator {
 		val response = getTextResponse();
 		return response.withStatusCode(202).withBody(url);
 
+	}
+	
+	private static String toPuniCode(String url) throws MalformedURLException {
+		System.out.println("original url "+url);
+		URL u = new URL(url);
+		String[] labels = u.getHost().split("\\.");
+		StringJoiner joiner = new StringJoiner(".");
+		for (int i=0;i<labels.length;i++) {
+			String str= java.net.IDN.toASCII(labels[i]);
+			joiner.add(str);
+		}
+		String punicoded =joiner.toString();
+		punicoded=u.getProtocol()+"://"+punicoded;
+		System.out.println("punicoded url "+punicoded);
+		return punicoded;
 	}
 
 }

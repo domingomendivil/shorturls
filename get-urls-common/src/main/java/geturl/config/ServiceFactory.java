@@ -22,6 +22,11 @@ import shorturls.dao.Query;
 import urlutils.idvalidator.BaseURL;
 import urlutils.idvalidator.IdValidatorImpl;
 
+/**
+ * Factory class for instantiating the Service Layer.
+ * 
+ *
+ */
 public class ServiceFactory {
 
 	private ServiceFactory() {

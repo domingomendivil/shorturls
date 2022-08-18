@@ -42,7 +42,7 @@ public class DynamoDAOTest {
     	item.put(DynamoDAO.LONG_URL,fromS(longURL));
 		item.put(DynamoDAO.PK, fromS(pk));
 		item.put(DynamoDAO.CREATION_DATE, fromS(creationDate));
-		item.put(DynamoDAO.EXPIRATION_TIME, fromN(expirationTime.toString()));
+		item.put(DynamoDAO.TTL, fromN(expirationTime.toString()));
 		return GetItemResponse.builder().item(item).build();
     }
     

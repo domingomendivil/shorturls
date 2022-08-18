@@ -44,7 +44,6 @@ public class DynamoDAO implements Query,Writer,Deleter {
 	protected static final String LONG_URL="longURL";
 	protected static final String CREATION_DATE="creationDate";
 	protected static final String TTL = "ttl";
-	protected static final String EXPIRATION_TIME = "expirationHours";
 
     public DynamoDAO(DynamoDbAsyncClient client){
         this.client=client;
@@ -82,7 +81,7 @@ public class DynamoDAO implements Query,Writer,Deleter {
 			val shortPath = responseItem.get(PK).s();
 			val str=responseItem.get(CREATION_DATE).s();
 			val date = getDate(str);
-			val time = responseItem.get(EXPIRATION_TIME);
+			val time = responseItem.get(TTL);
 			if (time !=null) {
 				val hours =time.n();
 				long nro = Long.parseLong(hours);
@@ -107,17 +106,13 @@ public class DynamoDAO implements Query,Writer,Deleter {
 		item.put(CREATION_DATE,  fromS(urlItem.getCreationDate().toString()));
 		val expirationTime= urlItem.getExpirationTime();
 		if (expirationTime!=null){
-			item.put(EXPIRATION_TIME,fromN(expirationTime.toString()));
-			Long ttl = expirationTime;
-		    item.put(TTL,fromN(ttl.toString()));
+		    item.put(TTL,fromN(expirationTime.toString()));
 		}
 		val request = PutItemRequest.builder()
 				.tableName(TABLE_URL_ITEM)
 				.item(item).build();
-		System.out.println("put item");
 		try {
 			var res=client.putItem(request).get();
-			System.out.println(res.sdkHttpResponse().isSuccessful());
 		} catch (InterruptedException|ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

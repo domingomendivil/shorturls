@@ -10,6 +10,10 @@ public class ShortURLRuntimeException extends RuntimeException{
 	public ShortURLRuntimeException(String msg) {
 		super(msg);
 	}
+	
+	public ShortURLRuntimeException(String msg,Throwable e) {
+		super(msg,e);
+	}
 
 
 }

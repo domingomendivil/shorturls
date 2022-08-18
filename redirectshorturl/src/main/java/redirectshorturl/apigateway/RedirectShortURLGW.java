@@ -15,7 +15,7 @@ public class RedirectShortURLGW implements RequestHandler<APIGatewayProxyRequest
     private static final RedirectShortURL service = Factory.getRedirectShortURL();
 
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-       return service.handleRequest(input);
+    	return service.handleRequest(input);
     }
 
 }
