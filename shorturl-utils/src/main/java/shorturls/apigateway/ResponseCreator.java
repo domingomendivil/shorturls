@@ -49,7 +49,7 @@ public class ResponseCreator {
 		return response.withStatusCode(400).withBody("Invalid URL");
 	}
 
-	public static APIGatewayProxyResponseEvent getMovedResponse(Map<String, String> reqHeaders, String url) {
+	public static APIGatewayProxyResponseEvent getMovedResponse(Map<String, String> reqHeaders, String url,String cookieConfig) {
 
 		val headers = new HashMap<String, String>();
 		headers.put("Location", url);
@@ -57,7 +57,7 @@ public class ResponseCreator {
 			val cookie = reqHeaders.get("Cookie");
 			if (cookie == null) {
 				String sessionId = random();
-				String newCookie = "sessionid=" + sessionId + "; SameSite=Strict";
+				String newCookie = "sessionid=" + sessionId + cookieConfig;
 				headers.put("Set-Cookie", newCookie);
 			}
 		}

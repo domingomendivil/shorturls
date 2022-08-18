@@ -44,7 +44,7 @@ Parameters:
     Default: "shorturls.cache.RedisCacheFactory"
   DynamoRandomRange: #Random range used as suffix of partition keys for avoiding hot partitions on DynamoDB
     Type: Number
-    Default: 5
+    Default: 1
     MinValue: 1
 Resources:
   CreateShortURLFunction:
@@ -80,11 +80,11 @@ Resources:
           Properties:
             Path: /urls
             Method: post
-  CreateShortURLHoursFunction:
+  CreateShortURLSecondsFunction:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: ../createshorturl
-      Handler: createshorturl.apigateway.CreateShortURLHoursGW::handleRequest
+      Handler: createshorturl.apigateway.CreateShortURLSecondsGW::handleRequest
       Runtime: java11
       Architectures:
         - x86_64

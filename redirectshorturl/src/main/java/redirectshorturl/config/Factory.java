@@ -4,6 +4,7 @@ import geturl.config.ServiceFactory;
 import geturl.services.Service;
 import lombok.Getter;
 import redirectshorturl.apigateway.RedirectShortURL;
+import shorturls.config.ShortURLProperties;
 
 /**
  * Class Factory for creating a ShortURL class instance.
@@ -22,7 +23,7 @@ public class Factory {
 
 	private static RedirectShortURL init() {
 		Service service = ServiceFactory.getInstance();
-		return new RedirectShortURL(service);
+		return new RedirectShortURL(service,new ShortURLProperties());
 	}
 
 }

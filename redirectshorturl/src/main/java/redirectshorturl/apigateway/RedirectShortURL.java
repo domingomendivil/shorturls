@@ -9,6 +9,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 
 import geturl.services.Service;
 import lombok.val;
+import shorturls.config.ShortURLProperties;
 import shorturls.exceptions.InvalidArgumentException;
 
 /**
@@ -23,11 +24,14 @@ public class RedirectShortURL {
 	 */
     private final Service service;
 
+    private ShortURLProperties props;
+
     /*
      * Constructor, where the service layer is injected
      */
-    public RedirectShortURL(Service service){
+    public RedirectShortURL(Service service,ShortURLProperties props){
         this.service=service;
+        this.props=props;
     }
     
     /*
@@ -47,8 +51,10 @@ public class RedirectShortURL {
                 if (longURL.isEmpty()) {
                     return getNotFoundResponse();
                 } else {
-
-                    return getMovedResponse(headers,longURL.get().toString());
+                    var cookieConfig = props.getProperty("COOKIE_CONFIG");
+                    if (cookieConfig==null)
+                        cookieConfig="";
+                    return getMovedResponse(headers,longURL.get().toString(),cookieConfig);
                 }
             } catch (InvalidArgumentException e) {
             	//bad request, return next in code

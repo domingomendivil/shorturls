@@ -48,6 +48,9 @@ Parameters:
     Type: Number
     Default: 5
     MinValue: 1
+  CookieConfig: #Cookie configuration for the cookie sent to the request agent 
+    Type: String
+    Default: "; samesite=Strict"
 Resources:
   RedirectShortURLFunction:
     Type: AWS::Serverless::Function 
@@ -76,6 +79,7 @@ Resources:
           KAFKA_ENABLED: !Ref KafkaEnabled
           RANDOM_ALPHABET: !Ref RandomAlphabet
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
+          COOKIE_CONFIG: !Ref CookieConfig
       Events:
         RedirectShortURLEvent:
           Type: Api 

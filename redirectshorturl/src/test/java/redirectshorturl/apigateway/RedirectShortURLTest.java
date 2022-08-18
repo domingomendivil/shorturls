@@ -17,6 +17,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
 import geturl.services.Service;
+import shorturls.config.ShortURLProperties;
 import shorturls.exceptions.InvalidArgumentException;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,6 +26,9 @@ public class RedirectShortURLTest {
 
 	@InjectMocks
 	private RedirectShortURL redirectShortURL;
+
+	@Mock
+	private ShortURLProperties props;
 	
 	@Mock
 	private Service service;

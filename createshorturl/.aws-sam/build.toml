@@ -8,6 +8,6 @@ architecture = "x86_64"
 handler = "createshorturl.apigateway.CreateShortURLGW::handleRequest"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["CreateShortURLFunction", "CreateShortURLHoursFunction"]
+functions = ["CreateShortURLFunction", "CreateShortURLSecondsFunction"]
 
 [layer_build_definitions]

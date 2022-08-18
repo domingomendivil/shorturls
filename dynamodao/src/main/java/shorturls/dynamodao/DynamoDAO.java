@@ -114,10 +114,18 @@ public class DynamoDAO implements Query,Writer,Deleter {
 		val request = PutItemRequest.builder()
 				.tableName(TABLE_URL_ITEM)
 				.item(item).build();
-		client.putItem(request);
+		System.out.println("put item");
+		try {
+			var res=client.putItem(request).get();
+			System.out.println(res.sdkHttpResponse().isSuccessful());
+		} catch (InterruptedException|ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
 	}
 
-	@Override
+	@Override	
 	public boolean deleteById(String shortPath) {
 		val itemKey = new HashMap<String, AttributeValue>();
 		itemKey.put(PK, AttributeValue.fromS(shortPath));
