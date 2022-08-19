@@ -9,4 +9,6 @@ public class Constants {
     public static final String QUERY_FACTORY="QUERY_FACTORY";
     public static final String CACHE_FACTORY="CACHE_FACTORY";
     public static final String DELETER_FACTORY="DELETER_FACTORY";
+    public static final String CACHE_ONLY="CACHE_ONLY";
+ 
 }

@@ -17,6 +17,9 @@ Parameters:
   CacheEnabled: #If enabled, cache is used
     Type: String
     Default: "false"
+  CacheOnly: #If enabled, only cache is used without going to database (cache must be enabled)
+    Type: String
+    Default: "false"
   QueryFactory: #Factory class used to configure the querying to the data layer
     Type: String
     Default: "shorturls.dynamodao.DynamoDAOFactory"
@@ -81,6 +84,7 @@ Resources:
           RANDOM_ALPHABET: !Ref RandomAlphabet
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
           COOKIE_CONFIG: !Ref CookieConfig
+          CACHE_ONLY: !Ref CacheOnly
       Events:
         RedirectShortURLEvent:
           Type: Api 

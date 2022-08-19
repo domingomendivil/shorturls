@@ -21,6 +21,9 @@ Parameters:
   CacheEnabled: #If enabled, cache is used
     Type: String
     Default: "false"
+  CacheOnly: #If enabled, only cache is used without going to database (cache must be enabled)
+    Type: String
+    Default: "false"
   QueryFactory: #Factory class used to configure the querying to the data layer
     Type: String
     Default: "shorturls.dynamodao.DynamoDAOFactory" 
@@ -78,6 +81,7 @@ Resources:
           KAFKA_ENABLED: !Ref KafkaEnabled
           RANDOM_ALPHABET: !Ref RandomAlphabet
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
+          CACHE_ONLY: !Ref CacheOnly
       Events:
         GetURLEvent:
           Type: Api 
@@ -110,6 +114,7 @@ Resources:
           KAFKA_TOPICNAME: !Ref KafkaTopicName
           KAFKA_ENABLED: !Ref KafkaEnabled
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
+          CACHE_ONLY: !Ref CacheOnly
       Events:
         GetLongURLEvent:
           Type: Api 
