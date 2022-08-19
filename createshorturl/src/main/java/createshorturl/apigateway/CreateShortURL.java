@@ -20,15 +20,36 @@ import lombok.val;
 import shorturls.apigateway.ResponseCreator;
 import shorturls.exceptions.InvalidArgumentException;
 
-
+/**
+ * Class for handling HTTP request for creating short URLs.
+ * 
+ */
 public class CreateShortURL {
 
+	/*
+	 * Service layer 
+	 */
 	private final Service service;
 
+	/*
+	 * Jackson mapper to convert JSON input to URLExpire object
+	 */
 	private final ObjectMapper mapper = new ObjectMapper();
 
+	/*
+	 * Constant to compare input content-type and following processing
+	 */
 	static final String CONTENT_TYPE="content-type";
 
+	/*
+	 * Validator of input URLs
+	 */
+	private UrlValidator urlValidator = UrlValidator.getInstance();
+
+	/**
+	 * Constructor with service layer to be injected
+	 * @param service The service layer injected
+	 */
 	public CreateShortURL(Service service) {
 		this.service = service;
 	}
@@ -37,36 +58,39 @@ public class CreateShortURL {
 		try {
 			val newURL = new URL(url);
 			val  shortURL = service.createShortURL(newURL,urlExpire.getSeconds());
-			return ResponseCreator.getWillBeCreatedResponse(shortURL.toString());
+			return getWillBeCreatedResponse(shortURL.toString());
 		}  catch (MalformedURLException| InvalidArgumentException e) {
-			return ResponseCreator.getBadRequestResponse();
+			return getBadRequestResponse();
 		} catch (ServiceException e) {
-			return ResponseCreator.getInternalErrorResponse();
+			return getInternalErrorResponse();
 		}
 	}
 
+	/*
+	 * Handles URLs with expiration time in seconds
+	 */
 	private APIGatewayProxyResponseEvent handleURLExpires(final String body) {
 		try{
 			val urlExpire=mapper.readValue(body,URLExpire.class);
 			val url = urlExpire.getUrl();
 			val seconds=urlExpire.getSeconds();
-			if (seconds <=0){
-				return ResponseCreator.getBadRequestResponse();
+			if (seconds >0){
+				if (urlValidator.isValid(url)) 
+					return getShortURL(url,urlExpire);
 			}
-			val isValid = UrlValidator.getInstance().isValid(url);
-			if (isValid) {
-				return getShortURL(url,urlExpire);
-			} else {
-				return ResponseCreator.getBadRequestResponse();
-			}
+			return getBadRequestResponse();
 		}catch(JsonProcessingException e){
-			return ResponseCreator.getBadRequestResponse();
+			//in case of error processing the json is because JSON is in wrong format
+			//so it is a bad request
+			return getBadRequestResponse();
 		}
 	}
 
+	/*
+	 * Handles a simple URL in plain text format
+	 */
 	private APIGatewayProxyResponseEvent handleURL(final String body) {
-		val isValid = UrlValidator.getInstance().isValid(body);
-		if (isValid) {
+		if (urlValidator.isValid(body)) {
 			try {
 				val newURL = new URL(body);
 				val shortURL = service.createShortURL(newURL);
@@ -76,22 +100,27 @@ public class CreateShortURL {
 			} catch (ServiceException e) {
 				return getInternalErrorResponse();
 			}
-		} else {
-			return getBadRequestResponse();
-		}
+		} 
+		return getBadRequestResponse();
+		
 	}
 
-	
+	/*
+	 * handler for creating Short URLs. 
+	 * Input content can be json or text. In case of json, it receives
+	 * in the body a URL in JSON format, indicating the expiration time in seconds
+	 * e.g. {"url":"http://www.google.com","seconds":3000}
+	 * In case of a text, the body must contain a URL in plain text format
+	 */
 	public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
 		val contentType = input.getHeaders().get(CONTENT_TYPE);
-		System.out.println(CONTENT_TYPE+": "+contentType);
 		val body = input.getBody();
 		if ("text/plain".equals(contentType)){
-			return handleURL(body);
+			return handleURL(body); //creates a simple URL without expiration time
 		}else if (("application/json").equals(contentType)){
-			return handleURLExpires(body);
+			return handleURLExpires(body); //creates a URL with expiration time (json)
 		}else{
-			return getBadRequestResponse();
+			return getBadRequestResponse(); //anything else is a bad request
 		}
 	}
 

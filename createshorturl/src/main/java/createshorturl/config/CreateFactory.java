@@ -36,20 +36,31 @@ public class CreateFactory {
 	@Getter(lazy = true)
 	private static final Service service = initService(new ShortURLProperties());
 
+	/*
+	 * Creates the Service layer
+	 */
 	private static Service initService(ShortURLProperties props) {
-		val cacheEnabled = Boolean.valueOf(props.getProperty(CACHE_ENABLED));
 		val baseURL = new BaseURL(props.getProperty(BASE_URL));
-		var writerFactory = props.getProperty(WRITER_FACTORY);
-		var writer = new Factory<Writer>().getInstance(writerFactory);
-		if (Boolean.TRUE.equals(cacheEnabled)) {
-			val cacheFactory = props.getProperty(CACHE_FACTORY);
-			val cache = new Factory<Cache>().getInstance(cacheFactory);
-			writer = new WriterWithCache(writer, cache);
-		}
+		val writer = getWriter(props);
 		val events = new EventsImplDAO(writer);
 		val idGeneratorFactory = props.getProperty("ID_GENERATOR_FACTORY");
 		val idGenerator = new Factory<IDGenerator>().getInstance(idGeneratorFactory);
 		return new ServiceImpl(events, idGenerator, baseURL);
+	}
+
+	/*
+	 * Gets the Writer interface to inject to the service layer
+	 */
+	private static Writer getWriter(ShortURLProperties props){
+		val cacheEnabled = Boolean.valueOf(props.getProperty(CACHE_ENABLED));
+		val writerFactory = props.getProperty(WRITER_FACTORY);
+		val writer = new Factory<Writer>().getInstance(writerFactory);
+		if (Boolean.TRUE.equals(cacheEnabled)) {
+			val cacheFactory = props.getProperty(CACHE_FACTORY);
+			val cache = new Factory<Cache>().getInstance(cacheFactory);
+			return  new WriterWithCache(writer, cache);
+		}
+		return writer;
 	}
 
 }
