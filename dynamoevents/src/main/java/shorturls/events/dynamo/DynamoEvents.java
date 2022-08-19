@@ -6,9 +6,9 @@ import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.from
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+
+import com.meli.events.Events;
 
 import lombok.val;
 import shorturls.exceptions.ShortURLRuntimeException;
@@ -17,7 +17,6 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
-import com.meli.events.Events;
 
 /**
  * This class is just for simulation purposes. To be scalable, 

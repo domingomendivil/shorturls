@@ -63,8 +63,8 @@ public class ServiceFactory {
 	 * Gets the Query interface to be injected in the Service Layer
 	 */
 	private static Query getQuery(ShortURLProperties properties,Factory<Query> queryFactory,Factory<Cache> cacheFactory){
-		val cacheEnabled = Boolean.valueOf(properties.getProperty(CACHE_ENABLED));
-		val cacheOnly = Boolean.valueOf(properties.getProperty(CACHE_ONLY));
+		val cacheEnabled = getBoolean(properties,CACHE_ENABLED);
+		val cacheOnly = getBoolean(properties,CACHE_ONLY);
 		val queryFactoryStr = properties.getProperty(QUERY_FACTORY);
 		val query = queryFactory.getInstance(queryFactoryStr);
 		if (Boolean.TRUE.equals(cacheEnabled)) {
@@ -76,6 +76,10 @@ public class ServiceFactory {
 				return new QueryWithCacheImpl(query, cache);
 		}
 		return query;
+	}
+
+	private static Boolean getBoolean(ShortURLProperties props,String name){
+		return Boolean.valueOf(props.getProperty(name));
 	}
 
 }
