@@ -5,6 +5,7 @@ import java.net.URI;
 import lombok.Getter;
 import lombok.val;
 import shorturls.config.ShortURLProperties;
+import shorturls.config.ShortURLPropertiesImpl;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 
 /**
@@ -18,12 +19,12 @@ public class DynamoDbClientFactory {
 	}
 	
 	@Getter(lazy=true)
-	private static final DynamoDbAsyncClient client = getClient(new ShortURLProperties());
+	private static final DynamoDbAsyncClient client = getClient(new ShortURLPropertiesImpl());
 	
     /*
      * Creates a new instance of DynamoDbAsynClient
      */
-	private static final DynamoDbAsyncClient getClient(ShortURLProperties props) {
+	static final DynamoDbAsyncClient getClient(ShortURLProperties props) {
 		val dynamoURL = props.getProperty("DYNAMO_URL");
         DynamoDbAsyncClient client;
         if ((dynamoURL==null) || (dynamoURL.equals(""))){

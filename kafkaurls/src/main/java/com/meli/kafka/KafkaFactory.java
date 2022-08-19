@@ -2,6 +2,7 @@ package com.meli.kafka;
 
 import lombok.Getter;
 import shorturls.config.ShortURLProperties;
+import shorturls.config.ShortURLPropertiesImpl;
 
 /**
  * Factory class responsible for instantiating the KafkaEvents class
@@ -14,7 +15,7 @@ public class KafkaFactory {
 	 * Lombok Getter annotation to facilitate the lazy instantiation of the KafkaEvents class
 	 */
 	@Getter(lazy=true)
-	private static final KafkaEvents instance = init(new ShortURLProperties());
+	private static final KafkaEvents instance = init(new ShortURLPropertiesImpl());
 	
 	/*
 	 * Instantiation method of the KafkaEvents class

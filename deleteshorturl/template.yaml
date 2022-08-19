@@ -20,7 +20,7 @@ Parameters:
     Default: "shorturls.dynamodao.DynamoDAOFactory"    
   CacheFactory:
     Type: String
-    Default: "shorturls.cache.RedisCacheFactory"
+    Default: "shorturls.cache.config.RedisCacheFactory"
   CacheEnabled:
     Type: String
     Default: "false"

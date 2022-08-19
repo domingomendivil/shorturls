@@ -15,10 +15,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import createshorturl.services.Service;
-import createshorturl.services.ServiceException;
 import lombok.val;
 import shorturls.apigateway.ResponseCreator;
+import shorturls.config.ShortURLProperties;
 import shorturls.exceptions.InvalidArgumentException;
+import shorturls.exceptions.ShortURLRuntimeException;
 
 /**
  * Class for handling HTTP request for creating short URLs.
@@ -36,11 +37,9 @@ public class CreateShortURL {
 	 */
 	private final ObjectMapper mapper = new ObjectMapper();
 
-	/*
-	 * Constant to compare input content-type and following processing
-	 */
-	static final String CONTENT_TYPE="content-type";
 
+	private final ShortURLProperties props;
+	
 	/*
 	 * Validator of input URLs
 	 */
@@ -50,8 +49,9 @@ public class CreateShortURL {
 	 * Constructor with service layer to be injected
 	 * @param service The service layer injected
 	 */
-	public CreateShortURL(Service service) {
+	public CreateShortURL(Service service,ShortURLProperties props) {
 		this.service = service;
+		this.props=props;
 	}
 	
 	private APIGatewayProxyResponseEvent getShortURL(String url,URLExpire urlExpire){
@@ -61,7 +61,7 @@ public class CreateShortURL {
 			return getWillBeCreatedResponse(shortURL.toString());
 		}  catch (MalformedURLException| InvalidArgumentException e) {
 			return getBadRequestResponse();
-		} catch (ServiceException e) {
+		} catch (ShortURLRuntimeException e) {
 			return getInternalErrorResponse();
 		}
 	}
@@ -97,7 +97,7 @@ public class CreateShortURL {
 				return getWillBeCreatedResponse(shortURL.toString());
 			}  catch (MalformedURLException| InvalidArgumentException e) {
 				return getBadRequestResponse();
-			} catch (ServiceException e) {
+			} catch (ShortURLRuntimeException e) {
 				return getInternalErrorResponse();
 			}
 		} 
@@ -113,15 +113,17 @@ public class CreateShortURL {
 	 * In case of a text, the body must contain a URL in plain text format
 	 */
 	public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
-		val contentType = input.getHeaders().get(CONTENT_TYPE);
+		val contentType = props.getProperty("CONTENT-TYPE");
+		val contentTypeStr = input.getHeaders().get(contentType);
 		val body = input.getBody();
-		if ("text/plain".equals(contentType)){
-			return handleURL(body); //creates a simple URL without expiration time
-		}else if (("application/json").equals(contentType)){
-			return handleURLExpires(body); //creates a URL with expiration time (json)
-		}else{
-			return getBadRequestResponse(); //anything else is a bad request
+		if (contentTypeStr!=null) {
+			if (contentTypeStr.contains("application/json")) {
+				return handleURLExpires(body); //creates a URL with expiration time (json)
+			}else {
+				return handleURL(body); //creates a URL without expiration time
+			}
 		}
+		return getBadRequestResponse();//anything else is a bad request
 	}
 
 }

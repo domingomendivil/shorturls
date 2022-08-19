@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.val;
 import shorturls.cache.Cache;
 import shorturls.config.ShortURLProperties;
+import shorturls.config.ShortURLPropertiesImpl;
 import shorturls.dao.Writer;
 import urlutils.idvalidator.BaseURL;
 
@@ -28,13 +29,13 @@ public class CreateFactory {
 	}
 
 	@Getter(lazy = true)
-	private static final CreateShortURL createShortURL = new CreateShortURL(getService());
+	private static final CreateShortURL createShortURL = new CreateShortURL(getService(),new ShortURLPropertiesImpl());
 
 	@Getter(lazy = true)
 	private static final CreateShortURLSeconds createShortURLSeconds = new CreateShortURLSeconds(getService());
 
 	@Getter(lazy = true)
-	private static final Service service = initService(new ShortURLProperties());
+	private static final Service service = initService(new ShortURLPropertiesImpl());
 
 	/*
 	 * Creates the Service layer

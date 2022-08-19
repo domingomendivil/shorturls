@@ -8,6 +8,7 @@ import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.from
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import lombok.val;
+import shorturls.exceptions.ShortURLRuntimeException;
 import shorturls.random.Randomizer;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -63,5 +65,6 @@ public class DynamoIdGeneratorTest {
 		when(encoder.encode(BigInteger.valueOf(10L))).thenReturn("ASD");
 		assertEquals("ASD",idGenerator.generateUniqueID());
 	}
+	
 
 }

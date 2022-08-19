@@ -8,6 +8,7 @@ import createshorturl.events.Events;
 import createshorturl.generator.IDGenerator;
 import lombok.val;
 import shorturls.exceptions.InvalidArgumentException;
+import shorturls.exceptions.ShortURLRuntimeException;
 import shorturls.model.URLItem;
 import urlutils.idvalidator.BaseURL;
 /**
@@ -19,10 +20,22 @@ import urlutils.idvalidator.BaseURL;
 public class ServiceImpl implements Service {
 
 	/*
-	 * 
+	 * Events interface to send the creation of the short URL
 	 */
 	private final Events events;
+	
+	/*
+	 * IDGenerator generates codes for new short URLs.
+	 * The code is what comes after the base url. 
+	 * E.g. in http://me.li/XKJFXd the code is "XKJFXd"
+	 */
 	private final IDGenerator idGenerator;
+	
+	
+	/*
+	 * The base URL is the first part of the short url
+	 * E.g. in http://me.li/XKJFXd the baseURL is "http://me.li"
+	 */
 	private final BaseURL baseURL;
 	
 
@@ -45,7 +58,7 @@ public class ServiceImpl implements Service {
 			events.send(item);
 			return getShortURL(item.getShortPath());
 		}else{
-			throw new InvalidArgumentException("Invalid expiration hours (must be between 1 and 10000)");
+			throw new InvalidArgumentException("Invalid expiration time");
 		}
 
 	}
@@ -57,10 +70,10 @@ public class ServiceImpl implements Service {
 
 
 	@Override
-	public URL createShortURL(URL longURL, Long time) throws InvalidArgumentException {
-		if ((validSeconds(time)) && (validURL(longURL))){
-			val seconds = getEpochSeconds(time);
-			val item = newURLItem(longURL,seconds);
+	public URL createShortURL(URL longURL, Long seconds) throws InvalidArgumentException {
+		if ((validSeconds(seconds)) && (validURL(longURL))){
+			val epochSeconds = getEpochSeconds(seconds);
+			val item = newURLItem(longURL,epochSeconds);
 			events.send(item);
 			return getShortURL(item.getShortPath());
 		}else{
@@ -68,8 +81,8 @@ public class ServiceImpl implements Service {
 		}
 	}
 
-	private Long getEpochSeconds(Long time) {
-		return (System.currentTimeMillis()/1000)+time;
+	private Long getEpochSeconds(Long seconds) {
+		return (System.currentTimeMillis()/1000)+seconds;
 	}
 
 
@@ -81,7 +94,7 @@ public class ServiceImpl implements Service {
 		try {
 			return new URL(baseURL.toURL()+id);
 		} catch (MalformedURLException e) {
-			throw new ServiceException("An internal error has ocurred creating the short URL",e);
+			throw new ShortURLRuntimeException("An internal error has ocurred creating the short URL",e);
 		}
 	}
 

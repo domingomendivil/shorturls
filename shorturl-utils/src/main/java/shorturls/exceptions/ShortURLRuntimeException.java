@@ -15,5 +15,9 @@ public class ShortURLRuntimeException extends RuntimeException{
 		super(msg,e);
 	}
 
+	public ShortURLRuntimeException(Throwable e) {
+		super(e);
+	}
+
 
 }

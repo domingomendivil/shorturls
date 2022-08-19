@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.val;
 import shorturls.config.ConfigurationException;
 import shorturls.config.ShortURLProperties;
+import shorturls.config.ShortURLPropertiesImpl;
 import shorturls.random.Randomizer;
 import shorturls.random.RandomizerImpl;
 
@@ -15,7 +16,7 @@ import shorturls.random.RandomizerImpl;
 public class DynamoIdGeneratorFactory {
 	
 	@Getter(lazy=true) //Lombok Getter annotation is used to facilitate getting an instance lazily
-	private static final DynamoIdGenerator instance = init(new ShortURLProperties());
+	private static final DynamoIdGenerator instance = init(new ShortURLPropertiesImpl());
 	
 	
 	

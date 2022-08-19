@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import geturl.services.Service;
 import shorturls.config.ShortURLProperties;
@@ -37,12 +38,22 @@ public class RedirectShortURLTest {
 	
 	private APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 
+	private void assertResponse(int statusCode,APIGatewayProxyResponseEvent response) {
+		assertEquals(Integer.valueOf(statusCode), response.getStatusCode());
+	}
+	
+	private void whenInvokeServiceReturnURL(String code,String responseUrl) throws InvalidArgumentException, MalformedURLException {
+		input.setPathParameters(map);
+		map.put("code", code);
+		var url = Optional.of(new URL(responseUrl));
+		when(service.getURL("ADD", null)).thenReturn(url);
+	}
 	
 	@Test
 	public void test1() {
 		input.setPathParameters(map);
 		var response = redirectShortURL.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
+		assertResponse(400,response);
 	}
 	
 	@Test
@@ -50,19 +61,15 @@ public class RedirectShortURLTest {
 		input.setPathParameters(map);
 		map.put("code", "");
 		var response = redirectShortURL.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
+		assertResponse(400,response);
 	}
 	
 	@Test
 	public void test3() throws MalformedURLException, InvalidArgumentException {
-		input.setPathParameters(map);
-		map.put("code", "ADD");
-		String responseURL ="http://www.montevideo.com.uy";
-		var url = Optional.of(new URL(responseURL));
-		when(service.getURL("ADD", null)).thenReturn(url);
+		whenInvokeServiceReturnURL("ADD", "http://www.montevideo.com.uy");
 		var response = redirectShortURL.handleRequest(input);
-		assertEquals(Integer.valueOf(301), response.getStatusCode());
-		assertEquals(responseURL, response.getHeaders().get("Location"));
+		assertResponse(301,response);
+		assertEquals("http://www.montevideo.com.uy", response.getHeaders().get("Location"));
 	}
 	
 	@Test
@@ -72,7 +79,7 @@ public class RedirectShortURLTest {
 		InvalidArgumentException e = new InvalidArgumentException("Invalid URL");
 		when(service.getURL("ADD", null)).thenThrow(e);
 		var response = redirectShortURL.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
+		assertResponse(400,response);
 		assertEquals("Invalid URL", response.getBody());
 	}
 	
@@ -83,7 +90,7 @@ public class RedirectShortURLTest {
 		map.put("code", "ADD");
 		when(service.getURL("ADD", null)).thenReturn(Optional.empty());
 		var response = redirectShortURL.handleRequest(input);
-		assertEquals(Integer.valueOf(404), response.getStatusCode());
+		assertResponse(404,response);
 	}
 
 	

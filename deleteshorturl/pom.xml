@@ -107,6 +107,48 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>${maven.shade.plugin.version}</version>
+				<configuration>
+					<filters>
+						<filter>
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>module-info.class</exclude>
+								<exclude>META-INF/services/reactor.blockhound.integration.BlockHoundIntegration
+								</exclude>
+								<exclude>module-info.class</exclude>
+								<exclude>META-INF/versions/9/module-info.class</exclude>
+								<exclude>META-INF/maven/com.fasterxml.jackson.core/jackson-core/pom.xml
+								</exclude>
+								<exclude>META-INF/maven/com.fasterxml.jackson.core/jackson-core/pom.properties
+								</exclude>
+								<exclude>META-INF/*</exclude>
+								<exclude>META-INF/maven/*</exclude>
+								<exclude>META-INF/*.DSA</exclude>
+								<exclude>META-INF/*.RSA</exclude>
+								<exclude>META-INF/*.MF</exclude>
+								<exclude>META-INF/*.txt</exclude>
+							</excludes>
+						</filter>
+					</filters>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
+		</plugins>
+
+	</build>
 
 </project>

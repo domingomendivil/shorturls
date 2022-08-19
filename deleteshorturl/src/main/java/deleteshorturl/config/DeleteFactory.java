@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.val;
 import shorturls.cache.Cache;
 import shorturls.config.ShortURLProperties;
+import shorturls.config.ShortURLPropertiesImpl;
 import shorturls.dao.Deleter;
 import urlutils.idvalidator.BaseURL;
 import urlutils.idvalidator.IdValidatorImpl;
@@ -47,7 +48,7 @@ public final class DeleteFactory {
 	/*
 	 * Service layer to be injected to the API Gateway classes
 	 */
-	private static final  Service service = getService(new ShortURLProperties());
+	private static final  Service service = getService(new ShortURLPropertiesImpl());
 
 	private static Service getService(ShortURLProperties props){
 		val deleteFactory = props.getProperty(DELETER_FACTORY);

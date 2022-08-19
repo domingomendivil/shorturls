@@ -29,15 +29,15 @@ public interface Service {
 	
 	/**
 	 * Creates a short URL associated with a long (original) URL. The short URL will 
-	 * exist and can be used for the period in hours which is also passed as an input
+	 * exist and can be used for the period in seconds which is also passed as an input
 	 * argument. After that period, the short URL is deleted automatically and cannot be
 	 * used. 
 	 * @param longURL the original URL for which a short URL must be created
-	 * @param hours The hours that the short URL will exist.
+	 * @param seconds The seconds that the short URL will exist.
 	 * @return
 	 * @throws InvalidArgumentException
 	 */
-	public URL createShortURL(URL longURL,Long hours) throws InvalidArgumentException;
+	public URL createShortURL(URL longURL,Long seconds) throws InvalidArgumentException;
 	
 
 

@@ -24,6 +24,8 @@ public class DeleteShortURLTest {
 
     @InjectMocks
     private DeleteShortURL deleteShortURL;
+    
+   
 
     @Test
     public void test1() throws MalformedURLException, InvalidArgumentException{
@@ -67,6 +69,15 @@ public class DeleteShortURLTest {
         var event = deleteShortURL.handleRequest(input);
         assertEquals(Integer.valueOf(400),event.getStatusCode());
         assertEquals("Invalid URL",event.getBody());
+    }
+    
+    @Test
+    public void test6() throws MalformedURLException, InvalidArgumentException{
+        APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
+        input.setBody("http://localhost:3000/asdf");
+        Mockito.when(svc.deleteURL(new URL("http://localhost:3000/asdf"))).thenReturn(false);
+        var event = deleteShortURL.handleRequest(input);
+        assertEquals(Integer.valueOf(404),event.getStatusCode());
     }
 
     

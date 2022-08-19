@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import geturl.services.Service;
 import lombok.val;
@@ -30,45 +31,55 @@ public class GetURLTest {
 	@Mock
 	private Service svc;
 
+	
+	private void assertResponse(int code,APIGatewayProxyResponseEvent response) {
+		assertEquals(Integer.valueOf(code), response.getStatusCode());
+	}
+	
+	private void assertBody(String body,APIGatewayProxyResponseEvent response) {
+		assertEquals(body, response.getBody());
+	}
+	
+	private void whenInvokeServiceReturn(String shortPath,Optional<URL> optional) throws InvalidArgumentException {
+		when(svc.getURL(shortPath, null)).thenReturn(optional);
+	}
+	
+	private APIGatewayProxyResponseEvent getURL(String code) {
+		val input = new APIGatewayProxyRequestEvent();
+		Map<String, String> map = new HashMap<>();
+		map.put("code", code);
+		input.setPathParameters(map);
+		return getURL.handleRequest(input);
+	}
+	
+	
 	@Test
 	public void test1() throws MalformedURLException, InvalidArgumentException {
 		val shortPath="HSFSF";
 		val e = new InvalidArgumentException("Invalid URL");
 		when(svc.getURL(shortPath, null)).thenThrow(e);
-		val input = new APIGatewayProxyRequestEvent();
-		Map<String, String> map = new HashMap<>();
-		map.put("code", shortPath);
-		input.setPathParameters(map);
-		val response = getURL.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
-		assertEquals("Invalid URL", response.getBody());
+		val response = getURL(shortPath);
+		assertResponse(400,response);
+		assertBody("Invalid URL", response);
 	}
 	
 	@Test
 	public void test2() throws MalformedURLException, InvalidArgumentException {
 		String shortPath="HSFSF";
 		URL url = new URL("http://www.google.com");
-		when(svc.getURL(shortPath, null)).thenReturn(Optional.of(url));
-		val input = new APIGatewayProxyRequestEvent();
-		Map<String, String> map = new HashMap<>();
-		map.put("code", shortPath);
-		input.setPathParameters(map);
-		val response = getURL.handleRequest(input);
-		assertEquals(Integer.valueOf(200), response.getStatusCode());
-		assertEquals("http://www.google.com", response.getBody());
+		whenInvokeServiceReturn(shortPath,Optional.of(url));
+		val response = getURL(shortPath);
+		assertResponse(200,response);
+		assertBody("http://www.google.com", response);
 	}
 	
 	@Test
 	public void test3() throws MalformedURLException, InvalidArgumentException {
 		String shortPath="HSFSF";
-		when(svc.getURL(shortPath, null)).thenReturn(Optional.empty());
-		val input = new APIGatewayProxyRequestEvent();
-		Map<String, String> map = new HashMap<>();
-		map.put("code", shortPath);
-		input.setPathParameters(map);
-		val response = getURL.handleRequest(input);
-		assertEquals(Integer.valueOf(404), response.getStatusCode());
-		assertEquals("URL not found", response.getBody());
+		whenInvokeServiceReturn(shortPath,Optional.empty());
+		val response = getURL(shortPath);
+		assertResponse(404,response);
+		assertBody("URL not found", response);
 	}
 
 }

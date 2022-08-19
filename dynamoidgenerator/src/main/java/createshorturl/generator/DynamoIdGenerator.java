@@ -89,15 +89,9 @@ public class DynamoIdGenerator implements IDGenerator {
 				.updateExpression("SET LastID = LastID + :incr")
 				.expressionAttributeValues(attributeValues).build();
 		try {
-			System.out.println("antes del get");
-
 			var response  = client.updateItem(request).get();
-			System.out.println("response "+response);
-
-			System.out.println("dps del get");
 			var nro =response.attributes().get("LastID");
 			return new BigInteger(nro.n(),10);
-			
 		}catch(ExecutionException|InterruptedException e) {
 			throw new ShortURLRuntimeException("Error in getting DynamoDB next counter");
 		}

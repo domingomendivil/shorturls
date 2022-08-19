@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.val;
 import shorturls.cache.Cache;
 import shorturls.config.ShortURLProperties;
+import shorturls.config.ShortURLPropertiesImpl;
 import shorturls.dao.Query;
 import urlutils.idvalidator.BaseURL;
 import urlutils.idvalidator.IdValidatorImpl;
@@ -38,7 +39,7 @@ public class ServiceFactory {
 	 * Lombok Getter is used for lazily instantiating the Service Layer
 	 */
 	@Getter(lazy = true)
-	private static final Service instance = init(new ShortURLProperties(),new Factory<Query>(),new Factory<Cache>(),new Factory<Events>());
+	private static final Service instance = init(new ShortURLPropertiesImpl(),new Factory<Query>(),new Factory<Cache>(),new Factory<Events>());
 
 	/*
 	 * Method for creating the Service layer

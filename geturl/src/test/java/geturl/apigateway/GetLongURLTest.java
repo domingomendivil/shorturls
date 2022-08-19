@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import geturl.services.Service;
 import lombok.val;
@@ -33,18 +34,30 @@ public class GetLongURLTest {
 	
 	@Mock
 	private Service svc;
-
-    @Test
-	public void test1() throws MalformedURLException, InvalidArgumentException {
-		String url = "file://wa";
-		InvalidArgumentException e = new InvalidArgumentException("Invalid URL");
+	
+	private void assertResponse(int code,APIGatewayProxyResponseEvent response) {
+		assertEquals(Integer.valueOf(code), response.getStatusCode());
+	}
+	
+	
+	private void assertBody(String body,APIGatewayProxyResponseEvent response) {
+		assertEquals(body, response.getBody());
+	}
+	
+	private APIGatewayProxyResponseEvent getLongURL(String url) {
 		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
 		Map<String, String> map = new HashMap<>();
         map.put("shortURL", url);
         input.setQueryStringParameters(map);
-		var response = getLongURL.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
-		assertEquals("Invalid URL", response.getBody());
+		return getLongURL.handleRequest(input);
+	}
+
+    @Test
+	public void test1() throws MalformedURLException, InvalidArgumentException {
+		String url = "file://wa";
+		val response = getLongURL(url);
+		assertResponse(400,response);
+		assertBody("Invalid URL",response);
 	}
 
 
@@ -55,24 +68,17 @@ public class GetLongURLTest {
         var returnURLStr = "http://www.google.com";
         var returnURL = new URL(returnURLStr);
         when(svc.getLongURL(new URL(url),null)).thenReturn(Optional.of(returnURL));
-		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
-		Map<String, String> map = new HashMap<>();
-        map.put("shortURL", encoded);
-        input.setQueryStringParameters(map);
-		var response = getLongURL.handleRequest(input);
-		assertEquals(Integer.valueOf(200), response.getStatusCode());
-        assertEquals(returnURLStr, response.getBody());
-	}
+		val response = getLongURL(encoded);
+		assertResponse(200,response);
+		assertBody(returnURLStr,response);
+ 	}
 
     @Test
 	public void test3() throws MalformedURLException, InvalidArgumentException {
 		String url = "a";
-		APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
-		Map<String, String> map = new HashMap<>();
-        map.put("shortURL", url);
-        input.setQueryStringParameters(map);
-		var response = getLongURL.handleRequest(input);
-		assertEquals(Integer.valueOf(400), response.getStatusCode());
+		val response = getLongURL(url);
+		assertResponse(400,response);
+
     }
 
 	@Test
@@ -80,13 +86,9 @@ public class GetLongURLTest {
 		String url = "http://me.li/2342";
 		String encoded = encode(url);
 		when(svc.getLongURL(new URL(url),null)).thenReturn(Optional.empty());
-		val input = new APIGatewayProxyRequestEvent();
-		Map<String, String> map = new HashMap<>();
-        map.put("shortURL", encoded);
-        input.setQueryStringParameters(map);
-		var response = getLongURL.handleRequest(input);
-		assertEquals(Integer.valueOf(404), response.getStatusCode());
-    	assertEquals("URL not found", response.getBody());
+		val response = getLongURL(encoded);
+		assertResponse(404,response);
+    	assertBody("URL not found",response);
     
 	}
 

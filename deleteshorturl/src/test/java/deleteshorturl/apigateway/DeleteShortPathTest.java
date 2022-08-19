@@ -29,7 +29,11 @@ public class DeleteShortPathTest {
     
     
     private void assertBadRequest(APIGatewayProxyResponseEvent res) {
-    	assertEquals(Integer.valueOf(400), res.getStatusCode());
+    	assertResponse(400, res);
+    }
+    
+    private void assertResponse(int code,APIGatewayProxyResponseEvent res) {
+    	assertEquals(Integer.valueOf(code), res.getStatusCode());
     }
     
     
@@ -52,7 +56,7 @@ public class DeleteShortPathTest {
     	val input = getInputParameters("nvasdkh");
 		when(svc.deleteURL("nvasdkh")).thenReturn(true);
     	var res = deleteShortPath.handleRequest(input);
-    	assertEquals(Integer.valueOf(200), res.getStatusCode());
+    	assertResponse(200, res);
     }
     
     @Test
@@ -60,7 +64,7 @@ public class DeleteShortPathTest {
 		val input = getInputParameters("nvasdkh");
 		when(svc.deleteURL("nvasdkh")).thenReturn(false);
     	var res = deleteShortPath.handleRequest(input);
-    	assertEquals(Integer.valueOf(404), res.getStatusCode());
+    	assertResponse(404, res);
     }
     
     private APIGatewayProxyRequestEvent getInputParameters(String shortPath) {

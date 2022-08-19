@@ -41,11 +41,14 @@ Parameters:
     Default: "false"
   CacheFactory: #Factory class used to configure cache
     Type: String
-    Default: "shorturls.cache.RedisCacheFactory"
+    Default: "shorturls.cache.config.RedisCacheFactory"
   DynamoRandomRange: #Random range used as suffix of partition keys for avoiding hot partitions on DynamoDB
     Type: Number
     Default: 1
     MinValue: 1
+  ContentType: #String to know the content-type of the requests when creating short urls
+    Type: String
+    Default: "content-type"
 Resources:
   CreateShortURLFunction:
     Type: AWS::Serverless::Function 
@@ -74,6 +77,7 @@ Resources:
           CACHE_ENABLED: !Ref CacheEnabled
           CACHE_FACTORY: !Ref CacheFactory 
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
+          CONTENT_TYPE: !Ref ContentType
       Events:
         CreateShortURLEvent:
           Type: Api 

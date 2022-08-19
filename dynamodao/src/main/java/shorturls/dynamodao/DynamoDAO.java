@@ -13,7 +13,6 @@ import java.util.concurrent.ExecutionException;
 import lombok.val;
 import shorturls.dao.Deleter;
 import shorturls.dao.Query;
-import shorturls.dao.QueryException;
 import shorturls.dao.Writer;
 import shorturls.exceptions.ShortURLRuntimeException;
 import shorturls.model.URLItem;
@@ -69,7 +68,7 @@ public class DynamoDAO implements Query,Writer,Deleter {
 				return Optional.empty();
 			}
 		} catch (InterruptedException|ExecutionException e) {
-			return Optional.empty();
+			throw new ShortURLRuntimeException(e);
 		} 
 		
 	}
@@ -90,7 +89,7 @@ public class DynamoDAO implements Query,Writer,Deleter {
 				return new URLItem(shortPath,longURL,date,null);
 			}
 		} catch (MalformedURLException e) {
-			throw new QueryException(e);
+			throw new ShortURLRuntimeException(e);
 		}
 	}
 	
@@ -111,14 +110,8 @@ public class DynamoDAO implements Query,Writer,Deleter {
 		val request = PutItemRequest.builder()
 				.tableName(TABLE_URL_ITEM)
 				.item(item).build();
-		try {
-			var res=client.putItem(request).get();
-		} catch (InterruptedException|ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-	}
+			client.putItem(request);
+ç	}
 
 	@Override	
 	public boolean deleteById(String shortPath) {

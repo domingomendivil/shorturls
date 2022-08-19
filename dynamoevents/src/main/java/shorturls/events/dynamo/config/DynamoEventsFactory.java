@@ -1,4 +1,4 @@
-package shorturls.events.dynamo;
+package shorturls.events.dynamo.config;
 
 import com.meli.dynamo.DynamoDbClientFactory;
 
@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.val;
 import shorturls.config.ConfigurationException;
 import shorturls.config.ShortURLProperties;
+import shorturls.config.ShortURLPropertiesImpl;
+import shorturls.events.dynamo.DynamoEvents;
 import shorturls.random.Randomizer;
 import shorturls.random.RandomizerImpl;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
@@ -16,7 +18,7 @@ public class DynamoEventsFactory {
 
   
     @Getter(lazy=true) //Lombok Getter annotation is used to facilitate getting an instance lazily
-	private static final DynamoEvents instance = init(new ShortURLProperties());
+	private static final DynamoEvents instance = init(new ShortURLPropertiesImpl());
 
     private static final DynamoEvents init(ShortURLProperties properties){
     	DynamoDbAsyncClient client = DynamoDbClientFactory.getClient();
