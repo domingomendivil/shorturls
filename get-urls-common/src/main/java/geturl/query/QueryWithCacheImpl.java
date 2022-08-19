@@ -2,11 +2,14 @@ package geturl.query;
 
 import java.util.Optional;
 
+import lombok.val;
 import shorturls.cache.Cache;
 import shorturls.dao.Query;
 import shorturls.model.URLItem;
 
-
+/**
+ * Class for querying cache first and then the database
+ */
 public class QueryWithCacheImpl implements Query{
 
 	private final  Query query;
@@ -21,7 +24,7 @@ public class QueryWithCacheImpl implements Query{
 	public Optional<URLItem> getById(String path) {
 		Optional<URLItem> urlItem =cache.getById(path);
 		if (urlItem.isEmpty()) {
-			var item = query.getById(path);
+			val item = query.getById(path);
 			if (item.isPresent()) {
 				cache.put(path, item.get());
 			}
