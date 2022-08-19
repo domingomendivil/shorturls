@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runner.RunWith;
@@ -69,9 +68,12 @@ public class CreateShortURLTest {
 		assertEquals(Integer.valueOf(statusCode), response.getStatusCode());
 	}
 	
-	private void whenServiceInvokeReturn(String url,String returnedURL) throws MalformedURLException, InvalidArgumentException {
+	private void whenServiceInvokeReturn(String url,Long seconds,String returnedURL) throws MalformedURLException, InvalidArgumentException {
 		URL response = new URL(returnedURL);
-		when(svc.createShortURL(new URL(url))).thenReturn(response);
+		if (seconds == null)
+			when(svc.createShortURL(new URL(url))).thenReturn(response);
+		else
+		    when(svc.createShortURL(new URL(url),seconds)).thenReturn(response);
 	}
 	
 
@@ -81,7 +83,7 @@ public class CreateShortURLTest {
 		when(props.getProperty("CONTENT-TYPE")).thenReturn(CONTENT_TYPE);
 		String url = "http://www.montevideo.com.uy";
 		String shortURL ="http://me.li/XDFUI";
-		whenServiceInvokeReturn(url,shortURL);
+		whenServiceInvokeReturn(url,null,shortURL);
 		val response = handleURL(url);
 		assertResponse(201, response);
 		assertBody(shortURL, response);
@@ -107,8 +109,7 @@ public class CreateShortURLTest {
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"3\"}";
 		String url = "http://www.montevideo.com.uy";
 		String shortURL ="http://me.li/XDFUI";
-		URL returnURL = new URL(shortURL);
-		when(svc.createShortURL(new URL(url),3L)).thenReturn(returnURL);
+		whenServiceInvokeReturn(url, 3L, shortURL);
 		var response = handleJson(json);
 		assertResponse(201, response);
 		assertBody(shortURL, response);
@@ -146,7 +147,7 @@ public class CreateShortURLTest {
 		when(props.getProperty("CONTENT-TYPE")).thenReturn(CONTENT_TYPE);
 		String json = "http://www.ladiaria.com.uy";
 		String shortURL ="http://me.li/XDFUI";
-		whenServiceInvokeReturn(json,shortURL);
+		whenServiceInvokeReturn(json,null,shortURL);
 		val response = handle(json,"text/html");
 		assertBody(shortURL, response);
 	}

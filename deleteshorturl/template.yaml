@@ -24,6 +24,9 @@ Parameters:
   CacheEnabled:
     Type: String
     Default: "false"
+  RedisUrl:
+    Type: String
+    Default: "redis://rediserver:6379/"
   RandomAlphabet:
     Type: String
     Default: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -49,6 +52,7 @@ Resources:
           CACHE_FACTORY: !Ref CacheFactory
           CACHE_ENABLED: !Ref CacheEnabled
           RANDOM_ALPHABET: !Ref RandomAlphabet
+          REDIS_URL: !Ref RedisUrl
       Events:
         DeleteShortURLevent:
           Type: Api 
@@ -75,6 +79,7 @@ Resources:
           CACHE_FACTORY: !Ref CacheFactory
           CACHE_ENABLED: !Ref CacheEnabled
           RANDOM_ALPHABET: !Ref RandomAlphabet
+          REDIS_URL: !Ref RedisUrl
       Events:
         DeleteShortURLevent:
           Type: Api 

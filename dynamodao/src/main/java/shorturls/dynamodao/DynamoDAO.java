@@ -111,7 +111,7 @@ public class DynamoDAO implements Query,Writer,Deleter {
 				.tableName(TABLE_URL_ITEM)
 				.item(item).build();
 			client.putItem(request);
-ç	}
+	}
 
 	@Override	
 	public boolean deleteById(String shortPath) {

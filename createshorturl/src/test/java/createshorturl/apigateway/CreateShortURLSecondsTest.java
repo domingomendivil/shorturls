@@ -41,7 +41,7 @@ public class CreateShortURLSecondsTest {
 		assertEquals(shortURL, response.getBody());
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	@Test
 	public void test2() throws MalformedURLException, InvalidArgumentException {
 		String url = "file://wa";

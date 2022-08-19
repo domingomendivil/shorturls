@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import createshorturl.services.Service;
 import lombok.val;
-import shorturls.apigateway.ResponseCreator;
 import shorturls.config.ShortURLProperties;
 import shorturls.exceptions.InvalidArgumentException;
 import shorturls.exceptions.ShortURLRuntimeException;

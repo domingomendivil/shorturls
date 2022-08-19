@@ -77,7 +77,6 @@ public class DynamoEvents implements Events{
 	
 
 	private void updateItem(String shortPath,String key,String value){
-		System.out.println("shortpath "+shortPath+" key: "+key +"  value: "+value);
 		val itemKey = new HashMap<String, AttributeValue>();
 		itemKey.put(PK, fromS(shortPath+randomizer.getRandomInt()));
 		itemKey.put(METADATA,fromS(key));
