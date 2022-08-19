@@ -6,7 +6,7 @@ import static shorturls.constants.Constants.CACHE_FACTORY;
 import static shorturls.constants.Constants.EVENTS_FACTORY;
 import static shorturls.constants.Constants.QUERY_FACTORY;
 import static shorturls.constants.Constants.RANDOM_ALPHABET;
-
+import static shorturls.constants.Constants.CACHE_ONLY;
 import com.meli.events.Events;
 import com.meli.factory.Factory;
 
@@ -63,7 +63,7 @@ public class ServiceFactory {
 	 */
 	private static Query getQuery(ShortURLProperties properties,Factory<Query> queryFactory,Factory<Cache> cacheFactory){
 		val cacheEnabled = Boolean.valueOf(properties.getProperty(CACHE_ENABLED));
-		val cacheOnly = Boolean.valueOf(properties.getProperty(CACHBoolean.valueOf(properties.getProperty(CACHE_ENABLED));E_ENABLED));
+		val cacheOnly = Boolean.valueOf(properties.getProperty(CACHE_ONLY));
 		val queryFactoryStr = properties.getProperty(QUERY_FACTORY);
 		val query = queryFactory.getInstance(queryFactoryStr);
 		if (Boolean.TRUE.equals(cacheEnabled)) {
