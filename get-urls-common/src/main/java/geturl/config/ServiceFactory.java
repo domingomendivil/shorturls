@@ -16,7 +16,6 @@ import geturl.services.ServiceImpl;
 import lombok.Getter;
 import lombok.val;
 import shorturls.cache.Cache;
-import shorturls.config.ConfigurationException;
 import shorturls.config.ShortURLProperties;
 import shorturls.dao.Query;
 import urlutils.idvalidator.BaseURL;
@@ -34,20 +33,27 @@ public class ServiceFactory {
 	}
 	
 	
-
+	/*
+	 * Lombok Getter is used for lazily instantiating the Service Layer
+	 */
 	@Getter(lazy = true)
 	private static final Service instance = init(new ShortURLProperties(),new Factory<Query>(),new Factory<Cache>(),new Factory<Events>());
 
-	
+	/*
+	 * Method for creating the Service layer
+	 */
 	static Service init(ShortURLProperties properties,Factory<Query> queryFactory,Factory<Cache> cacheFactory,Factory<Events> eventsFactory) {
 		try {
 			val cacheEnabled = Boolean.valueOf(properties.getProperty(CACHE_ENABLED));
 			val queryFactoryStr = properties.getProperty(QUERY_FACTORY);
 			var query = queryFactory.getInstance(queryFactoryStr);
 			if (Boolean.TRUE.equals(cacheEnabled)) {
+				System.out.println("cache enabled");
 				val cacheFactoryStr = properties.getProperty(CACHE_FACTORY);
 				val cache = cacheFactory.getInstance(cacheFactoryStr);
 				query = new QueryWithCacheImpl(query, cache);
+			}else{
+				System.out.println("cache not enabled");
 			}
 			val baseURL = new BaseURL(properties.getProperty(BASE_URL));
 			val eventFactoryStr = properties.getProperty(EVENTS_FACTORY);

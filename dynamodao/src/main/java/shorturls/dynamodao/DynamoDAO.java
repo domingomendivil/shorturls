@@ -15,6 +15,7 @@ import shorturls.dao.Deleter;
 import shorturls.dao.Query;
 import shorturls.dao.QueryException;
 import shorturls.dao.Writer;
+import shorturls.exceptions.ShortURLRuntimeException;
 import shorturls.model.URLItem;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -133,7 +134,8 @@ public class DynamoDAO implements Query,Writer,Deleter {
 			val hasAttributes= res.get().hasAttributes();
 			return hasAttributes;
 		} catch (InterruptedException|ExecutionException e) {
-			return false;
+			val msg = String.format("Error deleting %", shortPath);
+			throw new ShortURLRuntimeException(msg,e);
 		} 
 	}
 

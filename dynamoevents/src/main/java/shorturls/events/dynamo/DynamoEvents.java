@@ -102,13 +102,12 @@ public class DynamoEvents implements Events{
 	
 	@Override
 	public void send(String shortPath, Map<String,String> msg) {
-		CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-			Iterator<String> it = msg.keySet().iterator();
-			while (it.hasNext()) {
-				String nextKey = it.next();
-				updateItem(shortPath,nextKey,msg.get(nextKey));
-			}
-		});
+		Iterator<String> it = msg.keySet().iterator();
+		while (it.hasNext()) {
+			String nextKey = it.next();
+			updateItem(shortPath,nextKey,msg.get(nextKey));
+		}
+		
 	}
 
 
