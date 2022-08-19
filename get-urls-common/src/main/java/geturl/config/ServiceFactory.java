@@ -11,6 +11,7 @@ import com.meli.events.Events;
 import com.meli.factory.Factory;
 
 import geturl.query.QueryWithCacheImpl;
+import geturl.query.QueryWithOnlyCacheImpl;
 import geturl.services.Service;
 import geturl.services.ServiceImpl;
 import lombok.Getter;
@@ -44,17 +45,7 @@ public class ServiceFactory {
 	 */
 	static Service init(ShortURLProperties properties,Factory<Query> queryFactory,Factory<Cache> cacheFactory,Factory<Events> eventsFactory) {
 		try {
-			val cacheEnabled = Boolean.valueOf(properties.getProperty(CACHE_ENABLED));
-			val queryFactoryStr = properties.getProperty(QUERY_FACTORY);
-			var query = queryFactory.getInstance(queryFactoryStr);
-			if (Boolean.TRUE.equals(cacheEnabled)) {
-				System.out.println("cache enabled");
-				val cacheFactoryStr = properties.getProperty(CACHE_FACTORY);
-				val cache = cacheFactory.getInstance(cacheFactoryStr);
-				query = new QueryWithCacheImpl(query, cache);
-			}else{
-				System.out.println("cache not enabled");
-			}
+			val query = getQuery(properties, queryFactory, cacheFactory);
 			val baseURL = new BaseURL(properties.getProperty(BASE_URL));
 			val eventFactoryStr = properties.getProperty(EVENTS_FACTORY);
 			val events = eventsFactory.getInstance(eventFactoryStr);
@@ -65,8 +56,25 @@ public class ServiceFactory {
 			e.printStackTrace();
 			throw new shorturls.config.ConfigurationException(e);
 		}
+	}
 
-
+	/* 
+	 * Gets the Query interface to be injected in the Service Layer
+	 */
+	private static Query getQuery(ShortURLProperties properties,Factory<Query> queryFactory,Factory<Cache> cacheFactory){
+		val cacheEnabled = Boolean.valueOf(properties.getProperty(CACHE_ENABLED));
+		val cacheOnly = Boolean.valueOf(properties.getProperty(CACHBoolean.valueOf(properties.getProperty(CACHE_ENABLED));E_ENABLED));
+		val queryFactoryStr = properties.getProperty(QUERY_FACTORY);
+		val query = queryFactory.getInstance(queryFactoryStr);
+		if (Boolean.TRUE.equals(cacheEnabled)) {
+			val cacheFactoryStr = properties.getProperty(CACHE_FACTORY);
+			val cache = cacheFactory.getInstance(cacheFactoryStr);
+			if (Boolean.TRUE.equals(cacheOnly)){
+				return new QueryWithOnlyCacheImpl(cache);
+			}else
+				return new QueryWithCacheImpl(query, cache);
+		}
+		return query;
 	}
 
 }
