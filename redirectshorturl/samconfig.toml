@@ -8,5 +8,5 @@ s3_prefix = "sam-redirectshorurl"
 region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "DynamoURL=\"http://dynamo-local:8000\" RedisURL=\"redis://password@localhost:6379/\" CacheEnabled=\"false\" QueryFactory=\"shorturls.dynamodao.DynamoDAOFactory\" BaseURL=\"http://localhost:3000\" CacheFactory=\"shorturls.cache.RedisCacheFactory\" EventsFactory=\"com.meli.kafka.KafkaFactory\" KafkaBrokers=\"kafka:29092\" KafkaClientId=\"client1\" KafkaTopicName=\"geturl\" KafkaEnabled=\"false\""
+parameter_overrides = "DynamoURL=\"http://dynamo-local:8000\" RedisURL=\"redis://password@localhost:6379/\" CacheEnabled=\"true\" CacheOnly=\"true\" QueryFactory=\"shorturls.dynamodao.DynamoDAOFactory\" BaseURL=\"http://localhost:3000\" EventsFactory=\"shorturls.events.dynamo.config.DynamoEventsFactory\" CacheFactory=\"shorturls.cache.config.RedisCacheFactory\" KafkaBrokers=\"kafka:29092\" KafkaClientId=\"client1\" KafkaTopicName=\"geturl\" KafkaEnabled=\"false\" RandomAlphabet=\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\" DynamoRandomRange=\"1\" CookieConfig=\"; samesite=Strict\""
 image_repositories = []

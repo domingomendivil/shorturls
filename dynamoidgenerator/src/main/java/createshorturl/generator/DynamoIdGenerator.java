@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+import lombok.val;
 import shorturls.exceptions.ShortURLRuntimeException;
 import shorturls.random.Randomizer;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
@@ -79,9 +80,9 @@ public class DynamoIdGenerator implements IDGenerator {
 	 * whose key is "shortURL" and value is "counter". The new counter is then returned.
 	 */
 	private BigInteger nextCounter() {
-		HashMap<String, AttributeValue> itemKey = new HashMap<>();
+		val itemKey = new HashMap<String, AttributeValue>();
 		itemKey.put(PK, fromS("counter"+randomizer.getRandomInt()));
-		HashMap<String, AttributeValue> attributeValues = new HashMap<>();
+		val attributeValues = new HashMap<String, AttributeValue>();
 		attributeValues.put(":incr", one);
 		UpdateItemRequest request = UpdateItemRequest.builder()
 				.tableName(TABLE_URL_ITEM).key(itemKey)
@@ -89,8 +90,8 @@ public class DynamoIdGenerator implements IDGenerator {
 				.updateExpression("SET LastID = LastID + :incr")
 				.expressionAttributeValues(attributeValues).build();
 		try {
-			var response  = client.updateItem(request).get();
-			var nro =response.attributes().get("LastID");
+			val response  = client.updateItem(request).get();
+			val nro =response.attributes().get("LastID");
 			return new BigInteger(nro.n(),10);
 		}catch(ExecutionException|InterruptedException e) {
 			throw new ShortURLRuntimeException("Error in getting DynamoDB next counter");

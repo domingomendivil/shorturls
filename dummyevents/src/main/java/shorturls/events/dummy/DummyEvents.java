@@ -9,5 +9,9 @@ public class DummyEvents implements Events {
     public void send(String key,Map<String,String> message){
         //do nothing
     }
+
+    public DummyEvents getInstance(){
+        return new DummyEvents();
+    }
     
 }

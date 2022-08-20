@@ -29,10 +29,10 @@ Parameters:
     Default: "shorturls.dynamodao.DynamoDAOFactory" 
   EventsFactory:  #Factory class used to configure events sending 
     Type: String
-    Default: "shorturls.events.dynamo.DynamoEventsFactory"
+    Default: "shorturls.events.dynamo.config.DynamoEventsFactory"
   CacheFactory: #Factory class used to configure cache
     Type: String
-    Default: "shorturls.cache.RedisCacheFactory"
+    Default: "shorturls.cache.config.RedisCacheFactory"
   KafkaBrokers:  #List of comma separated connections to brokers
     Type: String
     Default: "kafka:29092"
@@ -98,6 +98,7 @@ Resources:
         - x86_64
       Policies:
         - AmazonDynamoDBFullAccess
+        - AmazonVPCCrossAccountNetworkInterfaceOperations
       MemorySize: 512
       Environment: 
         Variables:
