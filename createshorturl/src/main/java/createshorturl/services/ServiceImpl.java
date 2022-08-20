@@ -54,10 +54,13 @@ public class ServiceImpl implements Service {
 	@Override
 	public URL createShortURL(URL longURL) throws InvalidArgumentException {
 		if (validURL(longURL)){
+			System.out.println("url valida");
 			val item = newURLItem(longURL,null);
+			System.out.println("antes de llamar events.send");
 			events.send(item);
 			return getShortURL(item.getShortPath());
 		}else{
+			System.out.println("tiempo invalido");
 			throw new InvalidArgumentException("Invalid expiration time");
 		}
 
@@ -72,8 +75,10 @@ public class ServiceImpl implements Service {
 	@Override
 	public URL createShortURL(URL longURL, Long seconds) throws InvalidArgumentException {
 		if ((validSeconds(seconds)) && (validURL(longURL))){
+			System.out.println("seconds validos y url valida");
 			val epochSeconds = getEpochSeconds(seconds);
 			val item = newURLItem(longURL,epochSeconds);
+			System.out.println("llamamos al events.send");
 			events.send(item);
 			return getShortURL(item.getShortPath());
 		}else{
@@ -94,6 +99,7 @@ public class ServiceImpl implements Service {
 		try {
 			return new URL(baseURL.toURL()+id);
 		} catch (MalformedURLException e) {
+			System.out.println("URL formada internamente mal");
 			throw new ShortURLRuntimeException("An internal error has ocurred creating the short URL",e);
 		}
 	}

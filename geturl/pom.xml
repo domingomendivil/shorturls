@@ -90,6 +90,12 @@
 
 		<dependency>
 			<groupId>com.meli</groupId>
+			<artifactId>dummyevents</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.meli</groupId>
 			<artifactId>shorturl-cache-redis</artifactId>
 			<scope>runtime</scope>
 		</dependency>

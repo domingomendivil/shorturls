@@ -80,7 +80,7 @@ public class CreateShortURLTest {
 
 	@Test
 	public void test1() throws MalformedURLException, InvalidArgumentException {
-		when(props.getProperty("CONTENT-TYPE")).thenReturn(CONTENT_TYPE);
+		when(props.getProperty("CONTENT_TYPE")).thenReturn(CONTENT_TYPE);
 		String url = "http://www.montevideo.com.uy";
 		String shortURL ="http://me.li/XDFUI";
 		whenServiceInvokeReturn(url,null,shortURL);
@@ -105,7 +105,7 @@ public class CreateShortURLTest {
 
 	@Test
 	public void test3() throws MalformedURLException, InvalidArgumentException {
-		when(props.getProperty("CONTENT-TYPE")).thenReturn(CONTENT_TYPE);
+		when(props.getProperty("CONTENT_TYPE")).thenReturn(CONTENT_TYPE);
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"3\"}";
 		String url = "http://www.montevideo.com.uy";
 		String shortURL ="http://me.li/XDFUI";
@@ -136,7 +136,7 @@ public class CreateShortURLTest {
 	
 	@Test
 	public void test5() throws MalformedURLException, InvalidArgumentException {
-		when(props.getProperty("CONTENT-TYPE")).thenReturn(CONTENT_TYPE);
+		when(props.getProperty("CONTENT_TYPE")).thenReturn(CONTENT_TYPE);
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"1\",\"seconds2\": \"1\"}";
 		val response = handle(json,"text/html");
 		assertBadRequest(response);
@@ -144,7 +144,7 @@ public class CreateShortURLTest {
 	
 	@Test
 	public void test6() throws MalformedURLException, InvalidArgumentException {
-		when(props.getProperty("CONTENT-TYPE")).thenReturn(CONTENT_TYPE);
+		when(props.getProperty("CONTENT_TYPE")).thenReturn(CONTENT_TYPE);
 		String json = "http://www.ladiaria.com.uy";
 		String shortURL ="http://me.li/XDFUI";
 		whenServiceInvokeReturn(json,null,shortURL);

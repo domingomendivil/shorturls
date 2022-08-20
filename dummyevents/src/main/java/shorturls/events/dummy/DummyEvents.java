@@ -10,7 +10,7 @@ public class DummyEvents implements Events {
         //do nothing
     }
 
-    public DummyEvents getInstance(){
+    public static final DummyEvents getInstance(){
         return new DummyEvents();
     }
     

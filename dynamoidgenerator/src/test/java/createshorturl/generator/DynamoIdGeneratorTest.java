@@ -7,20 +7,16 @@ import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.from
 
 import java.math.BigInteger;
 import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import lombok.val;
-import shorturls.exceptions.ShortURLRuntimeException;
 import shorturls.random.Randomizer;
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
@@ -36,7 +32,7 @@ public class DynamoIdGeneratorTest {
 	private Encoder encoder;
 	
 	@Mock
-	private DynamoDbAsyncClient client = Mockito.mock(DynamoDbAsyncClient.class);
+	private DynamoDbClient client;
 	
 	@Mock
 	private Randomizer randomizer;
@@ -60,8 +56,7 @@ public class DynamoIdGeneratorTest {
 		val values = new HashMap<String, AttributeValue>();
 		values.put("LastID", attr);
 		UpdateItemResponse response = UpdateItemResponse.builder().attributes(values).build();
-		CompletableFuture<UpdateItemResponse> res = CompletableFuture.completedFuture(response);
-		when(client.updateItem(request)).thenReturn(res);
+		when(client.updateItem(request)).thenReturn(response);
 		when(encoder.encode(BigInteger.valueOf(10L))).thenReturn("ASD");
 		assertEquals("ASD",idGenerator.generateUniqueID());
 	}

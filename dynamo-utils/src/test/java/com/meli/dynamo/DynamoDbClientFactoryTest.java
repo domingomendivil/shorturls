@@ -1,12 +1,13 @@
 package com.meli.dynamo;
 
 import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.junit.Test;
+
 import shorturls.config.ShortURLProperties;
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 public class DynamoDbClientFactoryTest {
 	
@@ -16,7 +17,7 @@ public class DynamoDbClientFactoryTest {
 	public void test1() {
 		ShortURLProperties props =  mock(ShortURLProperties.class);
 		when(props.getProperty("DYNAMO_URL")).thenReturn(null);
-		DynamoDbAsyncClient client = DynamoDbClientFactory.getClient(props);
+		DynamoDbClient client = DynamoDbClientFactory.getClient(props);
 		assertNotNull(client);
 	}
 	
@@ -24,7 +25,7 @@ public class DynamoDbClientFactoryTest {
 	public void test2() {
 		ShortURLProperties props = mock(ShortURLProperties.class);
 		when(props.getProperty("DYNAMO_URL")).thenReturn("");
-		DynamoDbAsyncClient client = DynamoDbClientFactory.getClient(props);
+		DynamoDbClient client = DynamoDbClientFactory.getClient(props);
 		assertNotNull(client);
 	}
 	

@@ -42,22 +42,28 @@ public class RedirectShortURL {
      * with a redirect status code. Otherwise, an HTTP 404 is returned.
      */
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
-    	val map =input.getPathParameters();
+    	System.out.println("apigateway handlerequest");
+        val map =input.getPathParameters();
         val shortPath = map.get("code");
         if (shortPath!=null && (!shortPath.equals(""))){
+            System.out.println("apigateway path valida");
             try {
                 val headers=input.getHeaders();
+                System.out.println("antes de service.getURL");
                 var longURL = service.getURL(shortPath,headers);
+                System.out.println("luego de service.getURL");
                 if (longURL.isEmpty()) {
                     return getNotFoundResponse();
                 } else {
                     var cookieConfig = props.getProperty("COOKIE_CONFIG");
+                   System.out.println("cookieConfig "+cookieConfig);
                     if (cookieConfig==null)
                         cookieConfig="";
                     return getMovedResponse(headers,longURL.get().toString(),cookieConfig);
                 }
             } catch (InvalidArgumentException e) {
-            	//bad request, return next in code
+                System.out.println("error");
+            	e.printStackTrace();
             }
         }
         return getBadRequestResponse();

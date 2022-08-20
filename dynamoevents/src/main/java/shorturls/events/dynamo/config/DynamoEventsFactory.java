@@ -10,7 +10,7 @@ import shorturls.config.ShortURLPropertiesImpl;
 import shorturls.events.dynamo.DynamoEvents;
 import shorturls.random.Randomizer;
 import shorturls.random.RandomizerImpl;
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 
 
@@ -21,7 +21,7 @@ public class DynamoEventsFactory {
 	private static final DynamoEvents instance = init(new ShortURLPropertiesImpl());
 
     private static final DynamoEvents init(ShortURLProperties properties){
-    	DynamoDbAsyncClient client = DynamoDbClientFactory.getClient();
+    	DynamoDbClient client = DynamoDbClientFactory.getClient();
         val str = properties.getProperty("DYNAMO_RANDOM_RANGE");
         try {
             Integer randomRange = Integer.parseInt(str);

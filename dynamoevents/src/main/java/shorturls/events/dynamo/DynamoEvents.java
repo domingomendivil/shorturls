@@ -6,15 +6,15 @@ import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.from
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CompletableFuture;
 
 import com.meli.events.Events;
 
 import lombok.val;
-import shorturls.exceptions.ShortURLRuntimeException;
 import shorturls.random.Randomizer;
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedException;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
 
@@ -31,7 +31,7 @@ public class DynamoEvents implements Events{
 	/*
 	 * Client for connecting to DynamoDb
 	 */
-	private final DynamoDbAsyncClient client;
+	private final DynamoDbClient client;
 	
 
 	/*
@@ -62,7 +62,7 @@ public class DynamoEvents implements Events{
 
 	
 
-	public DynamoEvents(DynamoDbAsyncClient client,Randomizer randomizer) {
+	public DynamoEvents(DynamoDbClient client,Randomizer randomizer) {
 		this.client = client; 
 		this.randomizer= randomizer;
 	}
@@ -85,13 +85,10 @@ public class DynamoEvents implements Events{
 		UpdateItemRequest request = getUpdateRequest(itemKey,"set evalue= :evalue, ecounter = ecounter +:incr")
 				.conditionExpression("attribute_exists(ecounter)").expressionAttributeValues(attributeValues).build();
 		try{
-			 client.updateItem(request).get();
-		}catch(ExecutionException e){
+			 client.updateItem(request);
+		}catch(ConditionalCheckFailedException e){
 			val request2 = getUpdateRequest(itemKey,"set evalue= :evalue, ecounter = :incr").expressionAttributeValues(attributeValues).build();
 			client.updateItem(request2);
-		}catch (InterruptedException e) {
-			e.printStackTrace();
-			throw new ShortURLRuntimeException("");
 		}
 	}
 
@@ -100,11 +97,13 @@ public class DynamoEvents implements Events{
 	
 	@Override
 	public void send(String shortPath, Map<String,String> msg) {
-		Iterator<String> it = msg.keySet().iterator();
-		while (it.hasNext()) {
-			String nextKey = it.next();
-			updateItem(shortPath,nextKey,msg.get(nextKey));
-		}
+		CompletableFuture.runAsync( ()-> {
+			Iterator<String> it = msg.keySet().iterator();
+			while (it.hasNext()) {
+				String nextKey = it.next();
+				updateItem(shortPath,nextKey,msg.get(nextKey));
+			}
+		});
 		
 	}
 
