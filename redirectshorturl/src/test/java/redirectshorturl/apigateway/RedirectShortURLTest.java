@@ -18,6 +18,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import geturl.services.Service;
+import lombok.val;
 import shorturls.config.ShortURLProperties;
 import shorturls.exceptions.InvalidArgumentException;
 
@@ -41,12 +42,18 @@ public class RedirectShortURLTest {
 	private void assertResponse(int statusCode,APIGatewayProxyResponseEvent response) {
 		assertEquals(Integer.valueOf(statusCode), response.getStatusCode());
 	}
+
+	private APIGatewayProxyResponseEvent handle(String shortURL){
+		HashMap<String,String> map = new HashMap<>();
+		val input = new APIGatewayProxyRequestEvent();
+		map.put("code", shortURL);
+		input.setPathParameters(map);
+		return redirectShortURL.handleRequest(input);
+	}
 	
 	private void whenInvokeServiceReturnURL(String code,String responseUrl) throws InvalidArgumentException, MalformedURLException {
-		input.setPathParameters(map);
-		map.put("code", code);
 		var url = Optional.of(new URL(responseUrl));
-		when(service.getURL("ADD", null)).thenReturn(url);
+		when(service.getURL(code, null)).thenReturn(url);
 	}
 	
 	@Test
@@ -58,27 +65,23 @@ public class RedirectShortURLTest {
 	
 	@Test
 	public void test2() {
-		input.setPathParameters(map);
-		map.put("code", "");
-		var response = redirectShortURL.handleRequest(input);
+		val response = handle("");
 		assertResponse(400,response);
 	}
 	
 	@Test
 	public void test3() throws MalformedURLException, InvalidArgumentException {
 		whenInvokeServiceReturnURL("ADD", "http://www.montevideo.com.uy");
-		var response = redirectShortURL.handleRequest(input);
+		val response =handle("ADD");
 		assertResponse(301,response);
 		assertEquals("http://www.montevideo.com.uy", response.getHeaders().get("Location"));
 	}
 	
 	@Test
 	public void test4() throws MalformedURLException, InvalidArgumentException {
-		input.setPathParameters(map);
-		map.put("code", "ADD");
 		InvalidArgumentException e = new InvalidArgumentException("Invalid URL");
-		when(service.getURL("ADD", null)).thenThrow(e);
-		var response = redirectShortURL.handleRequest(input);
+		when(service.getURL("A", null)).thenThrow(e);
+		val response = handle("A");
 		assertResponse(400,response);
 		assertEquals("Invalid URL", response.getBody());
 	}
