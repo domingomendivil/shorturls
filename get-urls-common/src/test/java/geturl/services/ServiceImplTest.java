@@ -38,6 +38,12 @@ public class ServiceImplTest {
     @Mock
     private Events events;
 
+    private void whenValidateURLThroException(String urlStr) throws MalformedURLException, ValidationException{
+    	val url = new URL(urlStr);
+    	val e = new ValidationException();
+		when(idValidator.getCode(url)).thenThrow(e);
+    }
+
     private void whenQueryReturn(String shortPath,String url,LocalDateTime date,Long seconds) throws MalformedURLException{
     	val aURL = new URL(url);
     	val item = new URLItem(shortPath,aURL,date,seconds);
@@ -56,17 +62,15 @@ public class ServiceImplTest {
 
     @Test(expected = InvalidArgumentException.class)
     public void testGetLongURL2() throws MalformedURLException, InvalidArgumentException, ValidationException{
-    	val url = new URL("http://www.montevideo.com.uy");
-    	val e = new ValidationException();
-		when(idValidator.getCode(url)).thenThrow(e);
-        svc.getLongURL(url,null);    
+        String url = "http://www.montevideo.com.uy";
+        whenValidateURLThroException(url);
+        svc.getLongURL(new URL(url),null);    
     }
     
     @Test(expected = InvalidArgumentException.class)
     public void testGetLongURL3() throws MalformedURLException, InvalidArgumentException, ValidationException{
     	val url = new URL("http://www.montevideo.com.uy");
-    	val e = new ValidationException();
-		when(idValidator.getCode(url)).thenThrow(e);
+        whenValidateURLThroException("http://www.montevideo.com.uy");
         svc.getLongURL(url,null);    
     }
 
