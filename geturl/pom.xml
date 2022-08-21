@@ -13,24 +13,25 @@
 	<packaging>jar</packaging>
 	<name>API Get URL</name>
 
+	<properties>
+		<commons.validator.version>1.7</commons.validator.version>
+	</properties>
+
 	<dependencies>
 
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 
@@ -47,7 +48,7 @@
 		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
-			<version>1.7</version>
+			<version>${commons.validator.version}</version>
 		</dependency>
 
 
@@ -66,27 +67,22 @@
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>events</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>dynamodao</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>dynamoevents</artifactId>
-			
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -99,7 +95,6 @@
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>shorturl-cache-redis</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>

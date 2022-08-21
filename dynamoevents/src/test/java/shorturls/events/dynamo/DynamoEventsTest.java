@@ -1,19 +1,13 @@
 package shorturls.events.dynamo;
 
-import static org.mockito.Mockito.when;
-
-import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import shorturls.random.Randomizer;
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
+import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
 
 //@RunWith(MockitoJUnitRunner.class)
 public class DynamoEventsTest {
@@ -25,8 +19,15 @@ public class DynamoEventsTest {
 	private Randomizer randomizer;
 	
 
-	@Mock
-	private DynamoDbAsyncClient client;
+	//@Mock
+	private DynamoDbClient client;
+
+	/**private UpdateItemRequest.Builder getUpdateRequest(Map<String,AttributeValue> itemKey,String expression) {
+		return UpdateItemRequest.builder()
+		   .tableName(TABLE_URL_STATISTICS).key(itemKey)
+		   .returnValues(ReturnValue.UPDATED_NEW)
+		   .updateExpression(expression);
+   }
 	
 	/**@Test
 	public void test1() {
@@ -34,7 +35,8 @@ public class DynamoEventsTest {
 		map.put("location","Argentina");
 		when(randomizer.getRandomInt()).thenReturn(1);
 		dynamoEvents.send("code", map);
-		Mockito.verify(client).update
+		val request = getUpdateRequest(itemKey, expression)
+		Mockito.verify(client).updateItem(request);
 	}
     */
 }

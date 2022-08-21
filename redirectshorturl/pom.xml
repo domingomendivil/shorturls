@@ -27,20 +27,17 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
-			<scope>test</scope>
 		</dependency>
 
 
@@ -62,7 +59,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -75,13 +71,11 @@
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>dynamoevents</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>events</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
 		
@@ -93,7 +87,6 @@
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>shorturl-cache-redis</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -104,7 +97,6 @@
 		<dependency>
 			<groupId>com.meli</groupId>
 			<artifactId>dynamodao</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -123,7 +115,7 @@
 			<dependency>
 				<groupId>software.amazon.awssdk</groupId>
 				<artifactId>bom</artifactId>
-				<version>2.17.241</version>
+				<version>${amazon.awssdk.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

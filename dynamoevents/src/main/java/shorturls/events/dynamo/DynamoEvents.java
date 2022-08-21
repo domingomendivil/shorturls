@@ -6,7 +6,6 @@ import static software.amazon.awssdk.services.dynamodb.model.AttributeValue.from
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 import com.meli.events.Events;
 
@@ -60,6 +59,7 @@ public class DynamoEvents implements Events{
 	 */
 	private static final AttributeValue one = fromN("1");
 
+	private static final String UPDATE_EXPRESSION = "set evalue= :evalue, ecounter = ecounter +:incr";
 	
 
 	public DynamoEvents(DynamoDbClient client,Randomizer randomizer) {
@@ -82,7 +82,7 @@ public class DynamoEvents implements Events{
 		val attributeValues = new HashMap<String, AttributeValue>();
 		attributeValues.put(":incr", one);
 		attributeValues.put(":evalue",fromS(value));
-		UpdateItemRequest request = getUpdateRequest(itemKey,"set evalue= :evalue, ecounter = ecounter +:incr")
+		UpdateItemRequest request = getUpdateRequest(itemKey,UPDATE_EXPRESSION)
 				.conditionExpression("attribute_exists(ecounter)").expressionAttributeValues(attributeValues).build();
 		try{
 			 client.updateItem(request);
@@ -97,16 +97,12 @@ public class DynamoEvents implements Events{
 	
 	@Override
 	public void send(String shortPath, Map<String,String> msg) {
-		CompletableFuture.runAsync( ()-> {
-			Iterator<String> it = msg.keySet().iterator();
-			while (it.hasNext()) {
-				String nextKey = it.next();
-				updateItem(shortPath,nextKey,msg.get(nextKey));
-			}
-		});
+		Iterator<String> it = msg.keySet().iterator();
+		while (it.hasNext()) {
+			String nextKey = it.next();
+			updateItem(shortPath,nextKey,msg.get(nextKey));
+		}
+	};
 		
-	}
-
-
 	
 }

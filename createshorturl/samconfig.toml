@@ -8,5 +8,5 @@ s3_prefix = "sam-createshorturl"
 region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "DynamoURL=\"http://dynamo-local:8000\" BaseURL=\"http://localhost:3000\" WriterFactory=\"shorturls.dynamodao.DynamoDAOFactory\" IdGeneratorFactory=\"createshorturl.generator.SecureRandomGenerator\" RandomLength=\"7\" RandomAlgorithm=\"SHA1PRNG\" RandomSeed=\"79CVJGJ\" RandomAlphabet=\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\""
+parameter_overrides = "DynamoURL=\"http://dynamo-local:8000\" BaseURL=\"http://localhost:3000\" RedisURL=\"redis://redis-server:6379/\" WriterFactory=\"shorturls.dynamodao.config.DynamoDAOFactory\" IdGeneratorFactory=\"createshorturl.generator.SecureRandomGenerator\" RandomLength=\"7\" RandomAlgorithm=\"SHA1PRNG\" RandomSeed=\"79CVJGJ\" RandomAlphabet=\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\" CacheEnabled=\"false\" CacheFactory=\"shorturls.cache.config.RedisCacheFactory\" DynamoRandomRange=\"1\" ContentType=\"content-type\""
 image_repositories = []
