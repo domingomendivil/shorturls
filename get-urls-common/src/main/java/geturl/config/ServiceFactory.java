@@ -54,7 +54,6 @@ public class ServiceFactory {
 			val idValidator = new IdValidatorImpl(baseURL, alphabet);
 			return new ServiceImpl(query, idValidator, events);	
 		}catch (com.meli.factory.ConfigurationException e) {
-			e.printStackTrace();
 			throw new shorturls.config.ConfigurationException(e);
 		}
 	}

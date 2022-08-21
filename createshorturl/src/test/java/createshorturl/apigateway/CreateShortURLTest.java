@@ -77,16 +77,24 @@ public class CreateShortURLTest {
 	}
 	
 
+	private void setContentType(){
+		when(props.getProperty("CONTENT_TYPE")).thenReturn(CONTENT_TYPE);
+	}
+
+	private void assertOKResponse(String shortURL,APIGatewayProxyResponseEvent response){
+		assertResponse(201,response);
+		assertBody(shortURL, response);
+	}
+
 
 	@Test
 	public void test1() throws MalformedURLException, InvalidArgumentException {
-		when(props.getProperty("CONTENT_TYPE")).thenReturn(CONTENT_TYPE);
+		setContentType();
 		String url = "http://www.montevideo.com.uy";
 		String shortURL ="http://me.li/XDFUI";
 		whenServiceInvokeReturn(url,null,shortURL);
 		val response = handleURL(url);
-		assertResponse(201, response);
-		assertBody(shortURL, response);
+		assertOKResponse(shortURL, response);
 	}
 	
 	@ParameterizedTest
@@ -105,14 +113,13 @@ public class CreateShortURLTest {
 
 	@Test
 	public void test3() throws MalformedURLException, InvalidArgumentException {
-		when(props.getProperty("CONTENT_TYPE")).thenReturn(CONTENT_TYPE);
+		setContentType();
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"3\"}";
 		String url = "http://www.montevideo.com.uy";
 		String shortURL ="http://me.li/XDFUI";
 		whenServiceInvokeReturn(url, 3L, shortURL);
 		var response = handleJson(json);
-		assertResponse(201, response);
-		assertBody(shortURL, response);
+		assertOKResponse(shortURL, response);
 	}
 	
 	@ParameterizedTest
@@ -136,7 +143,7 @@ public class CreateShortURLTest {
 	
 	@Test
 	public void test5() throws MalformedURLException, InvalidArgumentException {
-		when(props.getProperty("CONTENT_TYPE")).thenReturn(CONTENT_TYPE);
+		setContentType();
 		String json = "{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"1\",\"seconds2\": \"1\"}";
 		val response = handle(json,"text/html");
 		assertBadRequest(response);
@@ -144,12 +151,12 @@ public class CreateShortURLTest {
 	
 	@Test
 	public void test6() throws MalformedURLException, InvalidArgumentException {
-		when(props.getProperty("CONTENT_TYPE")).thenReturn(CONTENT_TYPE);
+		setContentType();
 		String json = "http://www.ladiaria.com.uy";
 		String shortURL ="http://me.li/XDFUI";
 		whenServiceInvokeReturn(json,null,shortURL);
 		val response = handle(json,"text/html");
-		assertBody(shortURL, response);
+		assertOKResponse(shortURL, response);
 	}
 
 	

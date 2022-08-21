@@ -22,7 +22,7 @@ Parameters:
     Default: "false"
   QueryFactory: #Factory class used to configure the querying to the data layer
     Type: String
-    Default: "shorturls.dynamodao.DynamoDAOFactory"
+    Default: "shorturls.dynamodao.config.DynamoDAOFactory"
   BaseURL: #Base URL of short URLs that are generated, e.g. http://me.li
     Type: String
     Default: "http://localhost:3000"

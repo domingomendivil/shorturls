@@ -19,7 +19,7 @@ Parameters:
     Default: "redis://redis-server:6379/"  
   WriterFactory:  #Factory class used to persist URLs at the data layer
     Type: String
-    Default: "shorturls.dynamodao.DynamoDAOFactory"    
+    Default: "shorturls.dynamodao.config.DynamoDAOFactory"    
   IdGeneratorFactory: #Factory class used to generate codes of the short URLs
     Type: String
     Default: "createshorturl.generator.SecureRandomGenerator"    

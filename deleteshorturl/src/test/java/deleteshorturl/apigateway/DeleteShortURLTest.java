@@ -16,6 +16,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
 import deleteshorturl.services.Service;
+import lombok.val;
 import shorturls.exceptions.InvalidArgumentException;
 @RunWith(MockitoJUnitRunner.class)
 public class DeleteShortURLTest {
@@ -34,6 +35,12 @@ public class DeleteShortURLTest {
     	assertEquals(Integer.valueOf(code), res.getStatusCode());
     }
 
+    private APIGatewayProxyResponseEvent deleteShortURL(String shortURL){
+        val input = new APIGatewayProxyRequestEvent();
+        input.setBody(shortURL);
+        return deleteShortURL.handleRequest(input);
+    }
+
     @Test
     public void test1() throws MalformedURLException, InvalidArgumentException{
         APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
@@ -44,28 +51,21 @@ public class DeleteShortURLTest {
     
     @Test
     public void test2() throws MalformedURLException, InvalidArgumentException{
-        APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
-        input.setBody("http://localhost:3000");
         when(svc.deleteURL(new URL("http://localhost:3000"))).thenReturn(true);
-        var event = deleteShortURL.handleRequest(input);
-    
+        val event=deleteShortURL("http://localhost:3000");
         assertEquals(Integer.valueOf(200),event.getStatusCode());
     }
     
     @Test
     public void test3() throws MalformedURLException, InvalidArgumentException{
-        APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
-        input.setBody("a");
-        var event = deleteShortURL.handleRequest(input);
+        val event=deleteShortURL("a");
         assertBadRequest(event);
         assertEquals("Invalid URL",event.getBody());
     }
 
     @Test
     public void test4() throws MalformedURLException, InvalidArgumentException{
-        APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
-        input.setBody("");
-        var event = deleteShortURL.handleRequest(input);
+        val event = deleteShortURL("");
         assertBadRequest(event);
         assertEquals("Invalid URL",event.getBody());
     }
@@ -80,10 +80,8 @@ public class DeleteShortURLTest {
     
     @Test
     public void test6() throws MalformedURLException, InvalidArgumentException{
-        APIGatewayProxyRequestEvent input = new APIGatewayProxyRequestEvent();
-        input.setBody("http://localhost:3000/asdf");
         when(svc.deleteURL(new URL("http://localhost:3000/asdf"))).thenReturn(false);
-        var event = deleteShortURL.handleRequest(input);
+        val event = deleteShortURL("http://localhost:3000/asdf");
         assertEquals(Integer.valueOf(404),event.getStatusCode());
     }
 

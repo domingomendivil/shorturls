@@ -52,22 +52,21 @@ public class DeleteShortPathTest {
     
     @Test
     public void test3() throws InvalidArgumentException{
-    
-		  when(svc.deleteURL("nvasdkh")).thenReturn(true);
+		when(svc.deleteURL("nvasdkh")).thenReturn(true);
     	var res = delete("nvasdkh");
     	assertResponse(200, res);
     }
     
     @Test
     public void test4() throws InvalidArgumentException{
-		  when(svc.deleteURL("nvasdkh")).thenReturn(false);
+		when(svc.deleteURL("nvasdkh")).thenReturn(false);
     	val res = delete("nvasdkh");
     	assertResponse(404, res);
     }
     
 
     private APIGatewayProxyResponseEvent delete(String shortPath){
-       APIGatewayProxyRequestEvent input = getInputParameters(shortPath);
+       val input = getInputParameters(shortPath);
        return deleteShortPath.handleRequest(input);
     }
 

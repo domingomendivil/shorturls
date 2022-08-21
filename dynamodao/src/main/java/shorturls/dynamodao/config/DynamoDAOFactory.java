@@ -1,9 +1,10 @@
-package shorturls.dynamodao;
+package shorturls.dynamodao.config;
 
 import com.meli.dynamo.DynamoDbClientFactory;
 
 import lombok.Getter;
 import lombok.val;
+import shorturls.dynamodao.DynamoDAO;
 /**
  * Factory class for instantiating DynamoDAO
  * 

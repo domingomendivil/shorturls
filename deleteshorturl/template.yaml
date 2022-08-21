@@ -17,7 +17,7 @@ Parameters:
     Default: "http://dynamo-local:8000"
   DeleterFactory:
     Type: String
-    Default: "shorturls.dynamodao.DynamoDAOFactory"    
+    Default: "shorturls.dynamodao.config.DynamoDAOFactory"    
   CacheFactory:
     Type: String
     Default: "shorturls.cache.config.RedisCacheFactory"
