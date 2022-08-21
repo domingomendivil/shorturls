@@ -16,7 +16,6 @@ public class QueryWithOnlyCacheImpl implements Query{
 
     @Override
     public Optional<URLItem> getById(String path) {
-        System.out.println("query only cache");
         return cache.getById(path);
     }
     

@@ -9,8 +9,9 @@ import shorturls.apigateway.ResponseCreator;
 import shorturls.exceptions.InvalidArgumentException;
 
 /**
- * 
- * @author d0178
+ * Class for handling HTTP requests for getting URLs from
+ * short URLs. It makes requests validations and delegates
+ * the creation to the the service layer
  *
  */
 public class GetURL {

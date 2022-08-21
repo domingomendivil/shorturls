@@ -67,7 +67,6 @@ public class ServiceImpl implements Service {
 	}
 	
 	private Optional<URL> getValidatedURL(String shortPathId, Map<String, String> headers) throws InvalidArgumentException {
-		System.out.println("url "+shortPathId);
 		val urlItem = query.getById(shortPathId);
 		return urlItem.map(item -> {
 			send(item, headers);
