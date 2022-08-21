@@ -90,18 +90,13 @@ public class CreateShortURL {
 	 */
 	private APIGatewayProxyResponseEvent handleURL(final String body) {
 		if (urlValidator.isValid(body)) {
-			System.out.println("body "+body +" es valido");
 			try {
 				val newURL = new URL(body);
-				System.out.println("antes de llamar al service createshorturl");
 				val shortURL = service.createShortURL(newURL);
-				System.out.println("despues de llamar al service createshorturl");
 				return getWillBeCreatedResponse(shortURL.toString());
 			}  catch (MalformedURLException| InvalidArgumentException e) {
-				e.printStackTrace();
 				return getBadRequestResponse();
 			} catch (ShortURLRuntimeException e) {
-				e.printStackTrace();
 				return getInternalErrorResponse();
 			}
 		} 
@@ -118,16 +113,12 @@ public class CreateShortURL {
 	 */
 	public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input) {
 		val contentType = props.getProperty("CONTENT_TYPE");
-		System.out.println("content-type property "+contentType);
 		val contentTypeStr = input.getHeaders().get(contentType);
-		System.out.println("content-type que viene "+contentTypeStr);
 		val body = input.getBody();
 		if (contentTypeStr!=null) {
 			if (contentTypeStr.contains("application/json")) {
-				System.out.println("content-type contiene application/json");
 				return handleURLExpires(body); //creates a URL with expiration time (json)
 			}else {
-				System.out.println("content-type tiene otra cosa, handle comun");
 				return handleURL(body); //creates a URL without expiration time
 			}
 		}

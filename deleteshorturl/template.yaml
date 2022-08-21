@@ -69,6 +69,7 @@ Resources:
         - x86_64
       Policies:
       - AmazonDynamoDBFullAccess
+      - AmazonVPCCrossAccountNetworkInterfaceOperations
       MemorySize: 512
       Environment: 
         Variables:

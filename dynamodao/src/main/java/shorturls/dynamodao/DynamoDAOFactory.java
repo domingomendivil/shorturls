@@ -1,13 +1,9 @@
 package shorturls.dynamodao;
 
-import java.net.URI;
-
 import com.meli.dynamo.DynamoDbClientFactory;
 
 import lombok.Getter;
 import lombok.val;
-import shorturls.config.ShortURLProperties;
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 /**
  * Factory class for instantiating DynamoDAO
  * 

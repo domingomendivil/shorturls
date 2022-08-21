@@ -1,8 +1,6 @@
 package shorturls.apigateway;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -103,7 +101,6 @@ public class ResponseCreator {
 	}
 	
 	private static String toPuniCode(String url) throws MalformedURLException {
-		System.out.println("original url "+url);
 		URL u = new URL(url);
 		String[] labels = u.getHost().split("\\.");
 		StringJoiner joiner = new StringJoiner(".");
@@ -113,7 +110,6 @@ public class ResponseCreator {
 		}
 		String punicoded =joiner.toString();
 		punicoded=u.getProtocol()+"://"+punicoded;
-		System.out.println("punicoded url "+punicoded);
 		return punicoded;
 	}
 

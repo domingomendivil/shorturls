@@ -9,7 +9,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Base64.Decoder;
-import java.util.Base64.Encoder;
 
 import org.apache.commons.validator.routines.UrlValidator;
 

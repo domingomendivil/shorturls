@@ -19,9 +19,7 @@ public class WriterWithCache implements Writer{
 	@Override
 	public void insert(URLItem urlItem) {
 		writer.insert(urlItem);
-		System.out.println("antes de put cache");
 		cache.put(urlItem.getShortPath(), urlItem);
-		System.out.println("despues de put cache");
 	}
 
 }

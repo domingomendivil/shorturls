@@ -25,7 +25,6 @@ public class RedisCache implements Cache{
 	}
 
 	private Optional<URLItem> parse(String shortPath,String result) {
-		System.out.println("parsing shortpath "+shortPath +"result "+result);
 		if (result!=null) {
 			String[] temp = result.split(",");
 			if ((temp!=null) && (temp.length==3)) {
@@ -37,28 +36,20 @@ public class RedisCache implements Cache{
 						seconds=null;
 					}
 					val urlItem= new URLItem(shortPath,longURL,creationDate,seconds);
-					System.out.println("url iten obtenido");
 					return Optional.of(urlItem);
 				} catch (MalformedURLException|NumberFormatException e) {
-					System.out.println("error numberformtat");
-					e.printStackTrace();
 					throw new ShortURLRuntimeException("Error getting URL from cache",e);
 				}
 			}
 		}
-		System.out.println("optional.empty()");
 		return Optional.empty();
 	}
 	
 	@Override
 	public Optional<URLItem> getById(String path) {
-		System.out.println("redis getById");
 		val connection =redisClient.connect();
-		System.out.println("luego de redisClient.connect()");
 		val syncCommands = connection.sync();	
-		System.out.println("luego de connection.sync()");
 		val urlItem = syncCommands.get(path);
-		System.out.println("luego de syncCommands.get(path)");
 		return parse(path,urlItem);
 	}
 
