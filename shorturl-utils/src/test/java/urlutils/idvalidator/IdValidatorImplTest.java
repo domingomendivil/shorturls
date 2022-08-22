@@ -1,12 +1,15 @@
 package urlutils.idvalidator;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class IdValidatorImplTest {
 
@@ -18,10 +21,11 @@ public class IdValidatorImplTest {
 		return new IdValidatorImpl(baseURL, BASE62_ALPHABET,length);
 	}
 
-	@Test
-	public void testIsValid1() {
+	@ParameterizedTest
+	@ValueSource(strings= {"","/","&"})
+	public void testIsValid1(String arg) {
 		var validator=getIdValidator("http://localhost:8080",1);
-		assertFalse(validator.isValid(null));
+		assertFalse(validator.isValid(arg));
 	}
 	
 	@Test
@@ -30,17 +34,6 @@ public class IdValidatorImplTest {
 		assertFalse(validator.isValid(""));
 	}
 	
-	@Test
-	public void testIsValid3() {
-		var validator=getIdValidator("http://localhost:8080",1);
-		assertFalse(validator.isValid("/"));
-	}
-	
-	@Test
-	public void testIsValid4() {
-		var validator=getIdValidator("http://localhost:8080",1);
-		assertFalse(validator.isValid("&"));
-	}
 	
 	@Test
 	public void testIsValid5() {
@@ -121,26 +114,21 @@ public class IdValidatorImplTest {
 		assertEquals("a",code);
 	}
 	
-	@Test(expected=ValidationException.class)
-	public void testGetCode11() throws MalformedURLException, ValidationException {
+	@ParameterizedTest
+	@ValueSource(strings= {
+		"https://localhost:8080/a/a"
+		,"https://localhost:8080/a/b"
+		,"https://localhost:8080/a/#"})
+	public void testGetCode11(String arg) throws MalformedURLException {
 		var validator=getIdValidator("http://localhost:8080",3);
-		validator.getCode(new URL("https://localhost:8080/a/a"));
+		boolean exception=false;
+		try {
+			validator.getCode(new URL(arg));
+		} catch (ValidationException e) {
+			exception=true;
+		}
+		assertTrue(exception);
 	}
-	
-	@Test(expected=ValidationException.class)
-	public void testGetCode12() throws MalformedURLException, ValidationException {
-		var validator=getIdValidator("http://localhost:8080",3);
-		validator.getCode(new URL("https://localhost:8080/a/b"));
-		
-	}
-	
-	@Test(expected=ValidationException.class)
-	public void testGetCode13() throws MalformedURLException, ValidationException {
-		var validator=getIdValidator("http://localhost:8080",3);
-		validator.getCode(new URL("https://localhost:8080/a/#"));
-	}
-	
-
 	
 
 }
