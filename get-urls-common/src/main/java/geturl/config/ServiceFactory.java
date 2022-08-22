@@ -6,6 +6,7 @@ import static shorturls.constants.Constants.CACHE_FACTORY;
 import static shorturls.constants.Constants.EVENTS_FACTORY;
 import static shorturls.constants.Constants.QUERY_FACTORY;
 import static shorturls.constants.Constants.RANDOM_ALPHABET;
+import static shorturls.constants.Constants.RANDOM_LENGTH;
 import static shorturls.constants.Constants.CACHE_ONLY;
 import com.meli.events.Events;
 import com.meli.factory.Factory;
@@ -51,9 +52,10 @@ public class ServiceFactory {
 			val eventFactoryStr = properties.getProperty(EVENTS_FACTORY);
 			val events = eventsFactory.getInstance(eventFactoryStr);
 			val alphabet = properties.getProperty(RANDOM_ALPHABET);
-			val idValidator = new IdValidatorImpl(baseURL, alphabet);
+			val length = Integer.parseInt(properties.getProperty(RANDOM_LENGTH));
+			val idValidator = new IdValidatorImpl(baseURL, alphabet,length);
 			return new ServiceImpl(query, idValidator, events);	
-		}catch (com.meli.factory.ConfigurationException e) {
+		}catch (com.meli.factory.ConfigurationException|NumberFormatException e) {
 			throw new shorturls.config.ConfigurationException(e);
 		}
 	}
@@ -77,7 +79,7 @@ public class ServiceFactory {
 		return query;
 	}
 
-	private static Boolean getBoolean(ShortURLProperties props,String name){
+	private static final Boolean getBoolean(ShortURLProperties props,String name){
 		return Boolean.valueOf(props.getProperty(name));
 	}
 

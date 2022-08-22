@@ -5,6 +5,7 @@ import static shorturls.constants.Constants.CACHE_ENABLED;
 import static shorturls.constants.Constants.CACHE_FACTORY;
 import static shorturls.constants.Constants.DELETER_FACTORY;
 import static shorturls.constants.Constants.RANDOM_ALPHABET;
+import static shorturls.constants.Constants.RANDOM_LENGTH;
 
 import com.meli.factory.Factory;
 
@@ -62,7 +63,8 @@ public final class DeleteFactory {
 		}
 		val baseURL = new BaseURL(props.getProperty(BASE_URL));
 		val alphabet = props.getProperty(RANDOM_ALPHABET);
-		val idValidator = new IdValidatorImpl(baseURL, alphabet);
+		val length = Integer.parseInt(props.getProperty(RANDOM_LENGTH));
+		val idValidator = new IdValidatorImpl(baseURL, alphabet,length);
 		return new ServiceImpl(deleter, idValidator);
 	}
 	

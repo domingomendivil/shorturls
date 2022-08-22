@@ -17,11 +17,20 @@ import lombok.val;
 import shorturls.exceptions.InvalidArgumentException;
 
 
+/**
+ * Class for handling HTTP requests for deleting short URLs.
+ */
 public class DeleteShortURL {
 
-	private static final UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
+    /*
+     * Validator of URLs
+     */
+	private final UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
 	
 	
+    /*
+     * Service Layer
+     */
     private final Service service;
 
     public DeleteShortURL(Service service){

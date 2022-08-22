@@ -26,6 +26,11 @@ public class Constants {
      */
     public static final String RANDOM_ALPHABET="RANDOM_ALPHABET";
     
+
+    /**
+     * Legth of the Random code generated for short URLs
+     */
+    public static final String RANDOM_LENGTH="RANDOM_LENGTH";
     
     /**
      * Writer Factory class used for instantiating the Writer data layer. 

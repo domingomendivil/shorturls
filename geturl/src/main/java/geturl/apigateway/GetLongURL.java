@@ -69,7 +69,7 @@ public class GetLongURL {
         return getBadRequestResponse();
     }
 
-    public String decode(String raw) {
+    public final String decode(String raw) {
         byte[] bytes = decoder.decode(raw);
         return new String(bytes, StandardCharsets.UTF_8);
     }

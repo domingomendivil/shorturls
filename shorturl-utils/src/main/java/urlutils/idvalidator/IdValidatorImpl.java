@@ -2,6 +2,8 @@ package urlutils.idvalidator;
 
 import java.net.URL;
 
+import lombok.val;
+
 
 public class IdValidatorImpl implements IdValidator {
 
@@ -13,19 +15,22 @@ public class IdValidatorImpl implements IdValidator {
 	private static final String LOCAL_IP="127.0.0.1";
 
 	private final String alphabet;
+
+	private final Integer length;
 	
-	public IdValidatorImpl(BaseURL baseURL,String alphabet) {
+	public IdValidatorImpl(BaseURL baseURL,String alphabet,Integer length) {
 		this.baseURL=baseURL;
 		this.alphabet=alphabet;
+		this.length=length;
 	}
 	
 	@Override
 	public boolean isValid(String shortPath) {
-		if ((shortPath==null) || (shortPath.equals(""))) {
+		if ((shortPath==null) || (shortPath.equals("") || (shortPath.length()!=length))) {
 			return false;
 		}
 		for (int i=0;i<shortPath.length();i++){
-			int index= alphabet.indexOf(shortPath.charAt(i));
+			val index= alphabet.indexOf(shortPath.charAt(i));
 			if (index<0){
 				return false;
 			}
@@ -34,16 +39,16 @@ public class IdValidatorImpl implements IdValidator {
 	}
 	
 	public String getCode(URL shortURL) throws ValidationException {
-		String path = shortURL.getPath();
+		val path = shortURL.getPath();
 		if (!path.equals("")) {
-			int i = path.length() - 1;
-			StringBuilder sb = new StringBuilder();
+			var i = path.length() - 1;
+			val sb = new StringBuilder();
 			while (path.charAt(i) != '/') {
 				sb.append(path.charAt(i));
 				i--;
 			}
-			String shortCode = sb.reverse().toString();
-			String base = shortURL.toString().replace(path, "")+"/";
+			val shortCode = sb.reverse().toString();
+			var base = shortURL.toString().replace(path, "")+"/";
 			if (base.contains("localhost")) {
 				base = base.replace(LOCALHOST,LOCAL_IP);
 			}
