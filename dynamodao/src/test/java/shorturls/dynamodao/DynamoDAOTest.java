@@ -83,14 +83,17 @@ public class DynamoDAOTest {
   @Test
   public void testGetById2() throws MalformedURLException {
     val code = "code";
-    
     val response = getEmptyResponse();
-    
-    val request = getRequest(code);
     when(client.getItem(request)).thenReturn(response);
-
+    val request = getRequest(code);
     val res = dynamoDAO.getById(code);
     assertEquals(Optional.empty(), res);
+  }
+
+  public void testInsert() {
+       val dateStr ="2022-08-17T14:05:32.247299";
+       URLItem item = getItem("code","http://www.google.com",dateStr,10L);
+       dynamoDAO.insert(item);
   }
 
   /**
