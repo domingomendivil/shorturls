@@ -35,23 +35,27 @@ public class IdValidatorImplTest {
 	}
 	
 	
-	@Test
-	public void testIsValid5() {
-		var validator=getIdValidator("http://localhost:8080",1);
-		assertTrue(validator.isValid("A"));
+	@ParameterizedTest
+	@ValueSource(strings= {"AB","zy"})
+	public void testIsValid5(String arg) {
+		var validator=getIdValidator("http://localhost:8080",2);
+		assertTrue(validator.isValid(arg));
 	}
 	
-	@Test
-	public void testIsValid6() {
+	@ParameterizedTest
+	@ValueSource(strings= {"","A&","ABC","a","A"})
+	public void testIsValid6(String arg) {
 		var validator=getIdValidator("http://localhost:8080",2);
-		assertFalse(validator.isValid("A&"));
+		assertFalse(validator.isValid(arg));
 	}
 	
 
 	@ParameterizedTest
 	@ValueSource(strings= {
 	"http://localhost:8080/a"
-	,"http://127.0.0.1:8080/a"})
+	,"http://127.0.0.1:8080/a"
+	,"http://127.0.0.1:8080/a/a"
+	,"http://127.0.0.1:8080/a/b/a"})
 	public void testGetCode6(String arg) throws MalformedURLException, ValidationException {
 		var validator=getIdValidator("http://localhost:8080",1);
 		String code = validator.getCode(new URL(arg));
@@ -63,7 +67,11 @@ public class IdValidatorImplTest {
 	@ParameterizedTest
 	@ValueSource(strings= {
 	"https://localhost:8080/a"
-	,"https://localhost:8080/a/a"})
+	,"https://localhost:8080/a/a"
+	,"https://localhost:8080/a/a/a"
+	,"https://127.0.0.1:8080/a"
+	,"https://127.0.0.1:8080/a/a"
+	,"https://127.0.0.1:8080/b/a"})
 	public void testGetCode9(String arg) throws MalformedURLException, ValidationException {
 		var validator = getIdValidator("https://127.0.0.1:8080/",1);
 		String code = validator.getCode(new URL(arg));
@@ -78,7 +86,13 @@ public class IdValidatorImplTest {
 		,"http://localhost:8080/a&"
 		,"http://localhost:8080/"
 		,"http://localhost:8080"
-		,"https://127.0.0.1:8080/a"})
+		,"https://127.0.0.1:8080/a"
+		,"http://127.0.0.1:8080/a"
+		,"http://127.0.0.1:8080/ab"
+		,"http://127.0.0.1:8080/abcd"
+		,"http://localhost:8080/abcd"
+		,"http://localhost:8080/a"
+		,"http://localhost:8080/ab"})
 	public void testGetCode11(String arg) throws MalformedURLException {
 		var validator=getIdValidator("http://localhost:8080",3);
 		boolean exception=false;
