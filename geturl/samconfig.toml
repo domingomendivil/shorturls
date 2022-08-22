@@ -9,5 +9,5 @@ region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
 disable_rollback = true
-parameter_overrides = "DynamoURL=\"http://dynamo-local:8000\" BaseURL=\"http://127.0.0.1:3000\" RedisURL=\"redis://redis-server:6379/\" CacheEnabled=\"false\" QueryFactory=\"shorturls.dynamodao.DynamoDAOFactory\" CacheFactory=\"shorturls.cache.RedisCacheFactory\" EventsFactory=\"com.meli.kafka.KafkaFactory\" KafkaBrokers=\"kafka:29092\" KafkaClientId=\"client1\" KafkaTopicName=\"geturl\" KafkaEnabled=\"false\""
+parameter_overrides = "DynamoURL=\"http://dynamo-local:8000\" BaseURL=\"http://127.0.0.1:3000\" RedisURL=\"redis://redis-server:6379/\" CacheEnabled=\"false\" CacheOnly=\"false\" QueryFactory=\"shorturls.dynamodao.config.DynamoDAOFactory\" EventsFactory=\"shorturls.events.dummy.DummyEvents\" CacheFactory=\"shorturls.cache.config.RedisCacheFactory\" KafkaBrokers=\"kafka:29092\" KafkaClientId=\"client1\" KafkaTopicName=\"geturl\" KafkaEnabled=\"false\" RandomAlphabet=\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\" DynamoRandomRange=\"5\""
 image_repositories = []

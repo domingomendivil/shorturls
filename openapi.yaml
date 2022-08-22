@@ -6,10 +6,10 @@ paths:
   /urls:
     post: 
       servers: 
-      - url: "https://5vezhb8yj3.execute-api.us-east-1.amazonaws.com/{basePath}"
+      - url: "https://02v8mnujbg.execute-api.us-east-1.amazonaws.com/{basePath}"
         variables:
           basePath:
-            default: "/Prod" 
+            default: "Prod" 
       tags:
         - URL
       summary: Creates a new short URL
@@ -43,10 +43,10 @@ paths:
   /urls/{code}:
     get:
       servers: 
-      - url: "https://3q72xenzi2.execute-api.us-east-1.amazonaws.com/{basePath}"
+      - url: "https://rc71d6gafh.execute-api.us-east-1.amazonaws.com/{basePath}"
         variables:
           basePath:
-            default: "/Prod" 
+            default: "Prod" 
       summary: Returns the original URL
       description: Returns the original URL associated with the short URL
       operationId: getURL
@@ -77,10 +77,10 @@ paths:
           description: URL not found
     delete:
       servers: 
-      - url: "https://yx4mly91y7.execute-api.us-east-1.amazonaws.com/{basPath}"
+      - url: "https://46g0kljwsi.execute-api.us-east-1.amazonaws.com/{basePath}"
         variables:
           basePath:
-            default: "/Prod" 
+            default: "Prod" 
       summary: Deletes a short URL
       description: Deletes the short URL associated with an original URL
       operationId: deleteShortURL

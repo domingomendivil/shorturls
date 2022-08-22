@@ -47,7 +47,7 @@ public class RedirectShortURL {
         if (shortPath!=null && (!shortPath.equals(""))){
             try {
                 val headers=input.getHeaders();
-                var longURL = service.getURL(shortPath,headers);
+                val longURL = service.getURL(shortPath,headers);
                 if (longURL.isEmpty()) {
                     return getNotFoundResponse();
                 } else {

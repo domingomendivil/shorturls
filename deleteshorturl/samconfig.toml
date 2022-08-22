@@ -8,5 +8,5 @@ s3_prefix = "sam-deleteshorturl"
 region = "us-east-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "BaseURL=\"http://localhost:3000\" DynamoURL=\"http://dynamo-local:8000\" DeleterFactory=\"shorturls.dynamodao.DynamoDAOFactory\" CacheFactory=\"shorturl.cache.RedisCacheFactory\" CacheEnabled=\"false\" RandomAlphabet=\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\""
+parameter_overrides = "BaseURL=\"http://localhost:3000\" DynamoURL=\"http://dynamo-local:8000\" DeleterFactory=\"shorturls.dynamodao.config.DynamoDAOFactory\" CacheFactory=\"shorturls.cache.config.RedisCacheFactory\" CacheEnabled=\"false\" RedisUrl=\"redis://rediserver:6379/\" RandomAlphabet=\"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\""
 image_repositories = []

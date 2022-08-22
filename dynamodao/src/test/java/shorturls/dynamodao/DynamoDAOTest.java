@@ -25,6 +25,9 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 
+/**
+ * Unit Testing class for DynamoDAO class
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class DynamoDAOTest {
 

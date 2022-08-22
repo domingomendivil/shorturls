@@ -4,6 +4,7 @@ import geturl.apigateway.GetLongURL;
 import geturl.apigateway.GetURL;
 import geturl.services.Service;
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Factory class responsible for instantiating a GetLongURL and GetURL classes
@@ -30,7 +31,7 @@ public class Factory {
 	 * Method used for creating a new GetLongURL class
 	 */
 	private static GetLongURL initLongURL() {
-			Service service = ServiceFactory.getInstance();
+			val service = ServiceFactory.getInstance();
 			return new GetLongURL(service);
 	}
 	
@@ -38,7 +39,7 @@ public class Factory {
 	 * Method used for creating a new GetURL class
 	 */
 	private static GetURL initURL() {
-			Service service = ServiceFactory.getInstance();
+			val service = ServiceFactory.getInstance();
 			return new GetURL(service);
 	}
 
