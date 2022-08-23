@@ -28,10 +28,6 @@ public class IdValidatorImpl implements IdValidator {
 	 */
 	private static final String LOCAL_IP = "127.0.0.1";
 
-	/*
-	 * Alphabet used in generating the codes of the short URLs
-	 */
-	private final String alphabet;
 
 	private final Pattern pattern;
 
@@ -40,9 +36,12 @@ public class IdValidatorImpl implements IdValidator {
 	 */
 	private final Integer length;
 
+	private static final String SLASH ="/";
+
+	private static final String BLANK = "";
+
 	public IdValidatorImpl(BaseURL baseURL, String alphabet, Integer length) {
 		this.baseURL = baseURL;
-		this.alphabet = alphabet;
 		this.pattern = Pattern.compile(alphabet);
 		this.length = length;
 	}
@@ -57,22 +56,11 @@ public class IdValidatorImpl implements IdValidator {
 
 	public String getCode(final URL shortURL) throws ValidationException {
 		val path = shortURL.getPath();
-		if (!path.equals("")) {
-			var i = path.length() - 1;
-			val sb = new StringBuilder();
-			while (path.charAt(i) != '/') {
-				sb.append(path.charAt(i));
-				i--;
-			}
-			val shortCode = sb.reverse().toString();
-			var base = shortURL.toString().replace(path, "") + "/";
-			if (base.contains("localhost")) {
-				base = base.replace(LOCALHOST, LOCAL_IP);
-			}
-			String temp = baseURL.toURL();
-			if (temp.contains("localhost")) {
-				temp = temp.replace(LOCALHOST, LOCAL_IP);
-			}
+		if (!path.equals(BLANK)) {
+			val shortCode = path.substring(path.lastIndexOf(SLASH) + 1);
+			val oldBase = shortURL.toString().replace(path, BLANK) + SLASH;
+			val base = oldBase.replace(LOCALHOST, LOCAL_IP);
+			val temp = baseURL.toURL().replace(LOCALHOST, LOCAL_IP);
 			if (base.equals(temp)) {
 				if (isValid(shortCode)) {
 					return shortCode;
