@@ -43,7 +43,7 @@ paths:
   /urls/{code}:
     get:
       servers: 
-      - url: "https://3q72xenzi2.execute-api.us-east-1.amazonaws.com/{basePath}"
+      - url: "https://hyde7wwx34.execute-api.us-east-1.amazonaws.com/{basePath}"
         variables:
           basePath:
             default: "/Prod" 

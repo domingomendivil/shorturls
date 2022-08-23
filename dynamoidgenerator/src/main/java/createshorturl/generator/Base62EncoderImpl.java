@@ -1,6 +1,8 @@
 package createshorturl.generator;
 
 import java.math.BigInteger;
+
+import lombok.val;
 /**
  * Base62 encoder used to encode the counters generated. 
  * 
@@ -11,10 +13,9 @@ class Base62EncoderImpl implements Encoder{
 	
 	@Override
 	public String encode(BigInteger value) {
-	    StringBuilder sb = new StringBuilder();
-	    BigInteger length = BigInteger.valueOf(62);	
-	    BigInteger zero = BigInteger.valueOf(0);	
-
+	    val sb = new StringBuilder();
+	    val length = BigInteger.valueOf(62);	
+	    val zero = BigInteger.valueOf(0);	
 	    while (value.compareTo(zero)>0) {
 	    	int mod = value.mod(length).intValue();
 	        sb.append(BASE62.charAt(mod));

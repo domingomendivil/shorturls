@@ -19,7 +19,7 @@ public class DynamoDbClientFactory {
 	}
 	
 	@Getter(lazy=true)
-	private static final DynamoDbClient client = getClient(new ShortURLPropertiesImpl());
+	private static final DynamoDbClient client = getClient(ShortURLPropertiesImpl.getInstance());
 	
     /*
      * Creates a new instance of DynamoDbAsynClient

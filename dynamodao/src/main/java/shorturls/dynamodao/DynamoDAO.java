@@ -72,7 +72,7 @@ public class DynamoDAO implements Query, Writer, Deleter {
 	 * Otherwise it returns an Optional with the URLItem.
 	 */
 	@Override
-	public Optional<URLItem> getById(String path) {
+	public Optional<URLItem> getById(final String path) {
 		if (path.equals("")) {
 			throw new IllegalArgumentException();
 		}
@@ -95,7 +95,7 @@ public class DynamoDAO implements Query, Writer, Deleter {
 	 * Method for getting a URLIte from a Dynamo response.
 	 * It parses the response
 	 */
-	private URLItem getURLItem(GetItemResponse response) {
+	private URLItem getURLItem(final GetItemResponse response) {
 		try {
 			val responseItem = response.item();
 			val longURL = new URL(responseItem.get(LONG_URL).s());
@@ -129,7 +129,7 @@ public class DynamoDAO implements Query, Writer, Deleter {
 	 * The expirationTime is already in epoch UNIX time /seconds).
 	 */
 	@Override
-	public void insert(URLItem urlItem) {
+	public void insert(final URLItem urlItem) {
 		val item = new HashMap<String, AttributeValue>();
 		item.put(PK, fromS(urlItem.getShortPath()));
 		item.put(LONG_URL, fromS(urlItem.getLongURL().toString()));
@@ -150,7 +150,7 @@ public class DynamoDAO implements Query, Writer, Deleter {
 	 * it returns false.
 	 */
 	@Override
-	public boolean deleteById(String shortPath) {
+	public boolean deleteById(final String shortPath) {
 		val itemKey = new HashMap<String, AttributeValue>();
 		itemKey.put(PK, AttributeValue.fromS(shortPath));
 		val request = DeleteItemRequest.builder()

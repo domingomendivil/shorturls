@@ -53,7 +53,7 @@ public class CreateShortURL {
 		this.props=props;
 	}
 	
-	private APIGatewayProxyResponseEvent getShortURL(String url,URLExpire urlExpire){
+	private APIGatewayProxyResponseEvent getShortURL(final String url,final URLExpire urlExpire){
 		try {
 			val newURL = new URL(url);
 			val  shortURL = service.createShortURL(newURL,urlExpire.getSeconds());

@@ -43,16 +43,39 @@ public class ResponseCreator {
 		return new APIGatewayProxyResponseEvent().withHeaders(headers);
 	}
 
+	/**
+	 * Returns an HTTP 404 response indicating "URL not found in the body"
+	 * @return
+	 */
 	public static APIGatewayProxyResponseEvent getNotFoundResponse() {
 		val response = getTextResponse();
 		return response.withStatusCode(404).withBody("URL not found");
 	}
 
+	/**
+	 * Returns an HTTP 400 response indicating an Invalid URL
+	 * @return
+	 */
 	public static APIGatewayProxyResponseEvent getBadRequestResponse() {
 		var response = getTextResponse();
 		return response.withStatusCode(400).withBody("Invalid URL");
 	}
 
+	/**
+	 * Returns a moved HTTP response indicating the URL where to redirect.
+	 * For this, it sets the Location headers and also the content-type
+	 * of the HTTP response. It also checks the HTTP request headers to 
+	 * look for a possible sessionid already set cookie. In case that
+	 * this cookie doesn't already exist, it also sets this cookie on the
+	 * response. This cookie can also have other configuration options, 
+	 * for example if it's possible to set other cookies options, by 
+	 * the parameter named "cookieConfig". 
+	 * @param reqHeaders The HTTP request headers to look if an already
+	 * named cookie "sessionid" exist. 
+	 * @param url the URL to move forward (redirect)
+	 * @param cookieConfig the cookie config options
+	 * @return the HTTP response event for AWS API Gateway
+	 */
 	public static APIGatewayProxyResponseEvent getMovedResponse(Map<String, String> reqHeaders, String url,String cookieConfig) {
 
 		val headers = new HashMap<String, String>();

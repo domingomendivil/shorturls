@@ -30,6 +30,10 @@ Parameters:
   RandomAlphabet:
     Type: String
     Default: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  RandomLength:
+    Type: Number
+    Default: 7
+    MinValue: 5
 Resources:
   DeleteShortFunction:
     Type: AWS::Serverless::Function 
@@ -53,6 +57,7 @@ Resources:
           CACHE_ENABLED: !Ref CacheEnabled
           RANDOM_ALPHABET: !Ref RandomAlphabet
           REDIS_URL: !Ref RedisUrl
+          RANDOM_LENGTH: !Ref RandomLength
       Events:
         DeleteShortURLevent:
           Type: Api 
@@ -81,6 +86,7 @@ Resources:
           CACHE_ENABLED: !Ref CacheEnabled
           RANDOM_ALPHABET: !Ref RandomAlphabet
           REDIS_URL: !Ref RedisUrl
+          RANDOM_LENGTH: !Ref RandomLength
       Events:
         DeleteShortURLevent:
           Type: Api 

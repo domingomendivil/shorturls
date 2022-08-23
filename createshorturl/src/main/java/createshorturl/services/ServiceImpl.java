@@ -46,13 +46,13 @@ public class ServiceImpl implements Service {
 	}
 
 	
-	private URLItem newURLItem(URL longURL,Long expirationTime){
+	private URLItem newURLItem(final URL longURL,final Long expirationTime){
 		val id = idGenerator.generateUniqueID();
 		return new URLItem(id,longURL,LocalDateTime.now(),expirationTime);
 	}
 
 	@Override
-	public URL createShortURL(URL longURL) throws InvalidArgumentException {
+	public URL createShortURL(final URL longURL) throws InvalidArgumentException {
 		if (validURL(longURL)){
 			val item = newURLItem(longURL,null);
 			events.send(item);
@@ -63,14 +63,14 @@ public class ServiceImpl implements Service {
 
 	}
 
-	private boolean validURL(URL longURL) {
+	private boolean validURL(final URL longURL) {
 		val protocol = longURL.getProtocol();
 		return (protocol.equalsIgnoreCase("http") || (protocol.equalsIgnoreCase("https")));
 	}
 
 
 	@Override
-	public URL createShortURL(URL longURL, Long seconds) throws InvalidArgumentException {
+	public URL createShortURL(final URL longURL,final Long seconds) throws InvalidArgumentException {
 		if ((validSeconds(seconds)) && (validURL(longURL))){
 			val epochSeconds = getEpochSeconds(seconds);
 			val item = newURLItem(longURL,epochSeconds);

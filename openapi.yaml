@@ -6,7 +6,7 @@ paths:
   /urls:
     post: 
       servers: 
-      - url: "https://02v8mnujbg.execute-api.us-east-1.amazonaws.com/{basePath}"
+      - url: "https://yhnde4akv8.execute-api.us-east-1.amazonaws.com/{basePath}"
         variables:
           basePath:
             default: "Prod" 
@@ -43,7 +43,7 @@ paths:
   /urls/{code}:
     get:
       servers: 
-      - url: "https://rc71d6gafh.execute-api.us-east-1.amazonaws.com/{basePath}"
+      - url: "https://fu6q7m7vhj.execute-api.us-east-1.amazonaws.com/{basePath}"
         variables:
           basePath:
             default: "Prod" 
@@ -77,7 +77,7 @@ paths:
           description: URL not found
     delete:
       servers: 
-      - url: "https://46g0kljwsi.execute-api.us-east-1.amazonaws.com/{basePath}"
+      - url: "https://mh7mx96ynd.execute-api.us-east-1.amazonaws.com/{basePath}"
         variables:
           basePath:
             default: "Prod" 

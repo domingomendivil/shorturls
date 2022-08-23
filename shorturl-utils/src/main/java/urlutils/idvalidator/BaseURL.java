@@ -3,7 +3,7 @@ package urlutils.idvalidator;
 public class BaseURL {
     private final String url;
 
-    public BaseURL(String url){
+    public BaseURL(final String url){
     	if (!url.endsWith("/")) {
     		this.url=url+"/";	
     	}else {

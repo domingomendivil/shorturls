@@ -54,6 +54,10 @@ Parameters:
   CookieConfig: #Cookie configuration for the cookie sent to the request agent 
     Type: String
     Default: "; samesite=Strict"
+  RandomLength:
+    Type: Number
+    Default: 7
+    MinValue: 5
 Resources:
   RedirectShortURLFunction:
     Type: AWS::Serverless::Function 
@@ -85,6 +89,7 @@ Resources:
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
           COOKIE_CONFIG: !Ref CookieConfig
           CACHE_ONLY: !Ref CacheOnly
+          RANDOM_LENGTH: !Ref RandomLength
       Events:
         RedirectShortURLEvent:
           Type: Api 

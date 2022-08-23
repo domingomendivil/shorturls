@@ -32,7 +32,7 @@ public final class ServiceImpl implements Service {
 	}
 
 	@Override
-	public boolean deleteURL(URL shortURL) throws InvalidArgumentException {
+	public boolean deleteURL(final URL shortURL) throws InvalidArgumentException {
 		String shortPath;
 		try {
 			shortPath = idValidator.getCode(shortURL);
@@ -44,7 +44,7 @@ public final class ServiceImpl implements Service {
 	}
 
 	@Override
-	public boolean deleteURL(String shortPath) throws InvalidArgumentException {
+	public boolean deleteURL(final String shortPath) throws InvalidArgumentException {
 		if (idValidator.isValid(shortPath)){
 			return deleter.deleteById(shortPath);
 		}else{

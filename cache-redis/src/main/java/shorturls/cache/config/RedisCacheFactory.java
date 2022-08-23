@@ -18,7 +18,7 @@ public class RedisCacheFactory {
 	
 	@Getter(lazy=true)private static final RedisCache instance = init(new ShortURLPropertiesImpl());
 	
-	private static RedisCache init(ShortURLProperties props) {
+	private static RedisCache init(final ShortURLProperties props) {
 		String redisURL = props.getProperty("REDIS_URL");
 		return new RedisCache(RedisClient.create(redisURL));
 	}

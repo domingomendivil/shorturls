@@ -11,6 +11,10 @@ package shorturls.random;
  */
 public interface Randomizer {
 
+	/**
+	 * Gets the next random integer
+	 * @return the random integer
+	 */
     public Integer getRandomInt();
     
 }

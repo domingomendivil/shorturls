@@ -11,7 +11,6 @@ import lombok.val;
 
 public class SecureRandomGeneratorTest {
 
-    private static final String alphabet="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     @Test
     public void test1()throws NoSuchAlgorithmException{

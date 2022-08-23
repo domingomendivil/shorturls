@@ -52,6 +52,10 @@ Parameters:
     Type: Number
     Default: 5
     MinValue: 1
+  RandomLength:
+    Type: Number
+    Default: 7
+    MinValue: 5
 Resources:
   GetURLFunction:
     Type: AWS::Serverless::Function 
@@ -82,6 +86,7 @@ Resources:
           RANDOM_ALPHABET: !Ref RandomAlphabet
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
           CACHE_ONLY: !Ref CacheOnly
+          RANDOM_LENGTH: !Ref RandomLength
       Events:
         GetURLEvent:
           Type: Api 
@@ -116,6 +121,7 @@ Resources:
           KAFKA_ENABLED: !Ref KafkaEnabled
           DYNAMO_RANDOM_RANGE: !Ref DynamoRandomRange
           CACHE_ONLY: !Ref CacheOnly
+          RANDOM_LENGTH: !Ref RandomLength
       Events:
         GetLongURLEvent:
           Type: Api 

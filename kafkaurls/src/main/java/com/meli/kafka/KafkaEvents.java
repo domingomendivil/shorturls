@@ -27,16 +27,11 @@ import lombok.val;
 public class KafkaEvents implements Events {
 
 	/*
-	 * Configuration properties for connecting to Kafka
-	 */
-	private Properties props;
-
-	/*
 	 * Topic name used for sending events
 	 */
 	private final String topicName;
 
-	private Producer<String, String> producer;
+	private final Producer<String, String> producer;
 
 	/*
 	 * Indicates whether to enable sending or not events to Kafka
@@ -49,18 +44,12 @@ public class KafkaEvents implements Events {
 	 */
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
-	public KafkaEvents(Boolean enabled, String brokers, String cliendId, String topicName) {
-		this.enabled = enabled;
-		this.topicName = topicName;
-		if (enabled) {
-			props = new Properties();
-			props.put(BOOTSTRAP_SERVERS_CONFIG, brokers);
-			props.put(CLIENT_ID_CONFIG, cliendId);
-			val name= StringSerializer.class.getName();
-			props.put(KEY_SERIALIZER_CLASS_CONFIG, name);
-			props.put(VALUE_SERIALIZER_CLASS_CONFIG, name);
-			producer = new KafkaProducer<>(props);
-		}
+
+	
+	public KafkaEvents(Boolean enabled,Producer<String,String> producer,String topicName) {
+		this.producer=producer;
+		this.enabled=enabled;
+		this.topicName=topicName;
 	}
 
 	/*
@@ -68,7 +57,7 @@ public class KafkaEvents implements Events {
 	 * to a json structure 
 	 */
 	@Override
-	public void send(String key, Map<String, String> value) {
+	public void send(final String key,final Map<String, String> value) {
 		if (enabled) {
 			try {
 				val json = objectMapper.writeValueAsString(value);

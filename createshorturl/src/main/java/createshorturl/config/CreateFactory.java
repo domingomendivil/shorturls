@@ -35,12 +35,12 @@ public class CreateFactory {
 	private static final CreateShortURLSeconds createShortURLSeconds = new CreateShortURLSeconds(getService());
 
 	@Getter(lazy = true)
-	private static final Service service = initService(new ShortURLPropertiesImpl());
+	private static final Service service = initService(ShortURLPropertiesImpl.getInstance());
 
 	/*
 	 * Creates the Service layer
 	 */
-	private static Service initService(ShortURLProperties props) {
+	private static Service initService(final ShortURLProperties props) {
 		val baseURL = new BaseURL(props.getProperty(BASE_URL));
 		val writer = getWriter(props);
 		val events = new EventsImplDAO(writer);
@@ -52,7 +52,7 @@ public class CreateFactory {
 	/*
 	 * Gets the Writer interface to inject to the service layer
 	 */
-	private static Writer getWriter(ShortURLProperties props){
+	private static Writer getWriter(final ShortURLProperties props){
 		val cacheEnabled = Boolean.valueOf(props.getProperty(CACHE_ENABLED));
 		val writerFactory = props.getProperty(WRITER_FACTORY);
 		val writer = new Factory<Writer>().getInstance(writerFactory);

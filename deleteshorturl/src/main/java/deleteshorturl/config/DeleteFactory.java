@@ -49,9 +49,9 @@ public final class DeleteFactory {
 	/*
 	 * Service layer to be injected to the API Gateway classes
 	 */
-	private static final  Service service = getService(new ShortURLPropertiesImpl());
+	private static final  Service service = getService(ShortURLPropertiesImpl.getInstance());
 
-	private static Service getService(ShortURLProperties props){
+	private static Service getService(final ShortURLProperties props){
 		val deleteFactory = props.getProperty(DELETER_FACTORY);
 		val cacheEnabledStr = props.getProperty(CACHE_ENABLED);
 		var deleter = new Factory<Deleter>().getInstance(deleteFactory);

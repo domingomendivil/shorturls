@@ -5,6 +5,11 @@ import java.security.SecureRandom;
 
 import lombok.Getter;
 import lombok.val;
+import shorturls.config.ShortURLProperties;
+import shorturls.config.ShortURLPropertiesImpl;
+
+import static shorturls.constants.Constants.RANDOM_ALPHABET;
+import static shorturls.constants.Constants.RANDOM_LENGTH;
 
 /**
  * Class that implements the IDGenerator.
@@ -36,7 +41,7 @@ public class SecureRandomGenerator implements IDGenerator {
 
 
 	@Getter(lazy = true)
-	private static final SecureRandomGenerator instance = init();
+	private static final SecureRandomGenerator instance = init(ShortURLPropertiesImpl.getInstance());
 
 	/**
 	 * Public constructor of the class. In this case no seed is 
@@ -84,11 +89,11 @@ public class SecureRandomGenerator implements IDGenerator {
 	 * configuration.
 	 * @return
 	 */
-	public static final SecureRandomGenerator init()  {
-		val randomLength = Integer.parseInt(System.getenv("RANDOM_LENGTH"));
-		val alphabet = System.getenv("RANDOM_ALPHABET");
-		val algorithm = System.getenv("RANDOM_ALGORITHM");
-		val seed = System.getenv("RANDOM_SEED");
+	public static final SecureRandomGenerator init(ShortURLProperties props)  {
+		val randomLength = Integer.parseInt(props.getProperty(RANDOM_LENGTH));
+		val alphabet = props.getProperty(RANDOM_ALPHABET);
+		val algorithm = props.getProperty("RANDOM_ALGORITHM");
+		val seed = props.getProperty("RANDOM_SEED");
 		try {
 			if (seed == null)
 				return new SecureRandomGenerator(randomLength, alphabet, algorithm);

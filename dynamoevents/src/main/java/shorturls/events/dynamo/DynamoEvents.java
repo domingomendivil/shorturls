@@ -74,8 +74,15 @@ public class DynamoEvents implements Events{
 			.updateExpression(expression);
 	}
 	
-
-	private void updateItem(String shortPath,String key,String value){
+	/**
+	 * Updates the item counter associated with a specific shortPath (code of the URL)
+	 * and a key and value. 
+	 * @param shortPath the code of the short URL
+	 * @param key a key name (e.g. "user agent")
+	 * @param value a value for the specified key, e.g. for "user agent" key, 
+	 * a valid value can be "Firefox"
+	 */
+	private void updateItem(final String shortPath,final String key,String value){
 		val itemKey = new HashMap<String, AttributeValue>();
 		itemKey.put(PK, fromS(shortPath+randomizer.getRandomInt()));
 		itemKey.put(METADATA,fromS(key));
@@ -96,7 +103,7 @@ public class DynamoEvents implements Events{
 
 	
 	@Override
-	public void send(String shortPath, Map<String,String> msg) {
+	public void send(final String shortPath,final  Map<String,String> msg) {
 		Iterator<String> it = msg.keySet().iterator();
 		while (it.hasNext()) {
 			String nextKey = it.next();

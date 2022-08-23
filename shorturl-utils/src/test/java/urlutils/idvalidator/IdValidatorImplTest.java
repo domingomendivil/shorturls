@@ -13,8 +13,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class IdValidatorImplTest {
 
-	private static final String BASE62_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
+	//private static final String BASE62_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private static final String BASE62_ALPHABET = "^[a-zA-Z0-9]*$";
 
 	private IdValidatorImpl getIdValidator(String url,int length){
 		BaseURL baseURL = new BaseURL(url);
@@ -36,14 +36,14 @@ public class IdValidatorImplTest {
 	
 	
 	@ParameterizedTest
-	@ValueSource(strings= {"AB","zy"})
+	@ValueSource(strings= {"AB","zy","A1","BA"})
 	public void testIsValid5(String arg) {
 		var validator=getIdValidator("http://localhost:8080",2);
 		assertTrue(validator.isValid(arg));
 	}
 	
 	@ParameterizedTest
-	@ValueSource(strings= {"","A&","ABC","a","A"})
+	@ValueSource(strings= {"","A&","ABC","a","A","A#"})
 	public void testIsValid6(String arg) {
 		var validator=getIdValidator("http://localhost:8080",2);
 		assertFalse(validator.isValid(arg));
@@ -58,6 +58,18 @@ public class IdValidatorImplTest {
 	,"http://127.0.0.1:8080/a/b/a"})
 	public void testGetCode6(String arg) throws MalformedURLException, ValidationException {
 		var validator=getIdValidator("http://localhost:8080",1);
+		String code = validator.getCode(new URL(arg));
+		assertEquals("a",code);
+	}
+	
+	@ParameterizedTest
+	@ValueSource(strings= {
+	"http://localhost:8080/a"
+	,"http://127.0.0.1:8080/a"
+	,"http://127.0.0.1:8080/a/a"
+	,"http://127.0.0.1:8080/a/b/a"})
+	public void testGetCode7(String arg) throws MalformedURLException, ValidationException {
+		var validator=getIdValidator("http://localhost:8080/",1);
 		String code = validator.getCode(new URL(arg));
 		assertEquals("a",code);
 	}

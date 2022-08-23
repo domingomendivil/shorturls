@@ -18,7 +18,7 @@ public class DynamoEventsFactory {
 
   
     @Getter(lazy=true) //Lombok Getter annotation is used to facilitate getting an instance lazily
-	private static final DynamoEvents instance = init(new ShortURLPropertiesImpl());
+	private static final DynamoEvents instance = init(ShortURLPropertiesImpl.getInstance());
 
     private static final DynamoEvents init(ShortURLProperties properties){
     	DynamoDbClient client = DynamoDbClientFactory.getClient();

@@ -1,5 +1,6 @@
 package shorturls.config;
 
+import lombok.Getter;
 
 /**
  * Class implementing ShortURLProperties.
@@ -12,4 +13,7 @@ public class ShortURLPropertiesImpl implements ShortURLProperties{
 	public String getProperty(String name){
         return System.getenv(name);
     }
+	
+	@Getter(lazy=true)
+	private static final ShortURLPropertiesImpl instance = new ShortURLPropertiesImpl();
 }

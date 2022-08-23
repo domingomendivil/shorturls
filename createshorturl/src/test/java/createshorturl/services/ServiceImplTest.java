@@ -23,8 +23,7 @@ import urlutils.idvalidator.BaseURL;
 @RunWith(MockitoJUnitRunner.class)
 public class ServiceImplTest {
 	
-	@InjectMocks
-	private ServiceImpl svc;
+
 	
 	@Mock
 	private Events events;
@@ -36,6 +35,9 @@ public class ServiceImplTest {
 	private BaseURL baseURL;
 	
 	
+	@InjectMocks
+	private ServiceImpl svc;
+
 	@Test
 	public void testCreateShortURL1() throws MalformedURLException, InvalidArgumentException {
 		when(generator.generateUniqueID()).thenReturn("DFJKSX");

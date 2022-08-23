@@ -24,7 +24,18 @@ public class RedisCache implements Cache{
 		this.redisClient=redisClient;
 	}
 
-	private Optional<URLItem> parse(String shortPath,String result) {
+
+	/**
+	 * Parses a string (gotten from the redis cache) in the format 
+	 * where "shortPath,longURL,creationDate,epchSeconds".
+	 * E.g. "klSEv7,http://www.google.com,2012-03-02 09:23:00:01,161232"
+	 * and gets an URLItem from it.
+	 * In case that that the string is invalid it throws a ShortURLRuntimeException
+	 * @param shortPath
+	 * @param result
+	 * @return
+	 */
+	private Optional<URLItem> parse(final String shortPath,final String result) {
 		if (result!=null) {
 			String[] temp = result.split(",");
 			if ((temp!=null) && (temp.length==3)) {
@@ -45,36 +56,34 @@ public class RedisCache implements Cache{
 		return Optional.empty();
 	}
 	
+	/**
+	 * Gets an Optional URLItem given its path (code of the short URL) 
+	 */
 	@Override
-	public Optional<URLItem> getById(String path) {
+	public Optional<URLItem> getById(final String path) {
 		val connection =redisClient.connect();
 		val syncCommands = connection.sync();	
 		val urlItem = syncCommands.get(path);
 		return parse(path,urlItem);
+	
 	}
 
 	@Override
-	public void put(String path, URLItem urlItem) {
-		System.out.println("redis put");
+	
+	public void put(final String path, final URLItem urlItem) {
 		val connection =redisClient.connect();
 		val cmds = connection.sync();	
 		val str = format(urlItem);
 		val expirationTime=urlItem.getExpirationTime();
 		if (expirationTime==null){
-			System.out.println("expirtion time nulls");
-			System.out.println();
 			cmds.set(path, str);
-			System.out.println("luego de put en cache sin expiration");
 		}else{
-			System.out.println("antes de put en cache con expiration");
 			SetArgs setArgs= SetArgs.Builder.exAt(expirationTime);
 			cmds.set(path, str, setArgs);
-			System.out.println("luego de put en cache con expiration");
 		}	
-		
 	}
 
-	private String format(URLItem urlItem) {
+	private String format(final URLItem urlItem) {
 		var expirationHours=urlItem.getExpirationTime();
 		if (expirationHours==null){
 			expirationHours=0L;
@@ -83,7 +92,7 @@ public class RedisCache implements Cache{
 	}
 
 	@Override
-	public boolean delete(String path) {
+	public boolean delete(final String path) {
 		val connection =redisClient.connect();
 		val syncCommands = connection.sync();
 		return syncCommands.del(path) > 0;

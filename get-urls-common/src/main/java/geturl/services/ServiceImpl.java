@@ -56,7 +56,7 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public Optional<URL> getLongURL(URL shortURL, Map<String, String> headers) throws InvalidArgumentException {
+	public Optional<URL> getLongURL(final URL shortURL, final  Map<String, String> headers) throws InvalidArgumentException {
 		try {
 			val code = idValidator.getCode(shortURL);
 			return getValidatedURL(code, headers);
@@ -66,7 +66,7 @@ public class ServiceImpl implements Service {
 
 	}
 	
-	private Optional<URL> getValidatedURL(String shortPathId, Map<String, String> headers) throws InvalidArgumentException {
+	private Optional<URL> getValidatedURL(final String shortPathId, final Map<String, String> headers) throws InvalidArgumentException {
 		val urlItem = query.getById(shortPathId);
 		return urlItem.map(item -> {
 			send(item, headers);
@@ -75,7 +75,7 @@ public class ServiceImpl implements Service {
 	}
 
 	@Override
-	public Optional<URL> getURL(String shortPathId, Map<String, String> headers) throws InvalidArgumentException {
+	public Optional<URL> getURL(final String shortPathId, final Map<String, String> headers) throws InvalidArgumentException {
 		if (idValidator.isValid(shortPathId)) {
 			return getValidatedURL(shortPathId, headers);
 		}
@@ -83,7 +83,7 @@ public class ServiceImpl implements Service {
 	}
 
 	
-	private void send(URLItem urlItem, Map<String, String> headers) {
+	private void send(final  URLItem urlItem, final Map<String, String> headers) {
 		if (headers != null) {
 			val shortPath = urlItem.getShortPath();
 			events.send(shortPath, headers);
