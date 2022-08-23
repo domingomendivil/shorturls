@@ -47,7 +47,7 @@ Parameters:
     Default: "false"
   RandomAlphabet:  #Alphabet used for generating short URLs
     Type: String
-    Default: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    Default: "^[a-zA-Z0-9]*$"
   DynamoRandomRange: #Random range used as suffix of partition keys for avoiding hot partitions on DynamoDB
     Type: Number
     Default: 5

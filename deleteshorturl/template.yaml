@@ -29,7 +29,7 @@ Parameters:
     Default: "redis://rediserver:6379/"
   RandomAlphabet:
     Type: String
-    Default: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    Default: "^[a-zA-Z0-9]*$"
   RandomLength:
     Type: Number
     Default: 7
