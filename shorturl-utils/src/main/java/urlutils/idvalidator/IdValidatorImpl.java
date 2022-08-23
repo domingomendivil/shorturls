@@ -54,6 +54,10 @@ public class IdValidatorImpl implements IdValidator {
 		return pattern.matcher(shortPath).find();
 	}
 
+	/**
+	 * Gets the code from the short URL, validating it. 
+	 * In case the code is invalid it throws a ValidationException
+	 */
 	public String getCode(final URL shortURL) throws ValidationException {
 		val path = shortURL.getPath();
 		if (!path.equals(BLANK)) {
