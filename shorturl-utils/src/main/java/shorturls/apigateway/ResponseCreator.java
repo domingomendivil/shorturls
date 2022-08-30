@@ -80,7 +80,7 @@ public class ResponseCreator {
 
 		val headers = new HashMap<String, String>();
 		try {
-			headers.put("Location", toPuniCode(url));
+			headers.put("Location", PunyCodeConverter.toPunycode(url));
 			headers.put("content-type", "text/plain; charset=utf-8");
 			if (reqHeaders != null) {
 				val cookie = reqHeaders.get("Cookie");
@@ -123,17 +123,4 @@ public class ResponseCreator {
 
 	}
 	
-	private static String toPuniCode(String url) throws MalformedURLException {
-		URL u = new URL(url);
-		String[] labels = u.getHost().split("\\.");
-		StringJoiner joiner = new StringJoiner(".");
-		for (int i=0;i<labels.length;i++) {
-			String str= java.net.IDN.toASCII(labels[i]);
-			joiner.add(str);
-		}
-		String punicoded =joiner.toString();
-		punicoded=u.getProtocol()+"://"+punicoded;
-		return punicoded;
-	}
-
 }

@@ -127,6 +127,7 @@ public class CreateShortURLTest {
 			"{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"A\"}",
 			"{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"-1\"}",
 			"{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"0\"}",
+			"{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"A\"}",
 			"{\"url\": \"file://a\", \"seconds\": \"1\"}",
 			"{\"url\": \"http://www.montevideo.com.uy\", \"seconds\": \"1\",\"seconds2\": \"1\"}",
 			"file://site.edu.uy",

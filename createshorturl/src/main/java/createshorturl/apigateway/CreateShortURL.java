@@ -122,7 +122,7 @@ public class CreateShortURL {
 				return handleURL(body); //creates a URL without expiration time
 			}
 		}
-		return handleURL(body);//anything else is a bad request
+		return handleURL(body);//anything else by default, handle as URL
 	}
 
 }
