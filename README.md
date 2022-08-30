@@ -1,4 +1,4 @@
-# URL Shortener
+# URL Shortener 
 This project is for URL shortening.
 Given a URL like http://www.google.com, a shorter URL like http://me.li/JKSD8X is associated. 
 The domain or protocol (http or https) the short URL can be configured, so the short URL can be http://do.li/JSDLXK or https://con.me/JSDLXK or anything else.
@@ -11,15 +11,6 @@ Any other UTF-8 special characters, can be used, like "$", "€", "¬", etc. But
 
 Anyway, you can use the "ñ" for URLs, just as in http://www.peñarol.org.
 
-
-
-
-
-
-
-
-
-
 The following are the implemented REST services:
 
  **Short URL Creation**: Creates a short URL associated with a given original URL.
@@ -27,3 +18,7 @@ The following are the implemented REST services:
  **Short URL Deletion**: Deletes a short URL already created.
 
  **Short URL Query**: Returns the original URL associated with a given short URL.
+ 
+ The base URL part of the short URL is also configurable. 
+ 
+ You can use "htp://me.li" or "http://me.io", etc.
