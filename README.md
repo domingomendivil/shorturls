@@ -50,6 +50,10 @@ The following are the implemented REST services:
 - To run a local instance of DynamoDb, run the following:
 "docker run -d -p 8000:8000 --network=local-api-network --name dynamo-local amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb"
 
+Your DynamoDb instance will start running on port 8000 on host "dynamo-local"
+
+Acces to DynamoDb is with HTTP, so to connecto to it, you must configure the connection as the following: "http://dynamo-local:8000"
+
 - Create your tables, by importing the model "URLS-workbench.json" with AWS DynamoDb Workbench. This file is located in the root directory of the repo.
 
 - To run a local instance of your AWS function. Go to the directory of the function. E.g. /createshorturl. There you have a file named "template.yaml". You can build the AWS Function by running "sam build".
@@ -58,7 +62,24 @@ The following are the implemented REST services:
 
 "sam local start-api --docker-network local-api-network". 
 
-This tells to run your function in the already created docker network named "local-api-network". 
+This tells to run your function in the already created docker network named "local-api-network". By default, your function will be listening on port 3000.
+
+**Configuring environment variables**
+
+Every environment variable is defined in each of your template.yaml files, for each your functions: createshorturl, geturl, redirecturl and deleturl.
+
+DYNAMO_URL. This the connection URL to your DynamoDb instance. By default (having executed the previous command), the connection will be : ""http://dynamo-local:8000". 
+
+
+**Caching**
+
+Your can optionally configure your local instance to use caching. By default, Redis Cluster is the cache used. You must run a local instance with docker, also in the same previous created network ("local-api-network"), so your AWS Function can see it.
+
+CACHE_ENABLED. Set it to true in your template.yaml.
+
+REDIS_URL. Is the URL where your REDIS_CLUSTER will be running.
+
+**Kafka Configuration**
 
 - You can optionally configure your AWS Functions to be integrated with a Kafka Instance. This instance must also be running in the same network as DynamoDb and your AWS API Function.
 
