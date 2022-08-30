@@ -28,8 +28,7 @@ public class ResponseCreator {
 		int leftLimit = 48; // numeral '0'
 		int rightLimit = 122; // letter 'z'
 		int targetStringLength = 10;
-		Random random = new Random();
-
+		val random = new Random();
 		return random.ints(leftLimit, rightLimit + 1).filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
 				.limit(targetStringLength)
 				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
@@ -46,8 +45,8 @@ public class ResponseCreator {
 	 * @return
 	 */
 	public static APIGatewayProxyResponseEvent getNotFoundResponse() {
-		val response = getTextResponse();
-		return response.withStatusCode(404).withBody("URL not found");
+		return getTextResponse()
+			.withStatusCode(404).withBody("URL not found");
 	}
 
 	/**
@@ -55,8 +54,8 @@ public class ResponseCreator {
 	 * @return
 	 */
 	public static APIGatewayProxyResponseEvent getBadRequestResponse() {
-		var response = getTextResponse();
-		return response.withStatusCode(400).withBody("Invalid URL");
+		return getTextResponse()
+			.withStatusCode(400).withBody("Invalid URL");
 	}
 
 	/**
@@ -75,7 +74,6 @@ public class ResponseCreator {
 	 * @return the HTTP response event for AWS API Gateway
 	 */
 	public static APIGatewayProxyResponseEvent getMovedResponse(Map<String, String> reqHeaders, String url,String cookieConfig) {
-
 		val headers = new HashMap<String, String>();
 		try {
 			headers.put("Location", PunyCodeConverter.toPunycode(url));
@@ -83,8 +81,8 @@ public class ResponseCreator {
 			if (reqHeaders != null) {
 				val cookie = reqHeaders.get("Cookie");
 				if (cookie == null) {
-					String sessionId = random();
-					String newCookie = "sessionid=" + sessionId + cookieConfig;
+					val sessionId = random();
+					val newCookie = "sessionid=" + sessionId + cookieConfig;
 					headers.put("Set-Cookie", newCookie);
 				}
 			}
@@ -96,28 +94,28 @@ public class ResponseCreator {
 	}
 
 	public static APIGatewayProxyResponseEvent getOKResponse(String body) {
-		val response = getTextResponse();
-		return response.withStatusCode(200).withBody(body);
+		return getTextResponse()
+			.withStatusCode(200).withBody(body);
 	}
 
 	public static APIGatewayProxyResponseEvent getOKResponseCookie(String body) {
-		val response = getTextResponse();
-		return response.withStatusCode(200).withBody(body);
+		return getTextResponse()
+			.withStatusCode(200).withBody(body);
 	}
 
 	public static APIGatewayProxyResponseEvent getInternalErrorResponse() {
-		val response = getTextResponse();
-		return response.withStatusCode(500).withBody("An Internal Error has ocurred");
+		return getTextResponse()
+			.withStatusCode(500).withBody("An Internal Error has ocurred");
 	}
 
 	public static APIGatewayProxyResponseEvent getWillBeCreatedResponse(String url) {
-		val response = getTextResponse();
-		return response.withStatusCode(201).withBody(url);
+		return getTextResponse()
+			.withStatusCode(201).withBody(url);
 	}
 
 	public static APIGatewayProxyResponseEvent getURLCreatedResponse(String url) {
-		val response = getTextResponse();
-		return response.withStatusCode(202).withBody(url);
+		return getTextResponse()
+		 	.withStatusCode(202).withBody(url);
 
 	}
 	
