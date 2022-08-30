@@ -6,7 +6,7 @@ paths:
   /urls:
     post: 
       servers: 
-      - url: "https://yhnde4akv8.execute-api.us-east-1.amazonaws.com/{basePath}"
+      - url: "https://2up1uqfrdc.execute-api.us-east-1.amazonaws.com/{basePath}"
         variables:
           basePath:
             default: "Prod" 
