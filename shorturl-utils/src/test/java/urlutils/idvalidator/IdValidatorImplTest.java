@@ -13,7 +13,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class IdValidatorImplTest {
 
-	//private static final String BASE62_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String BASE62_ALPHABET = "^[a-zA-Z0-9]*$";
 
 	private IdValidatorImpl getIdValidator(String url,int length){
